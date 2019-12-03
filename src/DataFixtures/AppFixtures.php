@@ -4,8 +4,10 @@ namespace App\DataFixtures;
 
 use App\Entity\Category;
 use App\Entity\Comment;
+use App\Entity\Picture;
 use App\Entity\Trick;
 use App\Entity\User;
+use App\Entity\Video;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
@@ -52,6 +54,24 @@ class AppFixtures extends Fixture
 		        				->setUser($user)
 		        				->setTrick($trick);
 		        		$manager->persist($comment);
+		        	}
+
+			    	// Create 3 fake pictures
+		        	for($n = 1; $n <= 3; $n++){
+		        		$picture = new Picture();
+
+		        		$picture->setFilename($faker->imageUrl())
+		        				->setTrick($trick);
+		        		$manager->persist($picture);
+		        	}
+
+			    	// Create 3 fake videos
+		        	for($o = 1; $o <= 3; $o++){
+		        		$video = new Video();
+
+		        		$video->setEmbedLink('https://www.youtube.com/embed/I14b-C67EXY')
+		        			  ->setTrick($trick);
+		        		$manager->persist($video);
 		        	}
 		    	}
 	    	}
