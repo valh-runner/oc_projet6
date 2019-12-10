@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello AppController!{% endblock %}
+
+{% block body %}
+	{% for trick in tricks %}
+		<article>
+			<a href="{{ path('show', {'id': trick.id}) }}" class="btn btn-primary">{{ trick.name }}</a>
+			<div class="content">
+				<img src="{{ trick.pictures.first().filename }}" alt="">
+			</div>
+		</article>
+	{% endfor %}
+{% endblock %}
