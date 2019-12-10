@@ -5,7 +5,7 @@
 {% block body %}
 	{% for trick in tricks %}
 		<article>
-			<a href="" class="btn btn-primary">{{ trick.name }}</a>
+			<a href="{{ path('show', {'id': trick.id}) }}" class="btn btn-primary">{{ trick.name }}</a>
 			<div class="content">
 				<img src="{{ trick.pictures.first().filename }}" alt="">
 			</div>
