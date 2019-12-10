@@ -21,4 +21,16 @@ class AppController extends AbstractController
             'tricks' => $tricks
         ]);
     }
+
+    /**
+     * @Route("/show/{id}", name="show")
+     */
+    //public function show(Article $article, Request $request, EntityManagerInterface $manager)
+    public function show(Trick $trick)
+    {
+        return $this->render('app/show.html.twig', [
+            'trick' => $trick
+            //'commentForm' => $form->createView()
+        ]);
+    }
 }
