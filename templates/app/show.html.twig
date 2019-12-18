@@ -1,49 +1,67 @@
 {% extends 'base.html.twig' %}
 
-{% block body %}
-	<style>
-		#trick-head-banner {
-			background-image: url({{ trick.pictures.first.filename }});
-		}
-	</style>
-	<div class="row" id="trick-head">
-		<div class="col" id="trick-head-banner"></div>
-		<div class="col" id="trick-head-title"><h1>{{ trick.name }}</h1></div>
-	</div>
-	<article>
-		<div id="medias" class="row">
-			{% for picture in trick.pictures %}
-				<img class="col-sm-6 col-md-4 col-lg-3" src="{{ picture.filename }}" alt="">
-			{% endfor %}
-			{% for video in trick.videos %}
-				<iframe class="col-sm-6 col-md-4 col-lg-3" width="" height="" src="{{ video.embedLink }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-			{% endfor %}
-		</div>
-		<div id="description">
-			{{ trick.description | raw }}
-		</div>
-		<div id="tags">
-			<span>Créé le {{ trick.creationMoment | date('d/m/Y') }} à {{ trick.creationMoment | date('H:i') }}</span>
-			<span>catégorie {{ trick.category.name }}</span>
-		</div>
-	</article>
+{% block fullbanner %}
+	<div class="fixed faded" id="fullbanner"></div>
+{% endblock %}
 
-	<section id="commentaires">
-		<h1>{{ trick.comments | length }} commentaires : </h1>
-		{% for comment in trick.comments %}
-		<div class="row comment">
-			<div class="offset-1 col-1">
-				img
-			</div>
-			<div class="col-9 comment-content">
-				<div>
-					{{comment.content | raw}}
-				</div>
-				<div>
-					{{comment.user.username}} (<small>{{comment.creationMoment | date('d/m/Y à H:i') }}</small>)
+{% block body %}
+	<div class="row">
+		<div class="offset-sm-1 col-sm-10 offset-md-1 col-md-10 offset-lg-2 col-lg-8" id="content">
+			<div class="row">
+				<div class="container-fluid" id="second-container">
+					<div class="row" id="trick-head">
+						<img class="col" id="trick-head-banner" src="{{ trick.pictures.first.filename }}" alt="">
+						<div class="col" id="trick-head-title"><h1>{{ trick.name }}</h1></div>
+					</div>
+					<article>
+						<div id="medias" class="row">
+							{% for picture in trick.pictures %}
+								<img class="col-sm-6 col-md-4 col-lg-3" src="{{ picture.filename }}" alt="">
+							{% endfor %}
+							{% for video in trick.videos %}
+								<iframe class="col-sm-6 col-md-4 col-lg-3" width="" height="" src="{{ video.embedLink }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+							{% endfor %}
+						</div>
+						<div id="description">
+							{{ trick.description | raw }}
+						</div>
+						<div id="tags">
+							<span>Créé le {{ trick.creationMoment | date('d/m/Y') }} à {{ trick.creationMoment | date('H:i') }}</span>
+							<span>catégorie {{ trick.category.name }}</span>
+						</div>
+					</article>
+
+					<section id="commentaires">
+						<h1>{{ trick.comments | length }} commentaires : </h1>
+						{% for comment in trick.comments %}
+						<div class="row comment">
+							<div class="offset-1 col-1">
+								img
+							</div>
+							<div class="col-9 comment-content">
+								<div>
+									{{comment.content | raw}}
+								</div>
+								<div>
+									{{comment.user.username}} (<small>{{comment.creationMoment | date('d/m/Y à H:i') }}</small>)
+								</div>
+							</div>
+						</div>
+						{% endfor %}
+
+						{#% if app.user %}
+							{{ form_start(commentForm) }}
+							{{ form_row(commentForm.author, {'attr': {'placeholder': "Votre nom"}}) }}
+							{{ form_row(commentForm.content, {'attr': {'placeholder': "Votre commentaire"}}) }}
+							<button type="submit" class="btn btn-success">Commenter !</button>
+							{{ form_end(commentForm) }}
+						{% else %}
+							<h2>Vous ne pouvez pas commenter si vous n'êtes pas connecté !</h2>
+							<a href="{{ path('security_login') }}" class="btn btn-primary">Connexion</a>
+						{% endif %#}
+					</section>
 				</div>
 			</div>
 		</div>
-		{% endfor %}
-	</section>
+	</div>
 {% endblock %}
