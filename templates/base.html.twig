@@ -10,29 +10,44 @@
         {% endblock %}
     </head>
     <body>
-      <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#">SnowTricks</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
+      <!-- Guide de formatage --><!-- 
+      <div style="background-color: #aaa;"><div class="container" style="background-color: #000; color:#eee;"><div class="row">
+        <div class="col d-block d-sm-none">xs - smartphone</div>
+        <div class="col d-none d-sm-block d-md-none">sm - tablette</div>
+        <div class="col d-none d-md-block d-lg-none">md - moyen écran</div>
+        <div class="col d-none d-lg-block d-xl-none">lg - grand écran</div>
+        <div class="col d-none d-none d-xl-block">xl - très grand écran</div>
+      </div></div></div> -->
+      {% block fullbanner %}{% endblock %}
 
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-              <a class="nav-link" href="{{ path('home') }}">Accueil <span class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Connexion</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Inscription</a>
-            </li>
-          </ul>
+      <div id="global">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+          <a class="navbar-brand" href="{{ path('home') }}">SnowTricks</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+              <li class="nav-item active">
+                <a class="nav-link" href="{{ path('home') }}">Accueil <span class="sr-only">(current)</span></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Tricks</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{{ path('security_login') }}">Connexion</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{{ path('security_registration') }}">Inscription</a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+        <div class="container-fluid" id="main-container">
+          {% block body %}{% endblock %}
         </div>
-      </nav>
-      <div class="container" id="main-container">
-        {% block body %}{% endblock %}
       </div>
+
       {% block javascripts %}
         <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>

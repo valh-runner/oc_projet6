@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% form_theme form 'bootstrap_4_layout.html.twig' %}
+
+{% block title %}Inscription{% endblock %}
+
+{% block body %}
+	<h1>Inscription sur le site</h1>
+
+	<p>Vous avez bien été inscrit(e)</p>
+
+	<a href="{{ path('security_login') }}" class="btn btn-success">Se connecter</a>
+
+{% endblock %}
