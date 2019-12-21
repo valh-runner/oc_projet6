@@ -1,7 +1,32 @@
 {% extends 'base.html.twig' %}
 
+{% block fullbanner %}
+	<div class="fixed faded" id="fullbanner"></div>
+{% endblock %}
+
 {% block title %}Connexion{% endblock %}
 
 {% block body %}
-	<h1>Connexion</h1>
+	<div class="row" id="content-registration">
+		<div class="offset-sm-1 col-sm-10 offset-md-2 col-md-8 offset-lg-3 col-lg-6 offset-xl-4 col-xl-4" id="registration">
+			<h1>Connexion</h1>
+			<form action="{{ path('security_login') }}" method="post">
+				<div class="form-group">
+					<input placeholder="Adresse email ..." required name="_username" type="text" class="form-control">
+				</div>
+				<div class="form-group">
+					<input placeholder="Mot de passe ..." required name="_password" type="password" class="form-control">
+				</div>
+				<div class="form-group text-center">
+					<a href="{{ path('security_registration') }}">s'inscrire</a>
+				</div>
+				<div class="form-group text-center">
+					<a href="">mot de passe oublié?</a>
+				</div>
+				<div class="form-group text-center">
+					<button type="submit" class="btn btn-success">Connexion</button>
+				</div>
+			</form>
+		</div>
+	</div>
 {% endblock %}

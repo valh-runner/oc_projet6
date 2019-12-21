@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Comment;
 use App\Entity\Trick;
+use App\Form\CommentType;
 use App\Form\TrickType;
 use App\Repository\TrickRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -18,6 +20,15 @@ class AppController extends AbstractController
     public function index(TrickRepository $repo)
     {
         $tricks = $repo->findAll();
+        /*$tricks = $repo->findBy(
+            [],
+            ['creationMoment' => 'DESC']
+        );*/
+
+        /*$tricks = $repo->createQueryBuilder('e')
+                       ->select('e')
+                       ->orderBy('e.creation_moment', 'DESC')
+                       ->setMaxResults(100);*/
 
         return $this->render('app/index.html.twig', [
             'controller_name' => 'AppController',
@@ -28,26 +39,33 @@ class AppController extends AbstractController
     /**
      * @Route("/show/{id}", name="show")
      */
-    //public function show(Article $article, Request $request, EntityManagerInterface $manager)
-    public function show(Trick $trick)
+    public function show(Trick $trick, Request $request, EntityManagerInterface $manager)
     {
-/*        $comment = new Comment();
-        $form = $this->createForm(CommentType::class, $comment);
+        
+        $comments = $trick->getComments();
+
+        $newComment = new Comment();
+        $form = $this->createForm(CommentType::class, $newComment);
         
         $form->handleRequest($request);
         
         if($form->isSubmitted() && $form->isValid()){
-            $comment->setCreatedAt(new \DateTime())
-                    ->setArticle($article);
+            $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+            $user = $this->getUser();
 
-            $manager->persist($comment);
+            $newComment->setCreationMoment(new \DateTime())
+                    ->setUser($user)
+                    ->setTrick($trick);
+
+            $manager->persist($newComment);
             $manager->flush();
-            return $this->redirectToRoute('blog_show', ['id' => $article->getId()]);
-        }*/
-
+            return $this->redirectToRoute('show', ['id' => $trick->getId()]);
+        }
+        
         return $this->render('app/show.html.twig', [
-            'trick' => $trick
-            //'commentForm' => $form->createView()
+            'trick' => $trick,
+            'commentForm' => $form->createView(),
+            'comments' => $comments
         ]);
     }
 }

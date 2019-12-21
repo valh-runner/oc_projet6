@@ -10,14 +10,14 @@
         {% endblock %}
     </head>
     <body>
-      <!-- Guide de formatage --><!-- 
+      <!-- Guide de formatage --><!--
       <div style="background-color: #aaa;"><div class="container" style="background-color: #000; color:#eee;"><div class="row">
         <div class="col d-block d-sm-none">xs - smartphone</div>
         <div class="col d-none d-sm-block d-md-none">sm - tablette</div>
         <div class="col d-none d-md-block d-lg-none">md - moyen écran</div>
         <div class="col d-none d-lg-block d-xl-none">lg - grand écran</div>
         <div class="col d-none d-none d-xl-block">xl - très grand écran</div>
-      </div></div></div> -->
+      </div></div></div>-->
       {% block fullbanner %}{% endblock %}
 
       <div id="global">
@@ -27,25 +27,39 @@
             <span class="navbar-toggler-icon"></span>
           </button>
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
+            <ul class="navbar-nav ml-auto">
               <li class="nav-item active">
                 <a class="nav-link" href="{{ path('home') }}">Accueil <span class="sr-only">(current)</span></a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">Tricks</a>
+                <a class="nav-link" href="{{ path('home') }}#content">Tricks</a>
               </li>
-              <li class="nav-item">
-                <a class="nav-link" href="{{ path('security_login') }}">Connexion</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="{{ path('security_registration') }}">Inscription</a>
-              </li>
+              {% if not app.user %}
+                <li class="nav-item">
+                  <a class="nav-link" href="{{ path('security_login') }}">Connexion</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{{ path('security_registration') }}">Inscription</a>
+                </li>
+              {% else %}
+                <li class="nav-item">
+                  <a class="nav-link" href="{{ path('security_logout') }}">Déconnexion</a>
+                </li>
+              {% endif %}
             </ul>
           </div>
         </nav>
         <div class="container-fluid" id="main-container">
           {% block body %}{% endblock %}
-        </div>
+        </div><!--
+        <div class="container-fluid" id="main-container">
+          Copyright Snowtricks 2020
+        </div>-->
+        <footer class="footer mt-auto py-3">
+          <div class="container">
+            <span class="text-muted">Copyright Snowtricks 2020</span>
+          </div>
+        </footer>
       </div>
 
       {% block javascripts %}
