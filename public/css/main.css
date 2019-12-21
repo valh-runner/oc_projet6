@@ -27,14 +27,14 @@ body {
 	position: relative;
 	height: 400px;
 	/*overflow-y: hidden;*/
+	border: 3px solid white;
 }
 
 #trick-head-banner {
-	/*position: absolute;*/
+	position: absolute;
 	/*opacity:0.7;*/
 	padding-left: 0;
 	padding-right: 0;
-	/*transform: translateY(-50%);*/
 	object-fit: cover;
 	height: 100%;
 	width: 100%;
@@ -43,10 +43,12 @@ body {
 
 #trick-head-title {
 	position: absolute;
-	text-align:center;
 	top: 50%;
-	transform: translateY(-50%);
-	background-color: rgba(255, 255, 255, 0.5);
+	left: 50%;
+	transform: translate(-50%, -50%);
+	/*background-color: rgba(255, 255, 255, 0.5);*/
+	background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.6) 30% , rgba(255, 255, 255, 0.6) 70%, transparent 100%);
+	padding: 0 30px;
 }
 
 #trick-head-title h1 {
@@ -69,7 +71,7 @@ article {
 }
 
 .comment-content {
-	border: 1px solid #000;
+	background-color: #ccc;
 }
 
 .img-fluid{
@@ -89,6 +91,21 @@ article {
 	z-index: 0;
 }
 
+#slogan {
+	position: absolute;
+	text-align:center;
+	top: 50%;
+	left: 50%;
+	transform: translateX(-50%);
+	/*background-color: rgba(255, 255, 255, 0.4);*/
+	padding: 10px;
+	background: linear-gradient(0deg, transparent 0%, rgba(255, 255, 255, 0.4) 30% , rgba(255, 255, 255, 0.4) 70%, transparent 100%);
+}
+
+#slogan h1 {
+	font-size: 60px;
+}
+
 .abs {
 	position: absolute;
 }
@@ -106,11 +123,21 @@ article {
 }
 
 .faded {
-	opacity:0.4;
+	opacity:0.6;
 }
 
 #thegap {
+	position: relative;
 	height: 100vh;
+}
+
+#arrow {
+	position: absolute;
+	right: 50px;
+	bottom: 100px;
+	height: 50px;
+	width: 50px;
+	background-color: #000;
 }
 
 #second-container {
@@ -122,6 +149,7 @@ article {
 
 #content {
 	/*background-color: #fff;*/
+	padding-top:15px;
 }
 
 .trick-item {
@@ -163,4 +191,34 @@ article {
 
 .trick-item-del {
 	
+}
+
+.trick-details {
+	padding-top: 15px;
+}
+
+.trick-details .trick-details-media{
+	margin-bottom: 15px;
+}
+
+.trick-details .trick-details-media img{
+	
+}
+
+.trick-details .trick-details-media iframe{
+	width:100%;
+}
+
+
+#content-registration {
+	margin-top: 200px;
+}
+
+#registration {
+	background-color: #ddd;
+	padding: 20px;
+}
+
+#registration h1 {
+	text-align: center;
 }
