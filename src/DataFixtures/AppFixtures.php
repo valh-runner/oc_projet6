@@ -22,7 +22,8 @@ class AppFixtures extends Fixture
     		$user = new User();
     		$user->setUsername($faker->userName())
     			 ->setEmail($faker->safeEmail())
-    			 ->setPassword($faker->userName());
+    			 ->setPassword($faker->userName())
+    			 ->setConfirmed(0);
     		$manager->persist($user);
 
 	    	// Create 3 fake category
