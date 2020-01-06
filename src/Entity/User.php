@@ -11,7 +11,8 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
- * @UniqueEntity(fields= {"email"}, message= "L'email que vous avez indiqué est déja utilisé !")
+ * @UniqueEntity(fields="username", message= "Ce nom d'utilisateur est déja utilisé!")
+ * @UniqueEntity(fields="email", message= "Cette email est déja utilisé!")
  */
 class User implements UserInterface
 {
@@ -63,6 +64,16 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $token;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $creationMoment;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $forgotPasswordMoment;
 
     public function __construct()
     {
@@ -213,6 +224,30 @@ class User implements UserInterface
     public function setToken(?string $token): self
     {
         $this->token = $token;
+
+        return $this;
+    }
+
+    public function getCreationMoment(): ?\DateTimeInterface
+    {
+        return $this->creationMoment;
+    }
+
+    public function setCreationMoment(\DateTimeInterface $creationMoment): self
+    {
+        $this->creationMoment = $creationMoment;
+
+        return $this;
+    }
+
+    public function getForgotPasswordMoment(): ?\DateTimeInterface
+    {
+        return $this->forgotPasswordMoment;
+    }
+
+    public function setForgotPasswordMoment(?\DateTimeInterface $forgotPasswordMoment): self
+    {
+        $this->forgotPasswordMoment = $forgotPasswordMoment;
 
         return $this;
     }

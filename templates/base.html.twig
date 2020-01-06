@@ -33,9 +33,9 @@
             <div class="modal-body">
               {% for label, messages in flashes %}
                 {% for message in messages %}
-                    {% if ( label == 'notice' ) %}
-                        <p>{{ message }}</p>
-                    {% endif %}
+                  <div class="alert alert-{{ label }}" role="alert">
+                    <p>{{ message }}</p>
+                  </div>
                 {% endfor %}
               {% endfor %}
             </div>
@@ -81,8 +81,9 @@
               {% endif %}
             </ul>
           </div>
-        </nav>
-        <div class="container-fluid" id="main-container">
+        </nav><!--
+        <div class="container-fluid" id="main-container">-->
+        <div class="container" id="main-container">
           {% block body %}{% endblock %}
         </div><!--
         <div class="container-fluid" id="main-container">
