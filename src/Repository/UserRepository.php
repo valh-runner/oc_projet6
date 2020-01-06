@@ -71,7 +71,7 @@ class UserRepository extends ServiceEntityRepository implements UserLoaderInterf
             ->getOneOrNullResult();*/
 
         return $this->createQueryBuilder('u')
-            ->andWhere('u.email = :val AND u.confirmed = 1')
+            ->andWhere('(u.username = :val OR u.email = :val) AND u.confirmed = 1')
             ->setParameter('val', $email)
             ->getQuery()
             ->getOneOrNullResult()

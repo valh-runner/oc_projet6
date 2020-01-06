@@ -6,6 +6,9 @@ use App\Entity\User;
 use App\Form\RegistrationType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
@@ -40,9 +43,10 @@ class SecurityController extends AbstractController
     	if($form->isSubmitted() && $form->isValid()){
     		$hash = $encoder->encodePassword($user, $user->getPassword());
             $token = $tokenGenerator->generateToken();
-    		$user->setPassword($hash);
-            $user->setConfirmed(0);
-            $user->setToken($token);
+    		$user->setPassword($hash)
+                 ->setConfirmed(0)
+                 ->setToken($token)
+                 ->setCreationMoment(new \DateTime());
 
     		$manager->persist($user);
     		$manager->flush();
@@ -56,12 +60,14 @@ class SecurityController extends AbstractController
                 ->from('no-reply@example.com')
                 ->to($user->getEmail())
                 ->subject("Snowtricks - Finalisation de l'inscription")
-                ->html('<p><a href="'.$url.'">Finaliser l\'inscription</a></p>')
+                ->html('<h3>Bienvenue sur Snowtricks!</h3>
+                    <p>Pour finaliser votre inscription, cliquez sur le lien suivant: 
+                    <a href="'.$url.'">Finaliser l\'inscription</a></p>')
             ;
 
             $mailer->send($email);
 
-            $this->addFlash('notice', 'Votre inscription a été prise en compte. Pour la finaliser, suivez le lien qui viens de vous être envoyé par e-mail.');
+            $this->addFlash('success', 'Votre inscription a été prise en compte. Pour la finaliser, suivez le lien qui viens de vous être envoyé par e-mail.');
     		return $this->redirectToRoute('home');
     	}
 
@@ -71,25 +77,47 @@ class SecurityController extends AbstractController
     }
 
     /**
-     * @Route("/registration_confirm/{token}", name="security_registration_confirm")
+     * @Route("/registration_confirm", name="security_registration_confirm")
      */
-    public function registrationConfirm(string $token, EntityManagerInterface $manager, TokenGeneratorInterface $tokenGenerator)
+    public function registrationConfirm(Request $request, /*string $token, */ EntityManagerInterface $manager)
     {
-        $user = $manager->getRepository(User::class)->findOneByToken($token);
+        $token = $request->query->get('token');
+        $success = false;
+        $feedbacks = array();
 
-        if($user == false){
-            $success = false;
+        if(!$token){
+            $feedbacks[] = ['danger', 'token manquant'];
         }else{
-            $user->setToken('');
-            $user->setConfirmed(1);
-            
-            $manager->persist($user);
-            $manager->flush();
+            $user = $manager->getRepository(User::class)->findOneByToken($token);
 
-            $success = true;
+            //if no user found
+            if($user == false){
+                $feedbacks[] = ['danger', 'token inconnu'];
+            }else{
+                $hoursSinceRegistrationInit = (new \DateTime())->diff($user->getCreationMoment())->h;
+                
+                //if 48 hours time limit not expired
+                if($hoursSinceRegistrationInit < 48){
+                    $user->setToken('')
+                         ->setConfirmed(1);
+                    
+                    $manager->persist($user);
+                    $manager->flush();
+
+                    $success = true;
+                    $feedbacks[] = ['success', 'Votre inscription est finalisée'];
+                }else{
+                    $manager->remove($user); // user deletion
+                    $manager->flush();
+                    $feedbacks[] = ['danger', 'limite de temps du token expirée'];
+                }
+            }
         }
 
-    	return $this->render('security/registration_confirm.html.twig', ['success' => $success]);
+    	return $this->render('security/registration_confirm.html.twig', [
+            'success' => $success,
+            'feedbacks' => $feedbacks
+        ]);
     }
 
     /**
@@ -104,4 +132,117 @@ class SecurityController extends AbstractController
      * @Route("/deconnexion", name="security_logout")
      */
     public function logout() {}
+
+    /**
+     * @Route("/oubli_mot_de_passe", name="security_forgot_password")
+     */
+    public function forgotPassword(Request $request, EntityManagerInterface $manager, TokenGeneratorInterface $tokenGenerator, MailerInterface $mailer) {
+        
+        $form = $this->createFormBuilder()
+                     ->add('username', TextType::class)
+                     ->getForm();
+
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()){
+
+            $usernameToFind = $form->getData()['username'];
+
+            //search for a registered user
+            $user = $manager->getRepository(User::class)->findOneBy([
+                'username' => $usernameToFind,
+                'confirmed' => 1
+            ]);
+
+            if($user == false){
+                $this->addFlash('danger', 'aucun utilisateur correspondant');
+            }else{
+                // Token generation
+                $token = $tokenGenerator->generateToken();
+                // Database updates
+                $user->setForgotPasswordMoment(new \DateTime());
+                $user->setToken($token);
+                $manager->flush();
+                // Email send with tokenized link
+                $url = $this->generateUrl('security_reset_password', array('token' => $token), UrlGeneratorInterface::ABSOLUTE_URL);
+                $email = (new Email())
+                    ->from('no-reply@example.com')
+                    ->to($user->getEmail())
+                    ->subject("Snowtricks - Réinitialisation du mot de passe")
+                    ->html('<h3>Bienvenue sur Snowtricks!</h3>
+                        <p>Pour choisir votre mot de passe, cliquez sur le lien suivant: 
+                        <a href="'.$url.'" class="alert-link">Redéfinir le mot de passe</a></p>');
+                $mailer->send($email);
+
+                $this->addFlash('success', 'Un e-mail viens de vous être envoyé. Suivez le lien contenu dans cet e-mail pour redéfinir votre mot de passe');
+                return $this->redirectToRoute('home');
+            }
+        }
+
+        return $this->render('security/forgot_password.html.twig', [
+            'form' => $form->createView()
+        ]);
+    }
+
+    /**
+     * @Route("/nouveau_mot_de_passe", name="security_reset_password")
+     */
+    public function resetPassword(Request $request, UserPasswordEncoderInterface $encoder) {
+
+        $form = $this->createFormBuilder()
+                     ->add('email', EmailType::class)
+                     ->add('password', PasswordType::class)
+                     ->getForm();
+
+        $form->handleRequest($request);
+        
+        if($form->isSubmitted() && $form->isValid()){
+            
+            $formData = $form->getData();
+
+            $manager = $this->getDoctrine()->getManager();
+            //search for a registered user by email
+            $user = $manager->getRepository(User::class)->findOneBy([
+                'email' => $formData['email'],
+                'confirmed' => 1
+            ]);
+
+            //if no user found
+            if($user == false){
+                $this->addFlash('danger', 'e-mail utilisateur inconnu');
+            }else{
+                $token = $request->query->get('token');
+                // if missing token
+                if(!$token){
+                    $this->addFlash('danger', 'token manquant');
+                }else{
+                    // if wrong token
+                    if($user->getToken() != $token){
+                        $this->addFlash('danger', 'token non valide');
+                    }else{
+                        $hoursSinceForgotPasswordAsk = (new \DateTime())->diff($user->getForgotPasswordMoment())->h;
+                        //if 48 hours time limit not expired
+                        if($hoursSinceForgotPasswordAsk > 48){
+                            $this->addFlash('danger', 'limite de temps du token expirée');
+                        }else{
+                            $hash = $encoder->encodePassword($user, $formData['password']);
+                            $user->setPassword($hash)
+                                 ->setToken('');
+                            
+                            $manager->persist($user);
+                            $manager->flush();
+
+                            $this->addFlash('success', 'le changement de mot de passe a bien été pris en compte');
+                        }
+                    }
+                }
+
+                return $this->redirectToRoute('home');
+            }
+        }
+
+        return $this->render('security/reset_password.html.twig', [
+            'form' => $form->createView()
+        ]);
+    }
 }

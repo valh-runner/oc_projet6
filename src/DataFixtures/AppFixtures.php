@@ -10,9 +10,15 @@ use App\Entity\User;
 use App\Entity\Video;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class AppFixtures extends Fixture
 {
+	public function __construct(UserPasswordEncoderInterface $encoder)
+	{
+	    $this->encoder = $encoder;
+	}
+
     public function load(ObjectManager $manager)
     {
     	$faker = \Faker\Factory::create('fr_FR');
@@ -20,10 +26,13 @@ class AppFixtures extends Fixture
     	// Create 5 fake users
     	for($i = 1; $i <= 5; $i++){
     		$user = new User();
-    		$user->setUsername($faker->userName())
-    			 ->setEmail($faker->safeEmail())
-    			 ->setPassword($faker->userName())
-    			 ->setConfirmed(0);
+    		$username = $faker->userName();
+    		$hash = $this->encoder->encodePassword($user, $username);
+    		$user->setUsername($username)
+    			 ->setEmail($username.'@'.$faker->safeEmailDomain())
+    			 ->setPassword($hash)
+    			 ->setConfirmed(1)
+    			 ->setCreationMoment($faker->dateTimeBetween('- 3 months'));
     		$manager->persist($user);
 
 	    	// Create 3 fake category
@@ -36,10 +45,11 @@ class AppFixtures extends Fixture
 		    	for($k = 1; $k <= 3; $k++){
 		    		$trick = new Trick();
 		        	$description = '<p>' . join($faker->paragraphs(2), '</p><p>') . '</p>';
+		        	$daysSinceUser = (new \DateTime())->diff($user->getCreationMoment())->days;
 
 		    		$trick->setName($faker->city())
 		    			  ->setDescription($description)
-		    			  ->setCreationMoment($faker->dateTimeBetween('- 3 months'))
+		    			  ->setCreationMoment($faker->dateTimeBetween('-' . $daysSinceUser . ' days'))
 		    			  //->setRevisionMoment()
 		    			  ->setUser($user)
 		    			  ->setCategory($category);
@@ -48,10 +58,10 @@ class AppFixtures extends Fixture
 			    	// Create between 10 and 20 fake comments
 		        	for($m = 1; $m <= mt_rand(5, 10); $m++){
 		        		$comment = new Comment();
-		        		$days = (new \DateTime())->diff($trick->getCreationMoment())->days;
+		        		$daysSinceTrick = (new \DateTime())->diff($trick->getCreationMoment())->days;
 
 		        		$comment->setContent($faker->sentence())
-		        				->setCreationMoment($faker->dateTimeBetween('-' . $days . ' days'))
+		        				->setCreationMoment($faker->dateTimeBetween('-' . $daysSinceTrick . ' days'))
 		        				->setUser($user)
 		        				->setTrick($trick);
 		        		$manager->persist($comment);
