@@ -1,0 +1,80 @@
+{% extends 'base.html.twig' %}
+
+{% form_theme formTrick 'bootstrap_4_layout.html.twig' %}
+
+{% macro printPicturePrototype(picture) %}
+    <li>
+    	<div class="form-row">
+	    	<div class="form-group col-10">
+	    		{{ form_widget(picture.file, {
+					'attr': {'placeholder': "Sélectionner un fichier image"},
+				}) }}
+	    	</div>
+	    	<div class="form-group col">
+	    		<button type="button" class="btn btn-secondary">Supprimer</button>
+	    	</div>
+    	</div>
+	</li>
+{% endmacro %}
+{% macro printVideoPrototype(video) %}
+    <li>
+    	<div class="form-row">
+	    	<div class="form-group col-10">
+	    		{{ form_widget(video.embedLink, {
+					'attr': {'placeholder': "Saisir le \"lien embed\" d'une video en ligne"},
+				}) }}
+	    	</div>
+	    	<div class="form-group col">
+	    		<button type="button" class="btn btn-secondary">Supprimer</button>
+	    	</div>
+    	</div>
+    </li>
+{% endmacro %}
+{% import _self as formMacros %}
+
+{% block body %}
+	<h1 class="mb-5">Création d'un Trick</h1>
+
+	{{ form_start(formTrick) }}
+
+	{{ form_row(formTrick.name, {'attr': {'placeholder': "Nom du trick"}}) }}
+	{{ form_row(formTrick.description, {'attr': {'placeholder': "Description du trick"}}) }}
+
+	<p>Selectionnez une catégorie ou en préciser une nouvelle</p>
+	{{ form_row(formTrick.categoryType, {'label' : 'Type de catégorie'}) }}
+	
+	{{ form_row(formTrick.existantCategory, {'label' : 'Catégorie existante'}) }}
+
+	{{ form_row(formTrick.newCategory, {
+		'label' : 'Nouvelle catégorie', 
+		'attr': {'placeholder': "Entrez un nom"}
+	}) }}
+
+	<h3>Images</h3>
+	<ul class="pictures" data-prototype="{{ formMacros.printPicturePrototype(formTrick.pictures.vars.prototype)|e('html_attr') }}">
+        {# iterate over each existing picture and render the field filename #}
+        {% for picture in formTrick.pictures %}
+        	{{ formMacros.printPicturePrototype(picture) }}
+        {% endfor %}
+	</ul>
+
+	<h3>Videos</h3>
+	<ul class="videos" data-prototype="{{ formMacros.printVideoPrototype(formTrick.videos.vars.prototype)|e('html_attr') }}">
+        {# iterate over each existing video and render the field embedLink #}
+        {% for video in formTrick.videos %}
+            {{ formMacros.printVideoPrototype(video) }}
+        {% endfor %}
+	</ul>
+
+	<div class="form-group text-right mt-5">
+		<button type="submit" class="btn btn-primary">Ajouter le Trick</button>
+	</div>
+
+	{{ form_end(formTrick) }}
+	
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+	<script type="text/javascript" src="{{ asset('js/add_trick.js') }}"></script>
+{% endblock %}

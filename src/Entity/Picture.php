@@ -22,6 +22,11 @@ class Picture
     private $filename;
 
     /**
+     * @var UploadedFile
+     */
+    protected $file; // TEMP
+
+    /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Trick", inversedBy="pictures")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -52,6 +57,18 @@ class Picture
     public function setTrick(?Trick $trick): self
     {
         $this->trick = $trick;
+
+        return $this;
+    }
+
+    public function getFile()
+    {
+        return $this->file;
+    }
+
+    public function setFile($file)
+    {
+        $this->file = $file;
 
         return $this;
     }

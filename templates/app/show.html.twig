@@ -12,19 +12,21 @@
 			<div class="row">
 				<div class="container-fluid" id="second-container">
 					<div class="row" id="trick-head">
-						<img class="" id="trick-head-banner" src="{{ trick.pictures.first.filename }}" alt="">
+						<img class="" id="trick-head-banner" src="
+						{{ trick.pictures|length > 0 ? trick.pictures.first.filename starts with 'http://' ? trick.pictures.first.filename : asset('uploads/img/' ~ trick.pictures.first.filename) : asset('images/banner.jpg') }}
+						" alt="">
 						<div class="" id="trick-head-title"><h1>{{ trick.name }}</h1></div>
 					</div>
 					<article class="trick-details">
 						<div id="medias" class="row">
 							{% for picture in trick.pictures %}
 								<div class="col-sm-6 col-md-4 col-lg-3 trick-details-media">
-									<img class="img-fluid" src="{{ picture.filename }}" alt="">
+									<img class="img-fluid" src="{{ picture.filename starts with 'http://' ? picture.filename : asset('uploads/img/' ~ picture.filename) }}" alt="">
 								</div>
 							{% endfor %}
 							{% for video in trick.videos %}
-								<div class="col-sm-6 col-md-4 col-lg-3 trick-details-media">
-									<iframe class="" width="" height="" src="{{ video.embedLink }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+								<div class="col-sm-6 col-md-4 col-lg-4 trick-details-media">
+									<iframe width="" height="" src="{{ video.embedLink }}" frameborder="0" allow="accelerometer; fullscreen; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 								</div>
 							{% endfor %}
 						</div>
@@ -51,11 +53,6 @@
 						        {{ form_errors(commentForm.content) }}
 						    </div>
 						</div>
-						{#{ form_row(commentForm.author, {'attr': {'placeholder': "Votre nom"}}) }#}
-						{#{ form_row(commentForm.content, {
-							'attr': {'placeholder': "Votre commentaire"},
-							'attr': {'class': "mx-2"}
-						}) }#}
 						<button type="submit" class="btn btn-success">Laisser un commentaire</button>
 						{{ form_end(commentForm) }}
 					{% else %}
@@ -64,7 +61,7 @@
 					{% endif %}
 					<hr>
 					<section id="commentaires">
-						<h1>{#{ trick.comments | length }#} {{ comments | length }} commentaires : </h1>
+						<h1>{{ trick.comments | length }} commentaires :</h1>
 						{% for comment in comments %}
 						<div class="row comment">
 							<div class="offset-1 col-1">

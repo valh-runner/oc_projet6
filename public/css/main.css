@@ -207,6 +207,7 @@ article {
 
 .trick-details .trick-details-media iframe{
 	width:100%;
+	background-color: #000;
 }
 
 
@@ -221,4 +222,15 @@ article {
 
 #registration h1 {
 	text-align: center;
+}
+
+ul.videos {
+	list-style-type: none;
+}
+ul.pictures {
+	list-style-type: none;
+}
+
+.custom-file-input ~ .custom-file-label::after {
+    content: "Parcourir";
 }

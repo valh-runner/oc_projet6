@@ -77,10 +77,15 @@ class AppFixtures extends Fixture
 		        	}
 
 			    	// Create 3 fake videos
-		        	for($o = 1; $o <= 3; $o++){
-		        		$video = new Video();
+		        	$embedLinks = [
+		        		'https://www.youtube.com/embed/I14b-C67EXY',
+		        		'https://www.dailymotion.com/embed/video/x2m8jpp',
+		        		'https://player.vimeo.com/video/60459898'
+		        	];
 
-		        		$video->setEmbedLink('https://www.youtube.com/embed/I14b-C67EXY')
+		        	foreach($embedLinks as $embedLink){
+		        		$video = new Video();
+		        		$video->setEmbedLink($embedLink)
 		        			  ->setTrick($trick);
 		        		$manager->persist($video);
 		        	}
