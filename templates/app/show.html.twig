@@ -6,6 +6,8 @@
 	<div class="fixed faded" id="fullbanner"></div>
 {% endblock %}
 
+{% block title %}Détails d'un trick{% endblock %}
+
 {% block body %}
 	<div class="row">
 		<div class="offset-sm-1 col-sm-10 offset-md-1 col-md-10 offset-lg-2 col-lg-8" id="content">
@@ -35,6 +37,9 @@
 						</div>
 						<div id="tags">
 							<span>Créé le {{ trick.creationMoment | date('d/m/Y') }} à {{ trick.creationMoment | date('H:i') }}</span>
+				            {% if trick.revisionMoment is not null %}
+				    			<span>Modifié le {{ trick.revisionMoment | date('d/m/Y') }} à {{ trick.revisionMoment | date('H:i') }}</span>
+				            {% endif %}
 							<span>catégorie {{ trick.category.name }}</span>
 						</div>
 					</article>

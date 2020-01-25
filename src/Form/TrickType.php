@@ -15,6 +15,7 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Image;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 class TrickType extends AbstractType
@@ -24,7 +25,6 @@ class TrickType extends AbstractType
         $builder
             ->add('name')
             ->add('description')
-            //->add('revisionMoment')
             ->add('categoryType', ChoiceType::class, [
                 'choices'  => [
                     'Catégorie existante' => 1,
@@ -50,14 +50,6 @@ class TrickType extends AbstractType
                     new NotBlank(['groups' => ['newCat']]),
                 ],
             ])
-            ->add('videos', CollectionType::class, [
-                'entry_type' => VideoType::class,
-                'entry_options' => ['label' => false],
-                'allow_add' => true,
-                'by_reference' => false,
-                'allow_delete' => true,
-                'label' => false
-            ])
             ->add('pictures', CollectionType::class, [
                 'entry_type' => PictureType::class,
                 'entry_options' => ['label' => false],
@@ -66,6 +58,30 @@ class TrickType extends AbstractType
                 'allow_delete' => true,
                 'label' => false
             ])
+            ->add('videos', CollectionType::class, [
+                'entry_type' => VideoType::class,
+                'entry_options' => ['label' => false],
+                'allow_add' => true,
+                'by_reference' => false,
+                'allow_delete' => true,
+                'label' => false
+            ])
+            /*->add('featuredPicture', FileType::class, [
+                'mapped' => false, // to not try to store the file in the database
+                'required' => false, // to not re-upload the file at every edit for update
+                'constraints' => [
+                    new Image([
+                        'maxSize' => '1024k',
+                        'maxSizeMessage' => 'Le fichier image est trop lourd (1024Ko maximum)',
+                        'mimeTypes' => [
+                            'image/jpg',
+                            'image/jpeg',
+                            'image/png',
+                        ],
+                        'mimeTypesMessage' => 'Merci d\'envoyer un fichier image jpeg, jpg ou png valide',
+                    ])
+                ],
+            ])*/
         ;
     }
 
@@ -75,7 +91,6 @@ class TrickType extends AbstractType
             'data_class' => Trick::class,
             'validation_groups' => function (FormInterface $form) {
                 $formData = $form->getData();
-                //$catTypeValue = $formData->getCategoryType();
                 $catTypeValue = $form->get('categoryType')->getData();
 
                 if ($catTypeValue == 1) {

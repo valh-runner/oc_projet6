@@ -234,3 +234,32 @@ ul.pictures {
 .custom-file-input ~ .custom-file-label::after {
     content: "Parcourir";
 }
+
+.img-preview-holder {
+	position: relative;
+	height: 100px;
+    height: 0;
+    padding-bottom: 56.25%;
+	background-color: #000;
+}
+.img-preview {
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	object-fit: cover;
+}
+
+.video-container {
+    position: relative;
+    width: 100%;
+    height: 0;
+    padding-bottom: 56.25%;
+    overflow: hidden;
+}
+.video-container iframe {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+}

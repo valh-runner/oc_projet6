@@ -3,11 +3,6 @@
 // Setup "add and remove" functionnality for each CollectionType
 //--------------------------------------------------------------
 
-jQuery(document).ready(function() {
-	addAndRemoveFunctionnality('videos', false);
-	addAndRemoveFunctionnality('pictures', true);
-});
-
 function addAndRemoveFunctionnality(ulClassname, isFileTypeEntity){
 	var $collectionHolder;
 
@@ -68,39 +63,59 @@ function addVideoForm($collectionHolder, $newLinkLi, isFileTypeEntity) {
     // add a delete link to the new form
     addVideoFormDeleteLink($newFormLi);
 
-    //If as FileType field
+    //If is FileType field
     if(isFileTypeEntity == true){
 
-
     	//Make fileType field, styled by bootstrap, look usable
-    	//$newInputFile = $newFormLi.find('input#trick_pictures_'+ index +'_filename');
     	$newInputFile = $newFormLi.find('.custom-file-input');
 
+    	//On this file input change
         $newInputFile.on('change', function(event) {
             var inputFile = event.currentTarget;
             $(inputFile).parent()
                 .find('.custom-file-label')
                 .html(inputFile.files[0].name);
+
+            //Display of the image preview before form submission
+            if (typeof(FileReader) == "undefined") {
+				alert("Votre navigateur n'est pas capable d'afficher l'aperçu de l'image avant soumission");
+            }else{
+	            var imgPreviewHolder = $(inputFile).parent().parent().parent().find('.img-preview-holder');
+	            var imgPath = $(this)[0].value;
+	            var filename = imgPath.substring(imgPath.lastIndexOf('\\') + 1);
+
+			    var reader = new FileReader();
+			    reader.onload = function(e) {
+			        $("<img />", {
+			            "class": "img-preview",
+			            "src": e.target.result,
+			            "alt" : filename
+			        }).appendTo(imgPreviewHolder);
+			    }
+			    reader.readAsDataURL($(this)[0].files[0]);
+            }
+
         });
     }
 }
 
 function addVideoFormDeleteLink($videoFormLi) {
-    //var $removeFormButton = $('<button type="button">Delete this tag</button>');
-    //$videoFormLi.append($removeFormButton);
-
     $removeFormButton = $videoFormLi.find('button');
-
     $removeFormButton.on('click', function(e) {
         // remove the li for the video form
         $videoFormLi.remove();
     });
 }
 
+jQuery(document).ready(function() {
+	addAndRemoveFunctionnality('videos', false);
+	addAndRemoveFunctionnality('pictures', true);
+});
+
 //Form enhancer
 //-------------
 
-$(document).ready(function(){
+jQuery(document).ready(function(){
 	var $radios = $('input[name="trick[categoryType]"]');
 	$radios.change(function() {
 		var $checked = $radios.filter(':checked');
@@ -123,7 +138,6 @@ $(document).ready(function(){
 	});
 
 	//Make fileInput field, styled by bootstrap, look usable
-
     $('.custom-file-input').on('change', function(event) {
         var inputFile = event.currentTarget;
         $(inputFile).parent()
