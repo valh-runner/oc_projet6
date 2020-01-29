@@ -24,10 +24,16 @@
 						: asset('uploads/img/' ~ trick.mainPictureFilename) }}
 						" alt="">
 						<div class="" id="trick-head-title"><h1>{{ trick.name }}</h1></div>
+						{% if app.user %}
 						<div class="" id="trick-head-actions">
-							<a href="#"><i class="fas fa-pencil-alt" title="Modifier le trick"></i></a>
-							<a href="#"><i class="fas fa-trash-alt" title="Supprimer le trick"></i></a>
+							<a class="btn" href="{{ path('update_trick', {'id': trick.id}) }}">
+								<i class="fas fa-pencil-alt" title="Modifier le trick"></i>
+							</a>
+							<a class="btn" onclick="confirmTrickDeleteModal('{{ trick.id }}')">
+								<i class="fas fa-trash-alt" title="Supprimer le trick"></i>
+							</a>
 						</div>
+						{% endif %}
 					</div>
 					<article class="trick-details">
 						<div id="medias" class="row">

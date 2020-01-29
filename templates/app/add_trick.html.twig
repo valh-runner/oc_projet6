@@ -93,7 +93,7 @@
 					</div>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
 				</div>
 			</div>
 		</div>
@@ -152,7 +152,7 @@
 						}) }}
 						<div class="form-group text-right mt-5">
 							{% if editMode %}
-								<button type="" class="btn btn-danger">Supprimer</button>
+								<a class="btn btn-danger" onclick="confirmTrickDeleteModal('{{ trick.id }}')"><i class="fas fa-trash-alt" title="Supprimer"></i> Supprimer</a>
 							{% endif %}
 							<button type="submit" class="btn btn-primary">{{ editMode ? 'Enregistrer les modifications' : 'Créer le trick' }}</button>
 						</div>
