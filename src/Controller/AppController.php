@@ -25,15 +25,6 @@ class AppController extends AbstractController
     public function index(TrickRepository $repo)
     {
         $tricks = $repo->findAll();
-        /*$tricks = $repo->findBy(
-            [],
-            ['creationMoment' => 'DESC']
-        );*/
-
-        /*$tricks = $repo->createQueryBuilder('e')
-                       ->select('e')
-                       ->orderBy('e.creation_moment', 'DESC')
-                       ->setMaxResults(100);*/
 
         return $this->render('app/index.html.twig', [
             'controller_name' => 'AppController',
@@ -133,7 +124,6 @@ class AppController extends AbstractController
                     // if file uploaded, because field not required
                     if ($file) {
                         $newFilename = $this->saveUploadedFile($file);
-
                         $submittedPicture->setFilename($newFilename); // store only the filename in database
                         $manager->persist($submittedPicture);
                     }
@@ -206,7 +196,7 @@ class AppController extends AbstractController
                         break;
                 }
 
-                // submitted hidden field warning about main picture deletion
+                // submitted hidden field about main picture deletion state
                 $featuredPictureDeletionState = $form->get('featuredPictureDeletionState')->getData();
                 if($featuredPictureDeletionState == 'true'){
                     $trick->setMainPictureFilename(null);
@@ -242,13 +232,7 @@ class AppController extends AbstractController
                         $picture->setTrick(null); // remove the relationship from the relashionship owner - the picture
                         $manager->persist($picture);
                         $manager->remove($picture); // delete the orphan Picture from database
-                        //delete the orphan Picture from files
-                        $filesystem = new Filesystem();
-                        $path = $this->getParameter('images_directory').'/'.$picture->getFilename();
-                        $result = $filesystem->remove($path);
-                        if ($result === false) {
-                            throw new \Exception(sprintf('Error deleting "%s"', $path));
-                        }
+                        $this->deleteUploadedFile($picture->getFilename()); // delete the orphan Picture from files
                     }
                 }
 
@@ -281,16 +265,54 @@ class AppController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route("/suppression_trick/{id}", name="delete_trick")
+     */
+    public function deleteTrick(Trick $trick, EntityManagerInterface $manager)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY'); //restrict access to connected users
+        $user = $this->getUser();
 
+        // remove main picture
+        if($trick->getMainPictureFilename() != null){
+            $this->deleteUploadedFile($trick->getMainPictureFilename()); //delete main picture from files
+        }
+
+        // remove Pictures
+        foreach ($trick->getPictures() as $picture) {
+            $trick->removePicture($picture);
+            $manager->remove($picture); // delete the orphan Picture from database
+            $this->deleteUploadedFile($picture->getFilename()); // delete the orphan Picture from files
+        }
+        // remove Videos
+        foreach ($trick->getVideos() as $video) {
+            $trick->removeVideo($video);
+            $manager->remove($video); // delete the orphan Video
+        }
+        // remove Comments
+        foreach ($trick->getComments() as $comment) {
+            $trick->removeComment($comment);
+            $manager->remove($comment); // delete the orphan Comment
+        }
+
+        $manager->remove($trick);
+        $manager->flush();
+        $this->addFlash('success', 'le trick a bien été supprimé');
+
+        return $this->redirectToRoute('home');
+    }
+
+    /**
+     * 
+     */
     public function saveUploadedFile($file)
     {
         //filename transformations
         $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME); // filename of submitted image
         $safeFilename = transliterator_transliterate('Any-Latin; Latin-ASCII; [^A-Za-z0-9_] remove; Lower()', $originalFilename); // reformated filename
         $newFilename = $safeFilename.'-'.uniqid().'.'.$file->guessExtension(); // unique reformated filename
-        
         try {
-            $file->move( $this->getParameter('images_directory') , $newFilename ); // Move the file to the directory where images are stored
+            $file->move( $this->getParameter('images_directory') , $newFilename ); // Move the file to the uploaded images directory
         } catch (FileException $e) {
             throw $e; // handle exception if something happens during file upload
         }
@@ -298,4 +320,16 @@ class AppController extends AbstractController
         return $newFilename;
     }
 
+    /**
+     * 
+     */
+    public function deleteUploadedFile($filename)
+    {
+        $filesystem = new Filesystem();
+        $path = $this->getParameter('images_directory').'/'.$filename;
+        $result = $filesystem->remove($path);
+        if ($result === false) {
+            throw new \Exception(sprintf('Error deleting "%s"', $path));
+        }
+    }
 }

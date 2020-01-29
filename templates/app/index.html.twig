@@ -10,7 +10,7 @@
 
 {% block body %}
 	<div class="row" id="thegap">
-		<div id="arrow"><a href="#content">Arrow</a></div>
+		<div id="arrow"><a class="btn" href="#content"><i class="fas fa-arrow-down fa-5x" title="Voir les tricks"></i></a></div>
 	</div>
 	<div class="row" id="content">
 		{% for trick in tricks %}
@@ -28,8 +28,16 @@
 						" alt="">
 						<div class="trick-item-bar">
 							<div class="trick-item-title"><h3>{{ trick.name }}<h3></div>
-							<div class="trick-item-edit"><a href="{{ path('update_trick', {'id': trick.id}) }}">Edit</a></div>
-							<div class="trick-item-del"><a href="">Del</a></div>
+							<div class="trick-item-edit">
+								<a class="btn" href="{{ path('update_trick', {'id': trick.id}) }}">
+									<i class="fas fa-pencil-alt" title="Modifier le trick"></i>
+								</a>
+							</div>
+							<div class="trick-item-del">
+								<a class="btn" onclick="confirmTrickDeleteModal('{{ trick.id }}')">
+									<i class="fas fa-trash-alt" title="Supprimer le trick"></i>
+								</a>
+							</div>
 						</div>
 					</a>
 				</div>

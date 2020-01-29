@@ -160,7 +160,6 @@ function ReplaceInitialTitleBannerImage () {
     }
 }
 
-
 jQuery(document).ready(function() {
 	addAndRemoveFunctionnality('videos', false);
 	addAndRemoveFunctionnality('pictures', true);
