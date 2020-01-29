@@ -2,13 +2,19 @@
 
 {% form_theme formTrick 'bootstrap_4_layout.html.twig' %}
 
+{% block fullbanner %}
+	<div class="fixed faded" id="fullbanner"></div>
+{% endblock %}
+
+{% block title %}{{ pageTitle }}{% endblock %}
+
 {% macro printPicturePrototype(picture, placeHolder, isRequired) %}
     <li>
     	<div class="form-row">
 	    	<div class="form-group col-3">
 	    		<div class="img-preview-holder">
 	            {% if picture.vars.value.filename is defined %}
-	    			<img class="img-preview" src="{{ asset('uploads/img/' ~ picture.vars.value.filename) }}" alt="{{ picture.vars.value.filename }}">
+	    			<img class="img-preview" src="{{ picture.vars.value.filename starts with 'http' ? picture.vars.value.filename : asset('uploads/img/' ~ picture.vars.value.filename) }}" alt="{{ picture.vars.value.filename }}">
 	            {% endif %}
 	        	</div>
 	    	</div>
@@ -49,11 +55,50 @@
 {% endmacro %}
 {% import _self as formMacros %}
 
-{% block fullbanner %}
-	<div class="fixed faded" id="fullbanner"></div>
-{% endblock %}
+{% block bodyStart %}
+	{{ form_start(formTrick) }}
 
-{% block title %}{{ pageTitle }}{% endblock %}
+	<div class="modal" id="content_modal" data-backdrop="static" tabindex="-1" role="dialog">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Modal title</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div class="form-row">
+				    	<div class="form-group col-3">
+				    		<div class="img-preview-holder">
+				            {% if trick.mainPictureFilename is defined and trick.mainPictureFilename is not null %}
+				    			<img class="img-preview" src="{{ asset('uploads/img/' ~ trick.mainPictureFilename) }}" alt="{{ trick.mainPictureFilename }}">
+				            {% endif %}
+				        	</div>
+				    	</div>
+				    	<div class="form-group col">
+							{{ form_label(formTrick.featuredPicture, 'Image à la une') }}
+				    		{{ form_widget(formTrick.featuredPicture, {
+								'attr': {
+									'placeholder': trick.mainPictureFilename is defined ? trick.mainPictureFilename : 'Sélectionner un fichier image',
+								},
+								'required': false,
+							}) }}
+				    		{{ form_widget(formTrick.featuredPictureDeletionState, {
+								'attr': {
+									'value': 'false',
+								}
+							}) }}
+				    	</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
 
 {% block body %}
 	<div class="row">
@@ -62,21 +107,19 @@
 				<div class="container-fluid" id="second-container">
 					<div class="row" id="trick-head">
 						<img class="" id="trick-head-banner" src="
-						{{ 
-						trick is defined ?
-							trick.pictures|length > 0 ? 
-								trick.pictures.first.filename starts with 'http://' ? 
+						{{ trick.pictures|length > 0 ? 
+								trick.pictures.first.filename starts with 'http' ? 
 								trick.pictures.first.filename 
 								: asset('uploads/img/' ~ trick.pictures.first.filename) 
-							: asset('images/banner.jpg') 
-						: asset('images/banner.jpg') 
-						}}
+						: asset('images/banner.jpg') }}
 						" alt="">
 						<div class="" id="trick-head-title"><h1>{{ trick is defined ? trick.name : pageTitle }}</h1></div>
+						<div class="" id="trick-head-actions">
+							<a class="btn" data-toggle="modal" href="#content_modal"><i class="fas fa-pencil-alt" title="Modifier l'image à la une"></i></a>
+							<a class="btn" id="action-delete-featuredPicture"><i class="fas fa-trash-alt" title="Supprimer l'image à la une"></i></a>
+						</div>
 					</div>
 					<div class="">
-						{{ form_start(formTrick) }}
-
 						<h5>Images</h5>
 						<ul class="pictures" data-prototype="{{ formMacros.printPicturePrototype(formTrick.pictures.vars.prototype, 'Sélectionner un fichier image', true)|e('html_attr') }}">
 					        {# iterate over each existing picture and render the field filename #}
@@ -92,10 +135,6 @@
 					            {{ formMacros.printVideoPrototype(video) }}
 					        {% endfor %}
 						</ul>
-						{#{ form_row(formTrick.featuredPicture, {
-							'attr': {'placeholder': 'Sélectionner un fichier image'}, 
-							'label' : 'Image à la une'
-						}) }#}
 						{{ form_row(formTrick.name, {
 							'attr': {'placeholder': "Nom du trick"}, 
 							'label' : 'Nom'
@@ -117,13 +156,15 @@
 							{% endif %}
 							<button type="submit" class="btn btn-primary">{{ editMode ? 'Enregistrer les modifications' : 'Créer le trick' }}</button>
 						</div>
-
-						{{ form_end(formTrick) }}
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
+{% endblock %}
+
+{% block bodyEnd %}
+	{{ form_end(formTrick) }}
 {% endblock %}
 
 {% block javascripts %}

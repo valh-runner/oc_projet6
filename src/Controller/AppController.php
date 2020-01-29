@@ -116,32 +116,13 @@ class AppController extends AbstractController
                         break;
                 }
 
-                /*$uploadedFile = $form['featuredPicture']->getData();
-                //$uploadedFile = $form->get('featuredPicture')->getData();
-
-                /*var_dump($uploadedFile);
-                die();*//*
-
-
+                // submitted main picture handling
+                $uploadedFile = $form->get('featuredPicture')->getData();
                 // if file uploaded, because field not required
                 if ($uploadedFile) {
-                    $originalFilename = pathinfo($uploadedFile->getClientOriginalName(), PATHINFO_FILENAME);
-                    $newFilename = $originalFilename.'-'.uniqid().'.'.$uploadedFile->guessExtension();
-
-                    $uploadedFile->move(
-                        $this->getParameter('images_directory'),
-                        $newFilename
-                    );
-
-                    $mainImage = new Picture();
-                    $mainImage->setFilename($newFilename); // store only the filename in database
-                    $mainImage->setTrick($trick);
-                    $trick->setMainImage($mainImage);
-                    $manager->persist($mainImage);
-                }else{
-                    echo 'Shit';
-                    die();
-                }*/
+                    $newUploadedFilename = $this->saveUploadedFile($uploadedFile);
+                    $trick->setMainPictureFilename($newUploadedFilename);
+                }
 
                 // submitted pictures handling
                 $submittedPictures = $trick->getPictures();
@@ -151,7 +132,10 @@ class AppController extends AbstractController
 
                     // if file uploaded, because field not required
                     if ($file) {
-                        $this->saveUploadedFile($submittedPicture, $file, $manager);
+                        $newFilename = $this->saveUploadedFile($file);
+
+                        $submittedPicture->setFilename($newFilename); // store only the filename in database
+                        $manager->persist($submittedPicture);
                     }
                 }
 
@@ -222,6 +206,20 @@ class AppController extends AbstractController
                         break;
                 }
 
+                // submitted hidden field warning about main picture deletion
+                $featuredPictureDeletionState = $form->get('featuredPictureDeletionState')->getData();
+                if($featuredPictureDeletionState == 'true'){
+                    $trick->setMainPictureFilename(null);
+                }
+
+                // submitted main picture handling
+                $uploadedFile = $form->get('featuredPicture')->getData();
+                // if file uploaded, because field not required
+                if ($uploadedFile) {
+                    $newUploadedFilename = $this->saveUploadedFile($uploadedFile);
+                    $trick->setMainPictureFilename($newUploadedFilename);
+                }
+
                 // submitted pictures handling
                 $submittedPictures = $trick->getPictures();
                 foreach($submittedPictures as $submittedPicture){
@@ -229,7 +227,10 @@ class AppController extends AbstractController
                         /** @var UploadedFile $file */
                         $file = $submittedPicture->getFile();
                         if ($file) { // if file uploaded
-                            $this->saveUploadedFile($submittedPicture, $file, $manager);
+                            $newFilename = $this->saveUploadedFile($file);
+                            
+                            $submittedPicture->setFilename($newFilename); // store only the filename in database
+                            $manager->persist($submittedPicture);
                         }
                     }
                 }
@@ -281,7 +282,7 @@ class AppController extends AbstractController
     }
 
 
-    public function saveUploadedFile($submittedPicture, $file, $manager)
+    public function saveUploadedFile($file)
     {
         //filename transformations
         $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME); // filename of submitted image
@@ -294,8 +295,7 @@ class AppController extends AbstractController
             throw $e; // handle exception if something happens during file upload
         }
 
-        $submittedPicture->setFilename($newFilename); // store only the filename in database
-        $manager->persist($submittedPicture);
+        return $newFilename;
     }
 
 }

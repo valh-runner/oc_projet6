@@ -9,6 +9,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
@@ -66,7 +67,7 @@ class TrickType extends AbstractType
                 'allow_delete' => true,
                 'label' => false
             ])
-            /*->add('featuredPicture', FileType::class, [
+            ->add('featuredPicture', FileType::class, [
                 'mapped' => false, // to not try to store the file in the database
                 'required' => false, // to not re-upload the file at every edit for update
                 'constraints' => [
@@ -81,7 +82,10 @@ class TrickType extends AbstractType
                         'mimeTypesMessage' => 'Merci d\'envoyer un fichier image jpeg, jpg ou png valide',
                     ])
                 ],
-            ])*/
+            ])
+            ->add('featuredPictureDeletionState', HiddenType::class, [
+                'mapped' => false, // to not try to store the file in the database
+            ])
         ;
     }
 

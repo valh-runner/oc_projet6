@@ -19,10 +19,11 @@
         <div class="col d-none d-none d-xl-block">xl - très grand écran</div>
       </div></div></div>-->
 
+      {% block bodyStart %}{% endblock %}
 
       {% set flashes = app.flashes %}
       <div class="modal fade" id="notices_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-show="{{ flashes|length > 0 ? 'true' : 'false' }}">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-dialog-centered" role="document">
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title" id="exampleModalLabel">Information</h5>
@@ -96,10 +97,13 @@
         </footer>
       </div>
 
+      {% block bodyEnd %}{% endblock %}
+
       {% block javascripts %}
         <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+        <script src="https://kit.fontawesome.com/6476d46678.js" crossorigin="anonymous"></script>
         <script type="text/javascript">
           $('#notices_modal').modal();
         </script>
