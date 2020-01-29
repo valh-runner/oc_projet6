@@ -22,6 +22,7 @@ class AppFixtures extends Fixture
     public function load(ObjectManager $manager)
     {
     	$faker = \Faker\Factory::create('fr_FR');
+    	$incrementedPictureSeed = 1;
 
     	// Create 5 fake users
     	for($i = 1; $i <= 5; $i++){
@@ -69,9 +70,10 @@ class AppFixtures extends Fixture
 
 			    	// Create 3 fake pictures
 		        	for($n = 1; $n <= 3; $n++){
-		        		$picture = new Picture();
+		        		$incrementedPictureSeed++; // to get a static random image found by the seed value
 
-		        		$picture->setFilename($faker->imageUrl())
+		        		$picture = new Picture();
+		        		$picture->setFilename('https://picsum.photos/seed/'.$incrementedPictureSeed.'/800/600')
 		        				->setTrick($trick);
 		        		$manager->persist($picture);
 		        	}

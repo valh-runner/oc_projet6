@@ -68,6 +68,11 @@ class Trick
      */
     private $videos;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $mainPictureFilename;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
@@ -241,6 +246,18 @@ class Trick
                 $video->setTrick(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getMainPictureFilename(): ?string
+    {
+        return $this->mainPictureFilename;
+    }
+
+    public function setMainPictureFilename(?string $mainPictureFilename): self
+    {
+        $this->mainPictureFilename = $mainPictureFilename;
 
         return $this;
     }

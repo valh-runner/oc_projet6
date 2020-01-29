@@ -7,7 +7,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints\File;
+use Symfony\Component\Validator\Constraints\Image;
 
 class PictureType extends AbstractType
 {
@@ -17,12 +17,12 @@ class PictureType extends AbstractType
             ->add('file', FileType::class, [
                 //'mapped' => false, // to not try to store the file in the database
                 //'required' => false, // to not re-upload the file at every edit for update
-                // the way to define constraints on unmapped fields
                 'constraints' => [
-                    new File([
+                    new Image([
                         'maxSize' => '1024k',
                         'maxSizeMessage' => 'Le fichier image est trop lourd (1024Ko maximum)',
                         'mimeTypes' => [
+                            'image/jpg',
                             'image/jpeg',
                             'image/png',
                         ],

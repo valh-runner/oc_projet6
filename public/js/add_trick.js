@@ -1,12 +1,34 @@
 
+//Form enhancer
+//-------------
+
+function enhanceForm() {
+    var $radios = $('input[name="trick[categoryType]"]');
+    $radios.change(function() {
+        var $checked = $radios.filter(':checked');
+        if($checked.val() == 1) {
+            $('#trick_newCategory').removeAttr('required');
+            $('#trick_existantCategory').removeAttr('disabled');
+            $('#trick_newCategory').attr('disabled', 'disabled');
+            $('#trick_existantCategory').attr('required', 'required');
+        } else if($checked.val() == 2) {
+            $('#trick_existantCategory').removeAttr('required');
+            $('#trick_newCategory').removeAttr('disabled');
+            $('#trick_existantCategory').attr('disabled', 'disabled');
+            $('#trick_newCategory').attr('required', 'required');
+        } else {
+            $('#trick_existantCategory').removeAttr('required');
+            $('#trick_existantCategory').removeAttr('disabled');
+            $('#trick_newCategory').removeAttr('required');
+            $('#trick_newCategory').removeAttr('disabled');
+        }
+    });
+}
+
+
 
 // Setup "add and remove" functionnality for each CollectionType
 //--------------------------------------------------------------
-
-jQuery(document).ready(function() {
-	addAndRemoveFunctionnality('videos', false);
-	addAndRemoveFunctionnality('pictures', true);
-});
 
 function addAndRemoveFunctionnality(ulClassname, isFileTypeEntity){
 	var $collectionHolder;
@@ -21,7 +43,7 @@ function addAndRemoveFunctionnality(ulClassname, isFileTypeEntity){
 
     // add a delete link to all of the existing video form li elements
     $collectionHolder.find('li').each(function() {
-        addVideoFormDeleteLink($(this));
+        addItemFormDeleteLink($(this));
     });
 
     // add the "add a tag" anchor and li to the videos ul
@@ -34,16 +56,16 @@ function addAndRemoveFunctionnality(ulClassname, isFileTypeEntity){
 
     $addVideoButton.on('click', function(e) {
         // add a new video form
-        addVideoForm($collectionHolder, $newLinkLi, isFileTypeEntity);
+        addItemForm($collectionHolder, $newLinkLi, isFileTypeEntity);
     });
 
     //if no existant field, create default one
     if(index == 1){
-    	addVideoForm($collectionHolder, $newLinkLi, isFileTypeEntity);
+    	addItemForm($collectionHolder, $newLinkLi, isFileTypeEntity);
     }
 }
 
-function addVideoForm($collectionHolder, $newLinkLi, isFileTypeEntity) {
+function addItemForm($collectionHolder, $newLinkLi, isFileTypeEntity) {
     // Get the data-prototype explained earlier
     var prototype = $collectionHolder.data('prototype');
     // get the new index
@@ -62,72 +84,122 @@ function addVideoForm($collectionHolder, $newLinkLi, isFileTypeEntity) {
     // increase the index with one for the next item
     $collectionHolder.data('index', index + 1);
     // Display the form in the page in an li, before the "Add a tag" link li
-    var $newFormLi = $('<li></li>').append(newForm);
-    $newLinkLi.before($newFormLi);
+    var $newForm = $(newForm);
+    $newLinkLi.before($newForm);
 
     // add a delete link to the new form
-    addVideoFormDeleteLink($newFormLi);
+    addItemFormDeleteLink($newForm);
 
-    //If as FileType field
+    //If is FileType field
     if(isFileTypeEntity == true){
 
+    	$newInputFile = $newForm.find('.custom-file-input');
 
-    	//Make fileType field, styled by bootstrap, look usable
-    	//$newInputFile = $newFormLi.find('input#trick_pictures_'+ index +'_filename');
-    	$newInputFile = $newFormLi.find('.custom-file-input');
-
+    	//On this file input change
         $newInputFile.on('change', function(event) {
+
+            //Make fileType field, styled by bootstrap, look usable
             var inputFile = event.currentTarget;
             $(inputFile).parent()
                 .find('.custom-file-label')
                 .html(inputFile.files[0].name);
+
+            previewImageForInputFile(inputFile);
         });
     }
 }
 
-function addVideoFormDeleteLink($videoFormLi) {
-    //var $removeFormButton = $('<button type="button">Delete this tag</button>');
-    //$videoFormLi.append($removeFormButton);
-
+function addItemFormDeleteLink($videoFormLi) {
     $removeFormButton = $videoFormLi.find('button');
-
     $removeFormButton.on('click', function(e) {
         // remove the li for the video form
         $videoFormLi.remove();
     });
 }
 
-//Form enhancer
-//-------------
+function previewImageForInputFile(inputFile, callback = false) {
+            
+    //Display of the image preview before form submission
+    if (typeof(FileReader) == "undefined") {
+        alert("Votre navigateur n'est pas capable d'afficher l'aperÃ§u de l'image avant soumission");
+    }else{
+        var imgPreviewHolder = $(inputFile).parent().parent().parent().find('.img-preview-holder');
+        var imgPath = $(inputFile)[0].value;
+        var filename = imgPath.substring(imgPath.lastIndexOf('\\') + 1);
 
-$(document).ready(function(){
-	var $radios = $('input[name="trick[categoryType]"]');
-	$radios.change(function() {
-		var $checked = $radios.filter(':checked');
-		if($checked.val() == 1) {
-			$('#trick_newCategory').removeAttr('required');
-			$('#trick_existantCategory').removeAttr('disabled');
-			$('#trick_newCategory').attr('disabled', 'disabled');
-			$('#trick_existantCategory').attr('required', 'required');
-		} else if($checked.val() == 2) {
-			$('#trick_existantCategory').removeAttr('required');
-			$('#trick_newCategory').removeAttr('disabled');
-			$('#trick_existantCategory').attr('disabled', 'disabled');
-			$('#trick_newCategory').attr('required', 'required');
-		} else {
-			$('#trick_existantCategory').removeAttr('required');
-			$('#trick_existantCategory').removeAttr('disabled');
-			$('#trick_newCategory').removeAttr('required');
-			$('#trick_newCategory').removeAttr('disabled');
-		}
-	});
+        var reader = new FileReader();
+        reader.onload = function(e) {
 
-	//Make fileInput field, styled by bootstrap, look usable
+            imgPreviewHolder.empty(); // clear eventual previous preview image
+            // add new preview image
+            $("<img />", {
+                "class": "img-preview",
+                "src": e.target.result,
+                "alt" : filename
+            }).appendTo(imgPreviewHolder); 
 
-    $('.custom-file-input').on('change', function(event) {
+            if(callback != false){
+                callback(e.target.result);
+            }
+        }
+        reader.readAsDataURL($(inputFile)[0].files[0]);
+    }
+}
+
+var initialTitleBannerSrc = null;
+
+var funcPreviewImageInTitleBanner = function (filename) {
+    initialTitleBannerSrc = $('#trick-head-banner').attr('src');
+    $('#trick-head-banner').attr('src', filename);
+}
+
+
+function ReplaceInitialTitleBannerImage () {
+    if(initialTitleBannerSrc != null){
+        $('#trick-head-banner').attr('src', initialTitleBannerSrc);
+    }
+}
+
+
+jQuery(document).ready(function() {
+	addAndRemoveFunctionnality('videos', false);
+	addAndRemoveFunctionnality('pictures', true);
+
+    $newInputFile = $('input[id="trick_featuredPicture"]');
+    //On this file input change
+    $newInputFile.on('change', function(event) {
+
+        //Make fileType field, styled by bootstrap, look usable
         var inputFile = event.currentTarget;
         $(inputFile).parent()
             .find('.custom-file-label')
             .html(inputFile.files[0].name);
+
+        previewImageForInputFile(inputFile, funcPreviewImageInTitleBanner);
     });
+
+    $('#action-delete-featuredPicture').on('click', function(e) {
+        //if featuredPicture file input hold a file
+
+            // file input reinitialization
+            $inputFile = $('input[id="trick_featuredPicture"]');
+            $inputFile.val('');
+            //$InputFile.attr('placeholder', 'Sélectionner un fichier image');
+            $inputFile.parent().find('.custom-file-label').text('Sélectionner un fichier image');
+
+            //deletion of preview image
+            var imgPreviewHolder = $inputFile.parent().parent().parent().find('.img-preview-holder');
+            imgPreviewHolder.empty();
+
+            $('input[id="trick_featuredPictureDeletionState"]').attr('value', 'true'); //to know to apply the main picture deletion
+            ReplaceInitialTitleBannerImage();
+    });
+
+    imgPreviewSearch = $('input[id="trick_featuredPicture"]').parent().parent().parent().find('.img-preview');
+    // if featuredPicture is preset
+    if( imgPreviewSearch.length == 1 ){
+        funcPreviewImageInTitleBanner(imgPreviewSearch.attr('src')); //set same picture in banner title
+    }
+
+    enhanceForm();
 });

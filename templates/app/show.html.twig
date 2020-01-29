@@ -6,22 +6,34 @@
 	<div class="fixed faded" id="fullbanner"></div>
 {% endblock %}
 
+{% block title %}Détails d'un trick{% endblock %}
+
 {% block body %}
 	<div class="row">
-		<div class="offset-sm-1 col-sm-10 offset-md-1 col-md-10 offset-lg-2 col-lg-8" id="content">
+		<div class="col-sm-12 offset-md-1 col-md-10" id="content">
 			<div class="row">
 				<div class="container-fluid" id="second-container">
 					<div class="row" id="trick-head">
 						<img class="" id="trick-head-banner" src="
-						{{ trick.pictures|length > 0 ? trick.pictures.first.filename starts with 'http://' ? trick.pictures.first.filename : asset('uploads/img/' ~ trick.pictures.first.filename) : asset('images/banner.jpg') }}
+						{{ trick.mainPictureFilename is null ?
+								trick.pictures|length > 0 ? 
+									trick.pictures.first.filename starts with 'http' ? 
+									trick.pictures.first.filename 
+									: asset('uploads/img/' ~ trick.pictures.first.filename) 
+								: asset('images/banner.jpg') 
+						: asset('uploads/img/' ~ trick.mainPictureFilename) }}
 						" alt="">
 						<div class="" id="trick-head-title"><h1>{{ trick.name }}</h1></div>
+						<div class="" id="trick-head-actions">
+							<a href="#"><i class="fas fa-pencil-alt" title="Modifier le trick"></i></a>
+							<a href="#"><i class="fas fa-trash-alt" title="Supprimer le trick"></i></a>
+						</div>
 					</div>
 					<article class="trick-details">
 						<div id="medias" class="row">
 							{% for picture in trick.pictures %}
 								<div class="col-sm-6 col-md-4 col-lg-3 trick-details-media">
-									<img class="img-fluid" src="{{ picture.filename starts with 'http://' ? picture.filename : asset('uploads/img/' ~ picture.filename) }}" alt="">
+									<img class="img-fluid" src="{{ picture.filename starts with 'http' ? picture.filename : asset('uploads/img/' ~ picture.filename) }}" alt="">
 								</div>
 							{% endfor %}
 							{% for video in trick.videos %}
@@ -35,6 +47,9 @@
 						</div>
 						<div id="tags">
 							<span>Créé le {{ trick.creationMoment | date('d/m/Y') }} à {{ trick.creationMoment | date('H:i') }}</span>
+				            {% if trick.revisionMoment is not null %}
+				    			<span>Modifié le {{ trick.revisionMoment | date('d/m/Y') }} à {{ trick.revisionMoment | date('H:i') }}</span>
+				            {% endif %}
 							<span>catégorie {{ trick.category.name }}</span>
 						</div>
 					</article>
@@ -44,8 +59,9 @@
 							'attr': {'class': "form-inline"}
 						}) }}
 						<div class="form-group">
-						    <i class="fa fa-calendar"></i> 
-						    {{ form_widget(commentForm.content) }}
+						    {{ form_widget(commentForm.content, {
+								'attr': {'placeholder': 'Votre message...'}
+							}) }}
 
 						    <small>{{ form_help(commentForm.content) }}</small>
 
@@ -53,15 +69,15 @@
 						        {{ form_errors(commentForm.content) }}
 						    </div>
 						</div>
-						<button type="submit" class="btn btn-success">Laisser un commentaire</button>
+						<button type="submit" class="btn btn-success">Ajouter un commentaire</button>
 						{{ form_end(commentForm) }}
 					{% else %}
-						<h2>Vous ne pouvez pas commenter si vous n'êtes pas connecté !</h2>
+						<h3>Vous ne pouvez pas commenter si vous n'êtes pas connecté !</h3>
 						<a href="{{ path('security_login') }}" class="btn btn-primary">Connexion</a>
 					{% endif %}
 					<hr>
 					<section id="commentaires">
-						<h1>{{ trick.comments | length }} commentaires :</h1>
+						<h3>{{ trick.comments | length }} commentaires :</h3>
 						{% for comment in comments %}
 						<div class="row comment">
 							<div class="offset-1 col-1">
