@@ -280,3 +280,18 @@ ul.pictures {
     top: 0;
     left: 0;
 }
+
+
+#title-manage-account {
+	margin-top:  50px;
+}
+
+form[name="account"] {
+  margin-top:  50px;
+  margin-bottom:  20px;
+}
+
+.img-avatar {
+	height: 50px;
+	width: 50px;
+}

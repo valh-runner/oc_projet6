@@ -7,6 +7,7 @@ use App\Entity\Comment;
 use App\Entity\Picture;
 use App\Entity\Trick;
 use App\Entity\Video;
+use App\Form\AccountType;
 use App\Form\CommentType;
 use App\Form\TrickType;
 use App\Repository\TrickRepository;
@@ -300,6 +301,43 @@ class AppController extends AbstractController
         $this->addFlash('success', 'le trick a bien été supprimé');
 
         return $this->redirectToRoute('home');
+    }
+
+    /**
+     * @Route("/gestion_compte", name="manage_account")
+     */
+    public function manageAccount(Request $request, EntityManagerInterface $manager)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY'); //restrict access to connected users
+        $user = $this->getUser();
+
+        $form = $this->createForm(AccountType::class);
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()){
+
+            // submitted hidden field about account picture deletion state
+            $accountPictureDeletionState = $form->get('pictureDeletionState')->getData();
+            if($accountPictureDeletionState == 'true'){
+                $user->setPictureFilename(null);
+            }
+
+            // submitted account picture handling
+            $uploadedFile = $form->get('accountPicture')->getData();
+            // if file uploaded, because field not required
+            if ($uploadedFile) {
+                $newUploadedFilename = $this->saveUploadedFile($uploadedFile);
+                $user->setPictureFilename($newUploadedFilename);
+            }
+
+            $manager->flush();
+            $this->addFlash('success', 'La modification de l\'image du compte a bien été prise en compte');
+            return $this->redirectToRoute('home');
+        }
+
+        return $this->render('app/manage_account.html.twig', [
+            'form' => $form->createView(),
+            'user' => $user,
+        ]);
     }
 
     /**

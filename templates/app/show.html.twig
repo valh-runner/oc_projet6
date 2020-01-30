@@ -87,7 +87,11 @@
 						{% for comment in comments %}
 						<div class="row comment">
 							<div class="offset-1 col-1">
-								img
+					            {% if comment.user.pictureFilename is defined and comment.user.pictureFilename is not null %}
+					    			<img class="img-avatar" src="{{ asset('uploads/img/' ~ comment.user.pictureFilename) }}" alt="{{ comment.user.pictureFilename }}">
+					    		{% else %}
+					    			<img class="img-avatar" src="{{ asset('images/' ~ 'default_avatar.jpg') }}" alt="default avatar">
+					            {% endif %}
 							</div>
 							<div class="col-9 comment-content">
 								<div>
