@@ -80,7 +80,7 @@
 							{{ form_label(formTrick.featuredPicture, 'Image à la une') }}
 				    		{{ form_widget(formTrick.featuredPicture, {
 								'attr': {
-									'placeholder': trick.mainPictureFilename is defined ? trick.mainPictureFilename : 'Sélectionner un fichier image',
+									'placeholder': trick.mainPictureFilename is defined and trick.mainPictureFilename is not null ? trick.mainPictureFilename : 'Sélectionner un fichier image',
 								},
 								'required': false,
 							}) }}
@@ -107,10 +107,12 @@
 				<div class="container-fluid" id="second-container">
 					<div class="row" id="trick-head">
 						<img class="" id="trick-head-banner" src="
-						{{ trick.pictures|length > 0 ? 
-								trick.pictures.first.filename starts with 'http' ? 
-								trick.pictures.first.filename 
-								: asset('uploads/img/' ~ trick.pictures.first.filename) 
+						{{ trick is defined ? 
+								trick.pictures|length > 0 ? 
+										trick.pictures.first.filename starts with 'http' ? 
+										trick.pictures.first.filename 
+										: asset('uploads/img/' ~ trick.pictures.first.filename) 
+								: asset('images/banner.jpg') 
 						: asset('images/banner.jpg') }}
 						" alt="">
 						<div class="" id="trick-head-title"><h1>{{ trick is defined ? trick.name : pageTitle }}</h1></div>
