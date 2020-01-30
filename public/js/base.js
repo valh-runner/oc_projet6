@@ -38,7 +38,5 @@ function trickDelete(id){
 
 
 jQuery(document).ready(function() {
-
-
     $('#notices_modal').modal();
 });

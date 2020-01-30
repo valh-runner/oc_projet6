@@ -152,9 +152,16 @@ article {
 
 #arrow {
 	position: absolute;
-	right: 0px;
-	bottom: 100px;
+	right: 1vw;
+	top: 88vh;
 	background: linear-gradient(0deg, rgba(255, 255, 255, 0.7) 0% , transparent 100%);
+}
+
+#arrow2 {
+	position: absolute;
+	right: 1vw;
+	bottom: 20vh;
+	display: none;
 }
 
 #second-container {
@@ -294,4 +301,12 @@ form[name="account"] {
 .img-avatar {
 	height: 50px;
 	width: 50px;
+}
+
+#action-load-more {
+	margin-top: 30px;
+}
+
+#link-new-trick {
+	margin-top: 50px;
 }
