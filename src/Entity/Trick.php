@@ -153,6 +153,16 @@ class Trick
         return $this->comments;
     }
 
+    /**
+     * @return Collection|Comment[]
+     */
+    public function getCommentsSlice(int $offset, int $length): Collection
+    {
+        //$commentsSlice = new ArrayCollection();
+        $commentsSlice = $this->comments->slice($offset, $length); 
+        return new ArrayCollection($commentsSlice);
+    }
+
     public function addComment(Comment $comment): self
     {
         if (!$this->comments->contains($comment)) {
