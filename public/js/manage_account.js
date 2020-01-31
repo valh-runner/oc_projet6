@@ -13,19 +13,17 @@ jQuery(document).ready(function() {
     });
 
     $('#action-delete-accountPicture').on('click', function(e) {
-        //if featuredPicture file input hold a file
 
-            // file input reinitialization
-            $inputFile = $('input[id="account_accountPicture"]');
-            $inputFile.val('');
-            //$InputFile.attr('placeholder', 'Sélectionner un fichier image');
-            $inputFile.parent().find('.custom-file-label').text('Sélectionner un fichier image');
+        // file input reinitialization
+        $inputFile = $('input[id="account_accountPicture"]');
+        $inputFile.val('');
+        $inputFile.parent().find('.custom-file-label').text('Sélectionner un fichier image');
 
-            //deletion of preview image
-            var imgPreviewHolder = $inputFile.parent().parent().parent().find('.img-preview-holder');
-            imgPreviewHolder.empty();
+        //deletion of preview image
+        var imgPreviewHolder = $inputFile.parent().parent().parent().find('.img-preview-holder');
+        imgPreviewHolder.empty();
 
-            $('input[id="account_pictureDeletionState"]').attr('value', 'true'); //to know to apply the main picture deletion
+        $('input[id="account_pictureDeletionState"]').attr('value', 'true'); //to know to apply the main picture deletion
     });
 
     imgPreviewSearch = $('input[id="trick_featuredPicture"]').parent().parent().parent().find('.img-preview');

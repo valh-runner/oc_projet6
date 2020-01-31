@@ -25,7 +25,7 @@
 						" alt="">
 						<div class="" id="trick-head-title"><h1>{{ trick.name }}</h1></div>
 						{% if app.user %}
-						<div class="" id="trick-head-actions">
+						<div id="trick-head-actions">
 							<a class="btn" href="{{ path('update_trick', {'id': trick.id}) }}">
 								<i class="fas fa-pencil-alt" title="Modifier le trick"></i>
 							</a>
@@ -84,28 +84,38 @@
 					<hr>
 					<section id="commentaires">
 						<h3>{{ trick.comments | length }} commentaires :</h3>
-						{% for comment in comments %}
-						<div class="row comment">
-							<div class="offset-1 col-1">
-					            {% if comment.user.pictureFilename is defined and comment.user.pictureFilename is not null %}
-					    			<img class="img-avatar" src="{{ asset('uploads/img/' ~ comment.user.pictureFilename) }}" alt="{{ comment.user.pictureFilename }}">
-					    		{% else %}
-					    			<img class="img-avatar" src="{{ asset('images/' ~ 'default_avatar.jpg') }}" alt="default avatar">
-					            {% endif %}
-							</div>
-							<div class="col-9 comment-content">
-								<div>
-									{{comment.content | raw}}
+						<div id="comments-content">
+							{% for comment in comments |slice(0, 10) %}
+							<div class="row comment">
+								<div class="offset-1 col-1">
+						            {% if comment.user.pictureFilename is defined and comment.user.pictureFilename is not null %}
+						    			<img class="img-avatar" src="{{ asset('uploads/img/' ~ comment.user.pictureFilename) }}" alt="{{ comment.user.pictureFilename }}">
+						    		{% else %}
+						    			<img class="img-avatar" src="{{ asset('images/' ~ 'default_avatar.jpg') }}" alt="default avatar">
+						            {% endif %}
 								</div>
-								<div>
-									{{comment.user.username}} (<small>{{comment.creationMoment | date('d/m/Y à H:i') }}</small>)
+								<div class="col-9 comment-content">
+									<div>
+										{{comment.content | raw}}
+									</div>
+									<div>
+										{{comment.user.username}} (<small>{{comment.creationMoment | date('d/m/Y à H:i') }}</small>)
+									</div>
 								</div>
 							</div>
+							{% endfor %}
 						</div>
-						{% endfor %}
+						<div id="comments-paging-actions" data-trick-id="{{ trick.id }}">
+							<a id="action-paging-1" class="btn btn-primary" onclick="changeCommentsPage({{ trick.id }}, '1')">1</a>
+						</div>
 					</section>
 				</div>
 			</div>
 		</div>
 	</div>
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+	<script type="text/javascript" src="{{ asset('js/show.js') }}"></script>
 {% endblock %}

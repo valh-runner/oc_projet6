@@ -149,7 +149,6 @@ jQuery(document).ready(function() {
     });
 
     $('#action-delete-featuredPicture').on('click', function(e) {
-        //if featuredPicture file input hold a file
 
             // file input reinitialization
             $inputFile = $('input[id="trick_featuredPicture"]');
