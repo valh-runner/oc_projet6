@@ -25,7 +25,8 @@ class AppController extends AbstractController
      */
     public function index(TrickRepository $repo)
     {
-        $tricks = $repo->findAll();
+        //$tricks = $repo->findAll();
+        $tricks = $repo->findBy(array(), null, 8);
 
         return $this->render('app/index.html.twig', [
             'controller_name' => 'AppController',

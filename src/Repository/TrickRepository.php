@@ -22,19 +22,31 @@ class TrickRepository extends ServiceEntityRepository
     // /**
     //  * @return Trick[] Returns an array of Trick objects
     //  */
-    /*
-    public function findByExampleField($value)
+    
+    public function findTenFromNumber($num)
     {
-        return $this->createQueryBuilder('t')
+        /*return $this->createQueryBuilder('t')
             ->andWhere('t.exampleField = :val')
             ->setParameter('val', $value)
-            ->orderBy('t.id', 'ASC')
+            ->orderBy('t.creationMoment', 'ASC')
             ->setMaxResults(10)
             ->getQuery()
             ->getResult()
-        ;
+        ;*/
+
+        $entityManager = $this->getEntityManager();
+
+        $query = $entityManager->createQuery(
+            'SELECT t
+            FROM App\Entity\Trick t
+            LIMIT 10
+            OFFSET :num'
+        )->setParameter('num', $num);
+
+        // returns an array of Product objects
+        return $query->getResult();
     }
-    */
+    
 
     /*
     public function findOneBySomeField($value): ?Trick

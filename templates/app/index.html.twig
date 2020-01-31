@@ -10,7 +10,6 @@
 
 {% block body %}
 	<div class="row" id="thegap">
-		<div id="arrow"><a class="btn" href="#content"><i class="fas fa-arrow-down fa-5x" title="Voir les tricks"></i></a></div>
 	</div>
 	<div class="row" id="content">
 		{% for trick in tricks %}
@@ -46,12 +45,41 @@
 	</div>
 	<div class="row">
 		<div class="col text-center">
-			<a href="" class="btn btn-primary">Charger plus de tricks</a>
+			<a class="btn btn-primary" id="action-load-more">Charger plus de tricks</a>
 		</div>
 	</div>
 	<div class="row">
 		<div class="col text-right">
-			<a href="{{ path('add_trick') }}" class="btn btn-primary">Créer un trick</a>
+			<a id="link-new-trick" href="{{ path('add_trick') }}" class="btn btn-primary">Créer un trick</a>
 		</div>
 	</div>
+	<div id="arrow"><a class="btn" href="#content"><i class="fas fa-arrow-down fa-2x" title="Voir les tricks"></i></a></div>
+	<div id="arrow2"><a class="btn" href="#content"><i class="fas fa-arrow-up fa-2x" title="Remonter au début de la liste"></i></a></div>
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+	<script type="text/javascript">
+
+		var offset = 8;
+		var isArrow2displayed = false;
+
+		function loadMoreTricks(offset) {
+			$.get( "/charger_plus/"+ offset, function(data) {
+			  $( "div#content" ).append(data);
+			  var nbrTricks = $("div#content").children().length;
+			  if(nbrTricks > 15 && isArrow2displayed == false){
+			  	$("#arrow2").show();
+			  	isArrow2displayed = true;
+			  }
+			});
+		}
+
+		jQuery(document).ready(function() {
+		    $('#action-load-more').on('click', function(e) {
+		        loadMoreTricks(offset);
+		        offset += 8;
+		    });
+		});
+	</script>
 {% endblock %}
