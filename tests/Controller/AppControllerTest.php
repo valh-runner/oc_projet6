@@ -16,7 +16,7 @@ class AppControllerTest extends WebTestCase {
     public function testTrickDetailsPage()
     {
         $client = static::createClient();
-        $value = 135;
+        $value = 3;
         $crawler = $client->request('GET', "/details_trick/$value");
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
 	}    
