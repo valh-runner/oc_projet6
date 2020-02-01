@@ -19,6 +19,8 @@ class Video
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Length(min = 2, max = 255)
+     * @Assert\NotBlank
      */
     private $embedLink;
 

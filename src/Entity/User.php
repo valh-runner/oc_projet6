@@ -25,18 +25,23 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Length(min = 2, max = 255)
+     * @Assert\NotBlank
      */
     private $username;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Length(min = 5, max = 255)
      * @Assert\Email()
+     * @Assert\NotBlank
      */
     private $email;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\Length(min="8", minMessage="Votre mot de passe doit avoir au moins 8 caractères")
+     * @Assert\Length(min="8", minMessage="Votre mot de passe doit avoir au moins 8 caractères", max = 255)
+     * @Assert\NotBlank
      */
     private $password;
 
