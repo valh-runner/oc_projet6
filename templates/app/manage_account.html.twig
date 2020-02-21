@@ -2,28 +2,27 @@
 
 {% form_theme form 'bootstrap_4_layout.html.twig' %}
 
-{% block fullbanner %}
-	<div class="fixed faded" id="fullbanner"></div>
-{% endblock %}
-
-{% block title %}Gestion du compte{% endblock %}
+{% block title %}{{ parent() }} Gestion du compte{% endblock %}
 
 {% block body %}
 	<div class="row">
 		<div class="col-sm-12 offset-md-1 col-md-10" id="content">
 			<div class="row">
 				<div class="container-fluid" id="second-container">
-					<h3 id="title-manage-account" class="text-center">Gestion du compte</h3>
+					<h1 id="title-manage-account" class="text-center">Gestion du compte</h1>
 					<hr>
 					{{ form_start(form) }}
 					<div class="form-row">
-				    	<div class="form-group col-3">
-				    		<div class="img-preview-holder">
+				    	<!--<div class="form-group col-3">-->
+				    	<div class="form-group offset-3 col-6 offset-md-0 col-md-3">
+				    		<div class="img-preview-holder" title="aperçu de l'image">
 				            {% if user.pictureFilename is defined and user.pictureFilename is not null %}
 				    			<img class="img-preview" src="{{ asset('uploads/img/' ~ user.pictureFilename) }}" alt="{{ user.pictureFilename }}">
 				            {% endif %}
 				        	</div>
 				    	</div>
+				    	<!-- empty col to fill end whole on xs and sm devices -->
+				    	<div class="form-group col-3 d-block d-md-none"></div>
 						<div class="form-group col">
 							{{ form_label(form.accountPicture, 'Avatar du compte') }}
 				    		{{ form_widget(form.accountPicture, {
@@ -45,7 +44,7 @@
 						</div>
 					</div>
 					<div class="form-group text-right mt-5">
-						<button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
+						<button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Enregistrer les modifications</button>
 					</div>
 					{{ form_end(form) }}
 				</div>

@@ -32,11 +32,29 @@ function confirmTrickDeleteModal(id){
     $('#delete_warn_modal').modal();
     $('#deleteButton').attr('onclick', 'trickDelete('+id+')');
 }
+
 function trickDelete(id){
     document.location.href="/suppression_trick/"+id
 }
 
+function setActiveCurrentNavItem() {
+    $(".navbar").find(".active").removeClass("active");
+
+    $.each($('.navbar').find('li'), function() {
+        $(this).toggleClass('active', 
+            window.location.pathname == $(this).find('a').attr('href')
+        );
+    });
+    
+}
 
 jQuery(document).ready(function() {
     $('#notices_modal').modal();
+
+    $('#action-see-medias').on('click', function(e) {
+      $("div#action-medias").removeClass('d-block d-sm-none').addClass('d-none'); // unset display on mobile rule and set hide for all devices
+      $("div#medias").removeClass('d-none d-sm-block'); // unset hide on mobile rule
+    });
+
+    setActiveCurrentNavItem();
 });

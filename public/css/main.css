@@ -4,23 +4,48 @@ html {
 	/*width: 100%;*/
 }
 body {
-	background-color: #fff;
+	background-color: #000;
 	position: relative; /* for fullcover height */
 	/*min-height: 100%;*/
 	/*width: 100%;*/
 }
 
 #global {
-    position: relative; /* avoid fullbanner to cover */
-	z-index: 200;
+    position: relative; /* avoid background-color to be transparent cause of underlaying fullbanner */
+	/*z-index: 200; /* to delete */
+	min-height: 100vh; /* to have the footer at the bottom even if not enough content */
+
+    display: flex;
+    flex-direction: column;
+}
+
+#main {
+	flex: 1;
+
+	display: flex; /* to vertical center content of content-registration div */
+    flex-direction: column; /* to vertical center content of content-registration div */
 }
 
 #main-container {
-	padding-bottom: 50px;
+	/*padding-bottom: 50px;*/
+	/*padding: 50px;*/
+	flex: 1; /* to vertical center content of content-registration div */
+
+	display: flex; /* to vertical center content of content-registration div */
+    flex-direction: column; /* to vertical center content of content-registration div */
 }
 
 .navbar {
 	/*margin-bottom: 150px;*/
+	background-color: #ecf0f1;
+}
+
+.navbar .navbar-brand img {
+	height:40px;
+}
+
+.navbar li.space-right {
+	margin-right: 50px;
 }
 
 #trick-head {
@@ -52,7 +77,7 @@ body {
 }
 
 #trick-head-title h1 {
-
+	text-align: center;
 }
 
 #trick-head-actions {
@@ -91,6 +116,7 @@ article {
 
 .comment-content {
 	background-color: #ccc;
+	padding: 0 15px;
 }
 
 .img-fluid{
@@ -98,6 +124,7 @@ article {
 }
 
 #fullbanner {
+	position: fixed;
 	height: 100vh;
 	width: 100%;
 	top: 0;
@@ -108,9 +135,11 @@ article {
 	-webkit-background-size: cover; /* pour anciens Chrome et Safari */
 	background-size: cover; /* version standardisée */
 	z-index: 0;
+	opacity: 0.6;
 }
 
 #slogan {
+	display: none; /* activated by fullOn class */
 	position: absolute;
 	text-align:center;
 	top: 50%;
@@ -146,8 +175,8 @@ article {
 }
 
 #thegap {
-	position: relative;
-	height: 100vh;
+	/*position: relative;
+	height: 100vh;*/
 }
 
 #arrow {
@@ -160,26 +189,34 @@ article {
 #arrow2 {
 	position: absolute;
 	right: 1vw;
-	bottom: 20vh;
+	/*bottom: 20vh;*/
+	bottom: 140px;
 	display: none;
 }
 
 #second-container {
-	background-color: #fff;
-	margin-top: 200px;
+	background-color: #ecf0f1;
 	padding-bottom: 50px;
 	z-index: 300;
 }
 
 #content {
 	/*background-color: #fff;*/
-	padding-top:15px;
+	/*padding-top:15px;*/
+	padding-top: 100px;
+	padding-bottom: 80px;
+}
+
+#content-index {
+	min-height: 100vh; /* to have a fullscreen tricks section so the smooth scrollspy can slide totally to it */
+	padding-top: 50px;
 }
 
 .trick-item {
 	position: relative;
 	height: 15em;
 	margin-bottom: 10px;
+	border: 1px solid #333;
 }
 
 .trick-item a {
@@ -195,18 +232,22 @@ article {
 .trick-item .trick-item-bar {
 	position: absolute;
 	width: 100%;
-	text-align:center;
 	bottom: 0;
-	left:15;
-	right: 15;
-	background-color: rgba(255, 255, 255, 0.6);
+	/*left:15;
+	right: 15;*/
+	background-color: rgba(236, 240, 241, 0.6);
 	display: flex;
 	/*flex-wrap: nowrap;*/
-	padding: 0 5px;
+	/*padding: 0 5px;*/
 }
 
 .trick-item .trick-item-bar > a {
+	/*flex: 1;*/
+}
+
+.trick-item-title {
 	flex: 1;
+	text-align:center;
 }
 
 .trick-item-edit {
@@ -221,31 +262,55 @@ article {
 	padding-top: 15px;
 }
 
-.trick-details .trick-details-media{
+.trick-details-media {
+	position: relative;
+    height: 0;
+    padding-bottom: 56.25%;
+    overflow: hidden;
 	margin-bottom: 15px;
 }
 
-.trick-details .trick-details-media img{
-	
+.trick-details-media img{
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	object-fit: cover;
 }
 
 .trick-details .trick-details-media iframe{
-	width:100%;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
 	background-color: #000;
 }
 
 
-#content-registration {
-	margin-top: 200px;
+#content-panel {
+	/*margin-top: 200px;*/
+	padding-top: 10px;
+	padding-bottom: 10px;
+
+	flex: 1; /* to vertical center content of content-registration div */
 }
 
-#registration {
+#panel {
 	background-color: #eee;
 	padding: 20px;
 }
 
-#registration h1 {
+#panel h1 {
 	text-align: center;
+	margin-bottom: 30px;
+}
+
+#trick-update {
+	padding-top: 15px;
+}
+
+#action-see-medias {
+	color: #fff;
 }
 
 ul.videos {
@@ -261,7 +326,7 @@ ul.pictures {
 
 .img-preview-holder {
 	position: relative;
-	height: 100px;
+	/*height: 100px;*/
     height: 0;
     padding-bottom: 56.25%;
 	background-color: #000;
@@ -298,15 +363,79 @@ form[name="account"] {
   margin-bottom:  20px;
 }
 
+form[name="account"] .img-preview-holder {
+    padding-bottom: 100%; /* change the common img-preview-holder rules to be square ratio */
+}
+
 .img-avatar {
 	height: 50px;
 	width: 50px;
 }
 
+#action-delete-accountPicture {
+	padding-left: 0;
+	padding-right: 0;
+	margin-top: 2em;
+}
+
 #action-load-more {
 	margin-top: 30px;
+	color: #fff;
 }
 
 #link-new-trick {
 	margin-top: 50px;
+}
+
+#action-delete-trick {
+	color: #ecf0f1;
+}
+
+.action-paging {
+	margin: 0 10px;
+}
+
+#footer {
+	/*position: absolute;
+	bottom: 0;
+	width: 100%;*/
+
+	background-color: rgb(236, 240, 241);
+	color: #333;
+}
+
+.fullOn #fullbanner {
+	opacity: 0.95;
+}
+.fullOn #fullbanner #slogan {
+	display:  block;
+}
+.fullOn #global #thegap {
+	height: 100vh;
+}
+.fullOn #global #main {
+	background-color: rgba(236, 240, 241, 0.65);
+}
+.fullOn #global #main-container {
+	/*padding-top: 0;
+	padding-bottom: 0;*/
+}
+
+.h1, h1 {
+    font-size: 2rem;
+}
+.h2, h2 {
+    font-size: 1.75rem;
+}
+.h3, h3 {
+    font-size: 1.5rem;
+}
+.h4, h4 {
+    font-size: 1.25rem;
+}
+.h5, h5 {
+    font-size: 1rem;
+}
+.h6, h6 {
+    font-size: 0.75rem;
 }
