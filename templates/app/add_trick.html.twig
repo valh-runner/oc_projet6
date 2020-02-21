@@ -2,22 +2,21 @@
 
 {% form_theme formTrick 'bootstrap_4_layout.html.twig' %}
 
-{% block fullbanner %}
-	<div class="fixed faded" id="fullbanner"></div>
-{% endblock %}
-
-{% block title %}{{ pageTitle }}{% endblock %}
+{% block title %}{{ parent() }} {{ pageTitle }}{% endblock %}
 
 {% macro printPicturePrototype(picture, placeHolder, isRequired) %}
     <li>
     	<div class="form-row">
-	    	<div class="form-group col-3">
+	    	<!--<div class="form-group col-3">-->
+	    	<div class="form-group offset-2 col-8 offset-md-0 col-md-3">
 	    		<div class="img-preview-holder">
 	            {% if picture.vars.value.filename is defined %}
 	    			<img class="img-preview" src="{{ picture.vars.value.filename starts with 'http' ? picture.vars.value.filename : asset('uploads/img/' ~ picture.vars.value.filename) }}" alt="{{ picture.vars.value.filename }}">
 	            {% endif %}
 	        	</div>
 	    	</div>
+	    	<!-- empty col to fill end whole on xs and sm devices -->
+	    	<div class="form-group col-2 d-block d-md-none"></div>
 	    	<div class="form-group col">
 	    		{{ form_widget(picture.file, {
 					'attr': {
@@ -27,7 +26,7 @@
 				}) }}
 	    	</div>
 	    	<div class="form-group col-auto">
-	    		<button type="button" class="btn btn-secondary">Supprimer</button>
+	    		<button type="button" class="btn btn-secondary" title="Supprimer"><i class="fas fa-trash-alt"></i></button>
 	    	</div>
     	</div>
 	</li>
@@ -35,20 +34,23 @@
 {% macro printVideoPrototype(video) %}
     <li>
     	<div class="form-row">
-	    	<div class="form-group col-3">
+	    	<!--<div class="form-group col-3">-->
+	    	<div class="form-group offset-2 col-8 offset-md-0 col-md-3">
 		        {% if video.vars.value.embedLink is defined %}
 		    		<div class="video-container">
-			    			<iframe width="" height="" src="{{ video.vars.value.embedLink }}" frameborder="0" allow="accelerometer; fullscreen; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+			    			<iframe src="{{ video.vars.value.embedLink }}" frameborder="0" allow="accelerometer; fullscreen; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 		        	</div>
 		        {% endif %}
 	    	</div>
+	    	<!-- empty col to fill end whole on xs and sm devices -->
+	    	<div class="form-group col-2 d-block d-md-none"></div>
 	    	<div class="form-group col">
 	    		{{ form_widget(video.embedLink, {
 					'attr': {'placeholder': "Saisir le \"lien embed\" d'une video en ligne"},
 				}) }}
 	    	</div>
 	    	<div class="form-group col-auto">
-	    		<button type="button" class="btn btn-secondary">Supprimer</button>
+	    		<button type="button" class="btn btn-secondary" title="Supprimer"><i class="fas fa-trash-alt"></i></button>
 	    	</div>
     	</div>
     </li>
@@ -69,13 +71,15 @@
 				</div>
 				<div class="modal-body">
 					<div class="form-row">
-				    	<div class="form-group col-3">
+				    	<div class="form-group offset-2 col-8 offset-sm-3 col-sm-6">
 				    		<div class="img-preview-holder">
 				            {% if trick.mainPictureFilename is defined and trick.mainPictureFilename is not null %}
 				    			<img class="img-preview" src="{{ asset('uploads/img/' ~ trick.mainPictureFilename) }}" alt="{{ trick.mainPictureFilename }}">
 				            {% endif %}
 				        	</div>
 				    	</div>
+				    	<!-- empty col to fill end whole with width depending xs devices or others -->
+				    	<div class="form-group col-2 col-sm-3"></div>
 				    	<div class="form-group col">
 							{{ form_label(formTrick.featuredPicture, 'Image à la une') }}
 				    		{{ form_widget(formTrick.featuredPicture, {
@@ -102,41 +106,45 @@
 
 {% block body %}
 	<div class="row">
-		<div class="col-sm-12 offset-md-1 col-md-10" id="content">
+		<div class="col-sm-12 offset-lg-1 col-lg-10" id="content">
 			<div class="row">
 				<div class="container-fluid" id="second-container">
 					<div class="row" id="trick-head">
-						<img class="" id="trick-head-banner" src="
-						{{ trick is defined ? 
-								trick.pictures|length > 0 ? 
-										trick.pictures.first.filename starts with 'http' ? 
-										trick.pictures.first.filename 
-										: asset('uploads/img/' ~ trick.pictures.first.filename) 
-								: asset('images/banner.jpg') 
-						: asset('images/banner.jpg') }}
-						" alt="">
+						<img class="" id="trick-head-banner" src="{{ 
+							trick is defined ? 
+									trick.pictures|length > 0 ? 
+											trick.pictures.first.filename starts with 'http' ? 
+											trick.pictures.first.filename 
+											: asset('uploads/img/' ~ trick.pictures.first.filename) 
+									: asset('images/banner.jpg') 
+							: asset('images/banner.jpg') 
+						}}" alt="">
 						<div class="" id="trick-head-title"><h1>{{ trick is defined ? trick.name : pageTitle }}</h1></div>
 						<div class="" id="trick-head-actions">
 							<a class="btn" data-toggle="modal" href="#content_modal"><i class="fas fa-pencil-alt" title="Modifier l'image à la une"></i></a>
 							<a class="btn" id="action-delete-featuredPicture"><i class="fas fa-trash-alt" title="Supprimer l'image à la une"></i></a>
 						</div>
 					</div>
-					<div class="">
-						<h5>Images</h5>
-						<ul class="pictures" data-prototype="{{ formMacros.printPicturePrototype(formTrick.pictures.vars.prototype, 'Sélectionner un fichier image', true)|e('html_attr') }}">
-					        {# iterate over each existing picture and render the field filename #}
-					        {% for picture in formTrick.pictures %}
-					        	{{ formMacros.printPicturePrototype(picture, picture.vars.value.filename, false) }}
-					        {% endfor %}
-						</ul>
-
-						<h5>Videos</h5>
-						<ul class="videos" data-prototype="{{ formMacros.printVideoPrototype(formTrick.videos.vars.prototype)|e('html_attr') }}">
-					        {# iterate over each existing video and render the field embedLink #}
-					        {% for video in formTrick.videos %}
-					            {{ formMacros.printVideoPrototype(video) }}
-					        {% endfor %}
-						</ul>
+					<div id="trick-update">
+						<div id="medias" class="d-none d-sm-block">
+							<h4>Images</h4>
+							<ul class="pictures" data-prototype="{{ formMacros.printPicturePrototype(formTrick.pictures.vars.prototype, 'Sélectionner un fichier image', true)|e('html_attr') }}">
+						        {# iterate over each existing picture and render the field filename #}
+						        {% for picture in formTrick.pictures %}
+						        	{{ formMacros.printPicturePrototype(picture, picture.vars.value.filename, false) }}
+						        {% endfor %}
+							</ul>
+							<h4>Videos</h4>
+							<ul class="videos" data-prototype="{{ formMacros.printVideoPrototype(formTrick.videos.vars.prototype)|e('html_attr') }}">
+						        {# iterate over each existing video and render the field embedLink #}
+						        {% for video in formTrick.videos %}
+						            {{ formMacros.printVideoPrototype(video) }}
+						        {% endfor %}
+							</ul>
+						</div>
+						<div id="action-medias" class="d-block d-sm-none text-center">
+							<a id="action-see-medias" class="btn btn-secondary">Voir les médias</a>
+						</div>
 						{{ form_row(formTrick.name, {
 							'attr': {'placeholder': "Nom du trick"}, 
 							'label' : 'Nom'
@@ -154,9 +162,11 @@
 						}) }}
 						<div class="form-group text-right mt-5">
 							{% if editMode %}
-								<a class="btn btn-danger" onclick="confirmTrickDeleteModal('{{ trick.id }}')"><i class="fas fa-trash-alt" title="Supprimer"></i> Supprimer</a>
+								<a id="action-delete-trick" class="btn btn-danger" onclick="confirmTrickDeleteModal('{{ trick.id }}')"><i class="fas fa-trash-alt" title="Supprimer"></i> Supprimer</a>
 							{% endif %}
-							<button type="submit" class="btn btn-primary">{{ editMode ? 'Enregistrer les modifications' : 'Créer le trick' }}</button>
+							<button type="submit" class="btn btn-primary">
+								<i class="fas fa-save"></i> {{ editMode ? 'Enregistrer les modifications' : 'Créer le trick' }}
+							</button>
 						</div>
 					</div>
 				</div>

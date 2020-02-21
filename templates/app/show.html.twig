@@ -2,27 +2,23 @@
 
 {% form_theme commentForm 'bootstrap_4_layout.html.twig' %}
 
-{% block fullbanner %}
-	<div class="fixed faded" id="fullbanner"></div>
-{% endblock %}
-
-{% block title %}Détails d'un trick{% endblock %}
+{% block title %}{{ parent() }} Détails d'un trick{% endblock %}
 
 {% block body %}
 	<div class="row">
-		<div class="col-sm-12 offset-md-1 col-md-10" id="content">
+		<div class="col-sm-12 offset-lg-1 col-lg-10" id="content">
 			<div class="row">
 				<div class="container-fluid" id="second-container">
 					<div class="row" id="trick-head">
-						<img class="" id="trick-head-banner" src="
-						{{ trick.mainPictureFilename is null ?
-								trick.pictures|length > 0 ? 
-									trick.pictures.first.filename starts with 'http' ? 
-									trick.pictures.first.filename 
-									: asset('uploads/img/' ~ trick.pictures.first.filename) 
-								: asset('images/banner.jpg') 
-						: asset('uploads/img/' ~ trick.mainPictureFilename) }}
-						" alt="">
+						<img class="" id="trick-head-banner" src="{{ 
+							trick.mainPictureFilename is null ?
+									trick.pictures|length > 0 ? 
+										trick.pictures.first.filename starts with 'http' ? 
+										trick.pictures.first.filename 
+										: asset('uploads/img/' ~ trick.pictures.first.filename) 
+									: asset('images/banner.jpg') 
+							: asset('uploads/img/' ~ trick.mainPictureFilename) 
+						}}" alt="">
 						<div class="" id="trick-head-title"><h1>{{ trick.name }}</h1></div>
 						{% if app.user %}
 						<div id="trick-head-actions">
@@ -36,17 +32,26 @@
 						{% endif %}
 					</div>
 					<article class="trick-details">
-						<div id="medias" class="row">
-							{% for picture in trick.pictures %}
-								<div class="col-sm-6 col-md-4 col-lg-3 trick-details-media">
-									<img class="img-fluid" src="{{ picture.filename starts with 'http' ? picture.filename : asset('uploads/img/' ~ picture.filename) }}" alt="">
-								</div>
-							{% endfor %}
-							{% for video in trick.videos %}
-								<div class="col-sm-6 col-md-4 col-lg-4 trick-details-media">
-									<iframe width="" height="" src="{{ video.embedLink }}" frameborder="0" allow="accelerometer; fullscreen; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-								</div>
-							{% endfor %}
+						<div id="medias" class="d-none d-sm-block">
+							<div class="row">
+								{% for picture in trick.pictures %}
+									<div class="col-sm-6 col-md-6 col-lg-4">
+										<div class="trick-details-media">
+											<img src="{{ picture.filename starts with 'http' ? picture.filename : asset('uploads/img/' ~ picture.filename) }}" alt="">
+										</div>
+									</div>
+								{% endfor %}
+								{% for video in trick.videos %}
+									<div class="col-sm-6 col-md-6 col-lg-4">
+										<div class="trick-details-media">
+											<iframe src="{{ video.embedLink }}" frameborder="0" allow="accelerometer; fullscreen; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+										</div>
+									</div>
+								{% endfor %}
+							</div>
+						</div>
+						<div id="action-medias" class="d-block d-sm-none text-center">
+							<a id="action-see-medias" class="btn btn-secondary">Voir les médias</a>
 						</div>
 						<div id="description">
 							{{ trick.description | raw }}
@@ -61,21 +66,19 @@
 					</article>
 					<hr>
 					{% if app.user %}
-						{{ form_start(commentForm, {
-							'attr': {'class': "form-inline"}
-						}) }}
-						<div class="form-group">
-						    {{ form_widget(commentForm.content, {
-								'attr': {'placeholder': 'Votre message...'}
-							}) }}
-
-						    <small>{{ form_help(commentForm.content) }}</small>
-
-						    <div class="form-error">
-						        {{ form_errors(commentForm.content) }}
-						    </div>
-						</div>
-						<button type="submit" class="btn btn-success">Ajouter un commentaire</button>
+						{{ form_start(commentForm) }}
+							<div class="form-group col">
+							    {{ form_widget(commentForm.content, {
+									'attr': {'placeholder': 'Votre message...'}
+								}) }}
+							    <small>{{ form_help(commentForm.content) }}</small>
+							    <div class="form-error">
+							        {{ form_errors(commentForm.content) }}
+							    </div>
+							</div>
+							<div class="form-group col-auto text-right">
+								<button type="submit" class="btn btn-success"><i class="fas fa-comment-alt"></i> Ajouter un commentaire</button>
+							</div>
 						{{ form_end(commentForm) }}
 					{% else %}
 						<h3>Vous ne pouvez pas commenter si vous n'êtes pas connecté !</h3>
@@ -87,27 +90,25 @@
 						<div id="comments-content">
 							{% for comment in comments |slice(0, 10) %}
 							<div class="row comment">
-								<div class="offset-1 col-1">
+								<div class="col-auto">
 						            {% if comment.user.pictureFilename is defined and comment.user.pictureFilename is not null %}
 						    			<img class="img-avatar" src="{{ asset('uploads/img/' ~ comment.user.pictureFilename) }}" alt="{{ comment.user.pictureFilename }}">
 						    		{% else %}
 						    			<img class="img-avatar" src="{{ asset('images/' ~ 'default_avatar.jpg') }}" alt="default avatar">
 						            {% endif %}
 								</div>
-								<div class="col-9 comment-content">
-									<div>
-										{{comment.content | raw}}
-									</div>
-									<div>
-										{{comment.user.username}} (<small>{{comment.creationMoment | date('d/m/Y à H:i') }}</small>)
+								<div class="col pl-0">
+									<div class="comment-content">
+										<div>{{comment.content | raw}}</div>
+										<div class="text-right font-italic">
+											{{comment.user.username}} (<small>{{comment.creationMoment | date('d/m/Y à H:i') }}</small>)
+										</div>
 									</div>
 								</div>
 							</div>
 							{% endfor %}
 						</div>
-						<div id="comments-paging-actions" data-trick-id="{{ trick.id }}">
-							<a id="action-paging-1" class="btn btn-primary" onclick="changeCommentsPage({{ trick.id }}, '1')">1</a>
-						</div>
+						<div id="comments-paging-actions" class="text-center" data-trick-id="{{ trick.id }}"><a id="action-paging-1" class="btn btn-primary action-paging" onclick="changeCommentsPage({{ trick.id }}, '1')">1</a></div>
 					</section>
 				</div>
 			</div>

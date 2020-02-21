@@ -159,8 +159,8 @@ class SecurityController extends AbstractController
                     ->from('no-reply@example.com')
                     ->to($user->getEmail())
                     ->subject("Snowtricks - Réinitialisation du mot de passe")
-                    ->html('<h3>Bienvenue sur Snowtricks!</h3>
-                        <p>Pour choisir votre mot de passe, cliquez sur le lien suivant: 
+                    ->html('<h3>Snowtricks - Mot de passe oublié</h3>
+                        <p>Pour choisir un nouveau mot de passe, cliquez sur le lien suivant: 
                         <a href="'.$url.'" class="alert-link">Redéfinir le mot de passe</a></p>');
                 $mailer->send($email);
 

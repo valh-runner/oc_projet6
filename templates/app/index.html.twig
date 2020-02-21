@@ -1,60 +1,63 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello AppController!{% endblock %}
+{% block title %}{{ parent() }} Accueil{% endblock %}
 
-{% block fullbanner %}
-	<div class="abs" id="fullbanner">
-		<div id="slogan"><h1>Ride your way!</h1></div>
-	</div>
-{% endblock %}
+{% block fullscreenState %}fullOn{% endblock %}
 
 {% block body %}
-	<div class="row" id="thegap">
-	</div>
-	<div class="row" id="content">
-		{% for trick in tricks %}
-			<article class="col-sm-6 col-md-4 col-lg-3 trick-item">
-				<div class="trick-item">
-					<a href="{{ path('show', {'id': trick.id}) }}">
-						<img class="img-fluid" src="
-						{{ trick.mainPictureFilename is null ?
-								trick.pictures|length > 0 ? 
-									trick.pictures.first.filename starts with 'http' ? 
-									trick.pictures.first.filename 
-									: asset('uploads/img/' ~ trick.pictures.first.filename) 
-								: asset('images/banner.jpg')  
-						: asset('uploads/img/' ~ trick.mainPictureFilename) }}
-						" alt="">
+	<div id="content-index">
+		<div id="content-index-tricks" class="row">
+			{% for trick in tricks %}
+				<article class="col-sm-6 col-md-4 col-lg-3">
+					<div class="trick-item">
+						<a href="{{ path('show', {'id': trick.id}) }}">
+							<img class="img-fluid" src="{{ 
+								trick.mainPictureFilename is null ?
+										trick.pictures|length > 0 ? 
+											trick.pictures.first.filename starts with 'http' ? 
+											trick.pictures.first.filename 
+											: asset('uploads/img/' ~ trick.pictures.first.filename) 
+										: asset('images/banner.jpg')  
+								: asset('uploads/img/' ~ trick.mainPictureFilename) 
+							}}" alt="">
+						</a>
 						<div class="trick-item-bar">
-							<div class="trick-item-title"><h3>{{ trick.name }}<h3></div>
-							<div class="trick-item-edit">
-								<a class="btn" href="{{ path('update_trick', {'id': trick.id}) }}">
-									<i class="fas fa-pencil-alt" title="Modifier le trick"></i>
-								</a>
-							</div>
-							<div class="trick-item-del">
-								<a class="btn" onclick="confirmTrickDeleteModal('{{ trick.id }}')">
-									<i class="fas fa-trash-alt" title="Supprimer le trick"></i>
-								</a>
-							</div>
+							{#<div class="trick-item-title">#}
+							<a class="trick-item-title" href="{{ path('show', {'id': trick.id}) }}">
+								{#<a href="{{ path('show', {'id': trick.id}) }}">#}
+									<h2>{{ trick.name }}</h2>
+								{#</a>#}
+							</a>
+							{% if app.user %}
+								<div class="trick-item-edit">
+									<a class="btn" href="{{ path('update_trick', {'id': trick.id}) }}">
+										<i class="fas fa-pencil-alt" title="Modifier le trick"></i>
+									</a>
+								</div>
+								<div class="trick-item-del">
+									<a class="btn" onclick="confirmTrickDeleteModal('{{ trick.id }}')">
+										<i class="fas fa-trash-alt" title="Supprimer le trick"></i>
+									</a>
+								</div>
+							{% endif %}
 						</div>
-					</a>
-				</div>
-			</article>
-		{% endfor %}
-	</div>
-	<div class="row">
-		<div class="col text-center">
-			<a class="btn btn-primary" id="action-load-more">Charger plus de tricks</a>
+					</div>
+				</article>
+			{% endfor %}
+		</div>
+		<div class="row">
+			<div class="col text-center">
+				<a class="btn btn-primary" id="action-load-more"><i class="fas fa-sync-alt"></i> Charger plus de tricks</a>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col text-right">
+				<a id="link-new-trick" href="{{ path('add_trick') }}" class="btn btn-primary"><i class="fas fa-plus"></i> Créer un trick</a>
+			</div>
 		</div>
 	</div>
-	<div class="row">
-		<div class="col text-right">
-			<a id="link-new-trick" href="{{ path('add_trick') }}" class="btn btn-primary">Créer un trick</a>
-		</div>
-	</div>
-	<div id="arrow"><a class="btn" href="#content"><i class="fas fa-arrow-down fa-2x" title="Voir les tricks"></i></a></div>
-	<div id="arrow2"><a class="btn" href="#content"><i class="fas fa-arrow-up fa-2x" title="Remonter au début de la liste"></i></a></div>
+	<div id="arrow"><a class="btn" href="#main"><i class="fas fa-arrow-down fa-2x" title="Voir les tricks"></i></a></div>
+	<div id="arrow2"><a class="btn" href="#main"><i class="fas fa-arrow-up fa-2x" title="Remonter au début de la liste"></i></a></div>
 {% endblock %}
 
 {% block javascripts %}

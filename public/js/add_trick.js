@@ -2,9 +2,7 @@
 //Form enhancer
 //-------------
 
-function enhanceForm() {
-    var $radios = $('input[name="trick[categoryType]"]');
-    $radios.change(function() {
+function disableCorrespondingFieldDependingRadio($radios) {
         var $checked = $radios.filter(':checked');
         if($checked.val() == 1) {
             $('#trick_newCategory').removeAttr('required');
@@ -22,10 +20,16 @@ function enhanceForm() {
             $('#trick_newCategory').removeAttr('required');
             $('#trick_newCategory').removeAttr('disabled');
         }
-    });
 }
 
-
+function enhanceForm() {
+    var $radios = $('input[name="trick[categoryType]"]');
+    disableCorrespondingFieldDependingRadio($radios); // initial apply
+    // refresh on radio change
+    $radios.change(function() {
+        disableCorrespondingFieldDependingRadio($radios);
+    });
+}
 
 // Setup "add and remove" functionnality for each CollectionType
 //--------------------------------------------------------------
@@ -34,7 +38,7 @@ function addAndRemoveFunctionnality(ulClassname, isFileTypeEntity){
 	var $collectionHolder;
 
 	// setup an "add a video" link
-	var $addVideoButton = $('<button type="button" class="btn btn-secondary">Ajouter un champ</button>');
+	var $addVideoButton = $('<button type="button" class="btn btn-secondary"><i class="fas fa-plus"></i> Ajouter un champ</button>');
 	var $newLinkLi = $('<li></li>').append($addVideoButton);
 
 
@@ -124,7 +128,6 @@ var funcPreviewImageInTitleBanner = function (filename) {
     $('#trick-head-banner').attr('src', filename);
 }
 
-
 function ReplaceInitialTitleBannerImage () {
     if(initialTitleBannerSrc != null){
         $('#trick-head-banner').attr('src', initialTitleBannerSrc);
@@ -163,6 +166,11 @@ jQuery(document).ready(function() {
             $('input[id="trick_featuredPictureDeletionState"]').attr('value', 'true'); //to know to apply the main picture deletion
             ReplaceInitialTitleBannerImage();
     });
+
+    /*$('#action-see-medias').on('click', function(e) {
+      $("div#action-medias").removeClass('d-block d-sm-none').addClass('d-none'); // unset display on mobile rule and set hide for all devices
+      $("div#medias").removeClass('d-none d-sm-block'); // unset hide on mobile rule
+    });*/
 
     imgPreviewSearch = $('input[id="trick_featuredPicture"]').parent().parent().parent().find('.img-preview');
     // if featuredPicture is preset

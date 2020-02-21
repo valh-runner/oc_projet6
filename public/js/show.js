@@ -21,7 +21,7 @@ jQuery(document).ready(function() {
 
         // buttons adding after the first pre-existent one
         for (var i = 2; i <= totalPageCount; i++) {
-            buttonStr = '<a id="action-paging-'+ i +'" class="btn btn-secondary" onclick="changeCommentsPage('+ trickId +','+ i +')">'+ i +'</a>';
+            buttonStr = '<a id="action-paging-'+ i +'" class="btn btn-secondary action-paging" onclick="changeCommentsPage('+ trickId +','+ i +')">'+ i +'</a>';
             $("div#comments-paging-actions").append(buttonStr);
         }
     });

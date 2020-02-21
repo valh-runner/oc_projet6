@@ -2,28 +2,24 @@
 
 {% form_theme form 'bootstrap_4_layout.html.twig' %}
 
-{% block fullbanner %}
-	<div class="fixed faded" id="fullbanner"></div>
-{% endblock %}
-
-{% block title %}Inscription{% endblock %}
+{% block title %}{{ parent() }} Inscription{% endblock %}
 
 {% block body %}
-	<div class="row" id="content-registration">
-		<div class="offset-sm-1 col-sm-10 offset-md-2 col-md-8 offset-lg-3 col-lg-6 offset-xl-4 col-xl-4" id="registration">
+	<div class="row align-items-center" id="content-panel">
+		<div class="offset-sm-1 col-sm-10 offset-md-2 col-md-8 offset-lg-3 col-lg-6" id="panel">
 			<h1>Inscription</h1>
 			{{ form_start(form) }}
 			{{ form_row(form.username, {
-				'label': 'Nom d\'utilisateur', 'attr' : {'placeholder': 'Nom d\'utilisateur'}
+				'label': 'Nom d\'utilisateur', 'attr' : {'placeholder': 'votre pseudo ...'}
 			}) }}
 			{{ form_row(form.email, {
-				'label': 'Adresse email' ,'attr' : {'placeholder': 'Adresse email'}
+				'label': 'Adresse email' ,'attr' : {'placeholder': 'exemple@domaine.fr'}
 			}) }}
 			{{ form_row(form.password, {
-				'label': 'Mot de passe' ,'attr' : {'placeholder': 'Mot de passe'}
+				'label': 'Mot de passe' ,'attr' : {'placeholder': 'votre mot de passe ...'}
 			}) }}
 			{{ form_row(form.confirmPassword, {
-				'label': 'Confirmation du mot de passe' ,'attr' : {'placeholder': 'Répétez votre mot de passe'}
+				'label': 'Confirmation du mot de passe' ,'attr' : {'placeholder': 'répétez votre mot de passe ...'}
 			}) }}
 			<div class="form-group clearfix">
 				<button type="submit" class="btn btn-success float-right clearfix">Créér un compte</button>

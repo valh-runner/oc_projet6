@@ -1,15 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block fullbanner %}
-	<div class="fixed faded" id="fullbanner"></div>
-{% endblock %}
-
-{% block title %}Finalisation inscription{% endblock %}
+{% block title %}{{ parent() }} Finalisation inscription{% endblock %}
 
 {% block body %}
-	<div class="row" id="content-registration">
-		<div class="offset-sm-1 col-sm-10 offset-md-1 col-md-10 offset-lg-2 col-lg-8 offset-xl-2 col-xl-8 text-center" id="registration">
-			<h2>Finalisation de l'inscription</h2>
+	<div class="row align-items-center" id="content-panel">
+		<div class="offset-sm-1 col-sm-10 offset-md-1 col-md-10 offset-lg-2 col-lg-8 offset-xl-2 col-xl-8 text-center" id="panel">
+			<h1>Finalisation de l'inscription</h1>
 			{% for feedback in feedbacks %}
 				<div class="alert alert-{{ feedback.0 }}" role="alert">
 				    <p>{{ feedback.1 }}</p>

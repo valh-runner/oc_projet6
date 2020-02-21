@@ -12,11 +12,11 @@ use Symfony\Component\Routing\Annotation\Route;
 class SliceController extends AbstractController
 {
     /**
-     * @Route("/charger_plus/{offset}", name="load_more")
+     * @Route("/charger_plus/{number}/{offset}", name="load_more")
      */
-    public function loadMore(int $offset, TrickRepository $repo)
+    public function loadMore(int $number, int $offset, TrickRepository $repo)
     {
-    	$tricks = $repo->findBy(array(), null, 8, $offset);
+    	$tricks = $repo->findBy(array(), null, $number, $offset);
 
         return $this->render('slice/load_more.html.twig', [
             'controller_name' => 'SliceController',
