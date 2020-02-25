@@ -22,7 +22,7 @@
 						<div class="" id="trick-head-title"><h1>{{ trick.name }}</h1></div>
 						{% if app.user %}
 						<div id="trick-head-actions">
-							<a class="btn" href="{{ path('update_trick', {'id': trick.id}) }}">
+							<a class="btn" href="{{ path('update_trick', {'slug': trick.slug}) }}">
 								<i class="fas fa-pencil-alt" title="Modifier le trick"></i>
 							</a>
 							<a class="btn" onclick="confirmTrickDeleteModal('{{ trick.id }}')">

@@ -8,6 +8,7 @@ use App\Entity\Picture;
 use App\Entity\Trick;
 use App\Entity\User;
 use App\Entity\Video;
+use App\Service\SlugGenerator;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -21,7 +22,6 @@ class AppFixtures extends Fixture
 
     public function load(ObjectManager $manager)
     {
-
     	$categoriesDataset = ['Rotations','Flips','Grabs','Slides'];
 
 		$tricksDataset = [
@@ -51,17 +51,17 @@ class AppFixtures extends Fixture
 				['frontflip-1.jpg','frontflip-2.jpg','frontflip-3.jpg']
 			],
 			[
-				'Indy',2,'saisie de la carre frontside de la planche, entre les deux pieds, avec la main arrière',
+				'indy',2,'saisie de la carre frontside de la planche, entre les deux pieds, avec la main arrière',
 				['iKkhKekZNQ8','6yA3XqjTh_w'],
 				['indy-1.jpg','indy-2.jpg','indy-3.jpg','indy-4.jpg']
 			],
 			[
-				'Mute',2,'saisie de la carre frontside de la planche entre les deux pieds avec la main avant',
+				'mute',2,'saisie de la carre frontside de la planche entre les deux pieds avec la main avant',
 				['4sha5smEUHA','KXDQv7f8JNs','8r_yZfBWCeQ'],
 				['mute-1.jpg','mute-2.jpg','mute-3.jpg','mute-4.jpg','mute-5.jpg']
 			],
 			[
-				'Sad',2,'saisie de la carre backside de la planche, entre les deux pieds, avec la main avant',
+				'sad',2,'saisie de la carre backside de la planche, entre les deux pieds, avec la main avant',
 				['KEdFwJ4SWq4'],
 				['sad-1.jpg','sad-2.jpg','sad-3.jpg']
 			],
@@ -82,6 +82,7 @@ class AppFixtures extends Fixture
 		$faker = \Faker\Factory::create('fr_FR');
 		$incrementedPictureSeed = 1;
 		$tricksList = array();
+		$slugGenerator = new SlugGenerator();
 
     	// Create first user
 		$firstUser = new User();
@@ -119,7 +120,8 @@ class AppFixtures extends Fixture
 		    			  //->setCreationMoment($faker->dateTimeBetween('-'.$daysSinceUser.' days'))
 		    			  ->setCreationMoment($firstUser->getCreationMoment()) // same of first user creation
 		    			  ->setUser($firstUser)
-		    			  ->setCategory($category);
+		    			  ->setCategory($category)
+		    			  ->setSlug( $slugGenerator->convert($trickData[0]) ); // slug converted trick's name
 		    		$tricksList[] = $trick;
 		    		$manager->persist($trick);
 

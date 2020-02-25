@@ -11,6 +11,7 @@ use App\Form\AccountType;
 use App\Form\CommentType;
 use App\Form\TrickType;
 use App\Repository\TrickRepository;
+use App\Service\SlugGenerator;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -34,11 +35,12 @@ class AppController extends AbstractController
     }
 
     /**
-     * @Route("/details_trick/{id}", name="show")
+     * @Route("/details_trick/{slug}", name="show")
      */
-    public function show(Trick $trick, Request $request, EntityManagerInterface $manager)
+    //public function show(Trick $trick, Request $request, EntityManagerInterface $manager)
+    public function show(string $slug, TrickRepository $repo, Request $request, EntityManagerInterface $manager)
     {
-        
+        $trick = $repo->findOneBy(['slug' => $slug]); // getting the trick by slug
         $comments = $trick->getComments();
 
         $newComment = new Comment();
@@ -56,7 +58,7 @@ class AppController extends AbstractController
 
             $manager->persist($newComment);
             $manager->flush();
-            return $this->redirectToRoute('show', ['id' => $trick->getId()]);
+            return $this->redirectToRoute('show', ['slug' => $trick->getSlug()]);
         }
         
         return $this->render('app/show.html.twig', [
@@ -69,7 +71,7 @@ class AppController extends AbstractController
     /**
      * @Route("/creation_trick", name="add_trick")
      */
-    public function addTrick(Request $request, EntityManagerInterface $manager)
+    public function addTrick(Request $request, EntityManagerInterface $manager, SlugGenerator $slugGenerator)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY'); //restrict access to connected users
         $user = $this->getUser();
@@ -89,7 +91,8 @@ class AppController extends AbstractController
             }
             else{
                 $trick->setCreationMoment(new \DateTime())
-                      ->setUser($user);
+                      ->setUser($user)
+                      ->setSlug($slugGenerator->convert( $trick->getName() )); // slug converted trick's name
 
                 // category assignment depending on whether the category is existing or new
                 switch ($catTypeValue) {
@@ -146,12 +149,15 @@ class AppController extends AbstractController
     }
 
     /**
-     * @Route("/modification_trick/{id}", name="update_trick")
+     * @Route("/modification_trick/{slug}", name="update_trick")
      */
-    public function updateTrick(Trick $trick, Request $request, EntityManagerInterface $manager)
+    //public function updateTrick(Trick $trick, Request $request, EntityManagerInterface $manager)
+    public function updateTrick(string $slug, TrickRepository $repo, Request $request, EntityManagerInterface $manager, SlugGenerator $slugGenerator)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY'); //restrict access to connected users
         $user = $this->getUser();
+
+        $trick = $repo->findOneBy(['slug' => $slug]); // getting the trick by slug
 
         // Store initial pictures of the trick to compare
         $originalPictures = new ArrayCollection();
@@ -177,7 +183,8 @@ class AppController extends AbstractController
                 $this->addFlash('danger', 'choix inconnu du mode de définition de la catégorie');
             }
             else {
-                $trick->setRevisionMoment(new \DateTime());
+                $trick->setRevisionMoment(new \DateTime())
+                      ->setSlug($slugGenerator->convert( $trick->getName() )); // slug converted trick's name
 
                 // category assignment depending on whether the category is existing or new
                 switch ($catTypeValue) {
