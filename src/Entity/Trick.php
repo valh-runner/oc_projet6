@@ -11,6 +11,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\TrickRepository")
  * @UniqueEntity(fields="name", message= "Ce nom de figure existe déja")
+ * @ORM\Table(indexes={@ORM\Index(name="slug_idx",columns={"slug"}, options={"length": 255})})
  */
 class Trick
 {
@@ -76,6 +77,11 @@ class Trick
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $mainPictureFilename;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $slug;
 
     public function __construct()
     {
@@ -272,6 +278,18 @@ class Trick
     public function setMainPictureFilename(?string $mainPictureFilename): self
     {
         $this->mainPictureFilename = $mainPictureFilename;
+
+        return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): self
+    {
+        $this->slug = $slug;
 
         return $this;
     }
