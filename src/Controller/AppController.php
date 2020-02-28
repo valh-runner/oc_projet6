@@ -154,10 +154,10 @@ class AppController extends AbstractController
     //public function updateTrick(Trick $trick, Request $request, EntityManagerInterface $manager)
     public function updateTrick(string $slug, TrickRepository $repo, Request $request, EntityManagerInterface $manager, SlugGenerator $slugGenerator)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY'); //restrict access to connected users
-        $user = $this->getUser();
-
         $trick = $repo->findOneBy(['slug' => $slug]); // getting the trick by slug
+
+        $this->denyAccessUnlessGranted('edit', $trick); //restrict edition access to trick owner user and admin user
+        $user = $this->getUser();
 
         // Store initial pictures of the trick to compare
         $originalPictures = new ArrayCollection();
@@ -278,7 +278,7 @@ class AppController extends AbstractController
      */
     public function deleteTrick(Trick $trick, EntityManagerInterface $manager)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY'); //restrict access to connected users
+        $this->denyAccessUnlessGranted('delete', $trick); //restrict deletion access to trick owner user and admin user
         $user = $this->getUser();
 
         // remove main picture

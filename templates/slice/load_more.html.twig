@@ -17,7 +17,7 @@
 				<a class="trick-item-title" href="{{ path('show', {'slug': trick.slug}) }}">
 					<h3>{{ trick.name }}</h3>
 				</a>
-				{% if app.user %}
+				{% if (app.user == trick.user) or is_granted('ROLE_ADMIN') %}
 					<div class="trick-item-edit">
 						<a class="btn" href="{{ path('update_trick', {'slug': trick.slug}) }}">
 							<i class="fas fa-pencil-alt" title="Modifier le trick"></i>
