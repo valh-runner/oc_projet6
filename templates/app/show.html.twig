@@ -20,7 +20,7 @@
 							: asset('uploads/img/' ~ trick.mainPictureFilename) 
 						}}" alt="">
 						<div class="" id="trick-head-title"><h1>{{ trick.name }}</h1></div>
-						{% if app.user %}
+						{% if (app.user == trick.user) or is_granted('ROLE_ADMIN') %}
 						<div id="trick-head-actions">
 							<a class="btn" href="{{ path('update_trick', {'slug': trick.slug}) }}">
 								<i class="fas fa-pencil-alt" title="Modifier le trick"></i>

@@ -96,7 +96,8 @@ class AppFixtures extends Fixture
 			->setConfirmed(1)
 			//->setCreationMoment($faker->dateTimeBetween('- 30 days', '- 27 days'));
 			->setCreationMoment($dateCreationUser)
-			->setPictureFilename('869-250x250.jpg');
+			->setPictureFilename('869-250x250.jpg')
+			->setRoles(['ROLE_ADMIN']);
 		$manager->persist($firstUser);
 
     	// Create categories
