@@ -357,7 +357,7 @@ class AppController extends AbstractController
         $safeFilename = transliterator_transliterate('Any-Latin; Latin-ASCII; [^A-Za-z0-9_] remove; Lower()', $originalFilename); // reformated filename
         $newFilename = $safeFilename.'-'.uniqid().'.'.$file->guessExtension(); // unique reformated filename
         try {
-            $file->move( $this->getParameter('images_directory') , $newFilename ); // Move the file to the uploaded images directory
+            $file->move( $this->getParameter('uploaded_img_directory') , $newFilename ); // Move the file to the uploaded images directory
         } catch (FileException $e) {
             throw $e; // handle exception if something happens during file upload
         }
@@ -371,10 +371,7 @@ class AppController extends AbstractController
     public function deleteUploadedFile($filename)
     {
         $filesystem = new Filesystem();
-        $path = $this->getParameter('images_directory').'/'.$filename;
-        $result = $filesystem->remove($path);
-        if ($result === false) {
-            throw new \Exception(sprintf('Error deleting "%s"', $path));
-        }
+        $path = $this->getParameter('uploaded_img_directory').'/'.$filename;
+        $filesystem->remove($path);
     }
 }

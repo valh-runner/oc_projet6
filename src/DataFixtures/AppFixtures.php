@@ -11,14 +11,25 @@ use App\Entity\Video;
 use App\Service\SlugGenerator;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
-class AppFixtures extends Fixture
+class AppFixtures extends Fixture implements ContainerAwareInterface
 {
+	public const ADMIN_USER_REFERENCE = 'admin-user';
+	private $container;
+
 	public function __construct(UserPasswordEncoderInterface $encoder)
 	{
 	    $this->encoder = $encoder;
 	}
+
+    public function setContainer(ContainerInterface $container = null)
+    {
+        $this->container = $container;
+    }
 
     public function load(ObjectManager $manager)
     {
@@ -77,12 +88,11 @@ class AppFixtures extends Fixture
 			]
 		];
 
-		$commentsDataset = ['Pas mal','Sympa','Cool','Qui sait faire?', 'Mortel', 'Pas évident', 'jamais sans mon casque', 'Je donne des cours particuliers sur à la plagne', 'Où puis-je apprendre?', 'ça glisse!', 'tip top', 'Attention à la réception', 'Qui veut rider en groupe sur Méribel?'];
-
 		$faker = \Faker\Factory::create('fr_FR');
 		$incrementedPictureSeed = 1;
 		$tricksList = array();
 		$slugGenerator = new SlugGenerator();
+        $filesystem = new Filesystem();
 
     	// Create first user
 		$firstUser = new User();
@@ -129,10 +139,20 @@ class AppFixtures extends Fixture
 			    	// Create pictures
 			    	$nbrPictures = count($trickData[4]);
 		        	for($n = 0; $n < $nbrPictures; $n++){
-		        		$pictureData = $trickData[4][$n];
+		        		$pictureFilename = $trickData[4][$n];
+
+				        //filename transformations (TODO: copy of saveUploadedFile method of AppController so transforme the functionnality as a service)
+				        $originalFilename = pathinfo($pictureFilename, PATHINFO_FILENAME); // filename of submitted image
+				        $safeFilename = transliterator_transliterate('Any-Latin; Latin-ASCII; [^A-Za-z0-9_] remove; Lower()', $originalFilename); // reformated filename
+				        $newFilename = $safeFilename.'-'.uniqid().'.'.pathinfo($pictureFilename, PATHINFO_EXTENSION); // unique reformated filename
+
+		        		// Copy a trick picture from the inital set directory to uploaded images directory
+				        $pathFrom = $this->container->getParameter('images_directory').'/initialSet/'.$pictureFilename;
+				        $pathTo = $this->container->getParameter('uploaded_img_directory').'/'.$newFilename;
+				        $filesystem->copy($pathFrom, $pathTo, true);
 
 		        		$picture = new Picture();
-		        		$picture->setFilename($pictureData)
+		        		$picture->setFilename($newFilename)
 		        				->setTrick($trick);
 		        		$manager->persist($picture);
 		        	}
@@ -150,39 +170,10 @@ class AppFixtures extends Fixture
 	    	}
     	}
 
-    	// Create 25 fake users
-    	for($i = 1; $i <= 25; $i++){
-    		$user = new User();
-    		$username = $faker->userName();
-    		$hash = $this->encoder->encodePassword($user, $username);
+    	$manager->flush();
 
-			$daysSinceFirstUser = (new \DateTime())->diff($firstUser->getCreationMoment())->days;
-			$userCreationDate = $faker->dateTimeBetween('- '.$daysSinceFirstUser.' days');
-			$pictureFilename =  mt_rand(1, 3) == 1 ? null : mt_rand(870, 894).'-250x250.jpg';
-
-    		$user->setUsername($username)
-    			 ->setEmail($username.'@'.$faker->safeEmailDomain())
-    			 ->setPassword($hash)
-    			 ->setConfirmed(1)
-    			 ->setCreationMoment($userCreationDate)
-    			 ->setPictureFilename($pictureFilename);
-    		$manager->persist($user);
-
-			foreach($tricksList as $trick){
-		    	// Create between 0 and 2 fake comment by user, so one by user in average
-	        	for($m = 1; $m <= mt_rand(0, 2); $m++){
-	        		$daysSinceUserCreation = (new \DateTime())->diff($userCreationDate)->days;
-	        		$commentContent = $commentsDataset[mt_rand(0, count($commentsDataset)-1)]; //random content
-	        		$comment = new Comment();
-	        		$comment->setContent($commentContent)
-	        				->setCreationMoment($faker->dateTimeBetween('-'.$daysSinceUserCreation.' days'))
-	        				->setUser($user)
-	        				->setTrick($trick);
-	        		$manager->persist($comment);
-	        	}
-			}
-    	}
-    	
-        $manager->flush();
+    	// other fixtures can get this object using the UserFixtures::ADMIN_USER_REFERENCE constant
+        //$this->addReference(self::ADMIN_USER_REFERENCE, $firstUser);
+        $this->addReference('admin-user', $firstUser);
     }
 }
