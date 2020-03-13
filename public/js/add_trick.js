@@ -53,8 +53,8 @@ function addAndRemoveFunctionnality(ulClassname, isFileTypeEntity){
     // add the "add a tag" anchor and li to the videos ul
     $collectionHolder.append($newLinkLi);
 
-    // count the current form inputs we have (e.g. 2), use that as the new
-    // index when inserting a new item (e.g. 2)
+    // count the current form inputs we have, use that as the new
+    // index when inserting a new item
     var index = $collectionHolder.find(':input').length;
     $collectionHolder.data('index', index);
 
@@ -70,7 +70,7 @@ function addAndRemoveFunctionnality(ulClassname, isFileTypeEntity){
 }
 
 function addItemForm($collectionHolder, $newLinkLi, isFileTypeEntity) {
-    // Get the data-prototype explained earlier
+    // Get the data-prototype
     var prototype = $collectionHolder.data('prototype');
     // get the new index
     var index = $collectionHolder.data('index');
@@ -156,7 +156,6 @@ jQuery(document).ready(function() {
             // file input reinitialization
             $inputFile = $('input[id="trick_featuredPicture"]');
             $inputFile.val('');
-            //$InputFile.attr('placeholder', 'Sélectionner un fichier image');
             $inputFile.parent().find('.custom-file-label').text('Sélectionner un fichier image');
 
             //deletion of preview image
@@ -166,11 +165,6 @@ jQuery(document).ready(function() {
             $('input[id="trick_featuredPictureDeletionState"]').attr('value', 'true'); //to know to apply the main picture deletion
             ReplaceInitialTitleBannerImage();
     });
-
-    /*$('#action-see-medias').on('click', function(e) {
-      $("div#action-medias").removeClass('d-block d-sm-none').addClass('d-none'); // unset display on mobile rule and set hide for all devices
-      $("div#medias").removeClass('d-none d-sm-block'); // unset hide on mobile rule
-    });*/
 
     imgPreviewSearch = $('input[id="trick_featuredPicture"]').parent().parent().parent().find('.img-preview');
     // if featuredPicture is preset

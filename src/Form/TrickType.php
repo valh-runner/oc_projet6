@@ -57,7 +57,7 @@ class TrickType extends AbstractType
                 'allow_add' => true,
                 'by_reference' => false,
                 'allow_delete' => true,
-                'label' => false
+                /*'label' => false*/
             ])
             ->add('videos', CollectionType::class, [
                 'entry_type' => VideoType::class,
@@ -65,7 +65,7 @@ class TrickType extends AbstractType
                 'allow_add' => true,
                 'by_reference' => false,
                 'allow_delete' => true,
-                'label' => false
+                /*'label' => false*/
             ])
             ->add('featuredPicture', FileType::class, [
                 'mapped' => false, // to not try to store the file in the database

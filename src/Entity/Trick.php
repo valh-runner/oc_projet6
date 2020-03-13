@@ -168,7 +168,6 @@ class Trick
      */
     public function getCommentsSlice(int $offset, int $length): Collection
     {
-        //$commentsSlice = new ArrayCollection();
         $commentsSlice = $this->comments->slice($offset, $length); 
         return new ArrayCollection($commentsSlice);
     }

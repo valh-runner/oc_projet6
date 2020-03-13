@@ -15,8 +15,6 @@ class PictureType extends AbstractType
     {
         $builder
             ->add('file', FileType::class, [
-                //'mapped' => false, // to not try to store the file in the database
-                //'required' => false, // to not re-upload the file at every edit for update
                 'constraints' => [
                     new Image([
                         'maxSize' => '1024k',

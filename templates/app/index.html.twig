@@ -19,7 +19,7 @@
 											: asset('uploads/img/' ~ trick.pictures.first.filename) 
 										: asset('images/banner.jpg')  
 								: asset('uploads/img/' ~ trick.mainPictureFilename) 
-							}}" alt="">
+							}}" alt="image de la figure">
 						</a>
 						<div class="trick-item-bar">
 							<a class="trick-item-title" href="{{ path('show', {'slug': trick.slug}) }}">
@@ -44,12 +44,12 @@
 		</div>
 		<div class="row">
 			<div class="col text-center">
-				<a class="btn btn-primary" id="action-load-more"><i class="fas fa-sync-alt"></i> Charger plus de tricks</a>
+				<a class="btn btn-info" id="action-load-more"><i class="fas fa-sync-alt"></i> Charger plus de tricks</a>
 			</div>
 		</div>
 		<div class="row">
 			<div class="col text-right">
-				<a id="link-new-trick" href="{{ path('add_trick') }}" class="btn btn-primary"><i class="fas fa-plus"></i> Créer un trick</a>
+				<a id="link-new-trick" href="{{ path('add_trick') }}" class="btn btn-info"><i class="fas fa-plus"></i> Créer un trick</a>
 			</div>
 		</div>
 	</div>

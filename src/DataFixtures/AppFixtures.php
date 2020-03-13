@@ -9,6 +9,7 @@ use App\Entity\Trick;
 use App\Entity\User;
 use App\Entity\Video;
 use App\Service\SlugGenerator;
+use App\Service\FileHelper;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
@@ -18,7 +19,6 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class AppFixtures extends Fixture implements ContainerAwareInterface
 {
-	public const ADMIN_USER_REFERENCE = 'admin-user';
 	private $container;
 
 	public function __construct(UserPasswordEncoderInterface $encoder)
@@ -92,6 +92,7 @@ class AppFixtures extends Fixture implements ContainerAwareInterface
 		$incrementedPictureSeed = 1;
 		$tricksList = array();
 		$slugGenerator = new SlugGenerator();
+		$fileHelper = new FileHelper();
         $filesystem = new Filesystem();
 
     	// Create first user
@@ -99,14 +100,22 @@ class AppFixtures extends Fixture implements ContainerAwareInterface
 		$username = 'generator';
 		$hash = $this->encoder->encodePassword($firstUser, $username);
 		$dateCreationUser = (new \DateTime())->sub(new \DateInterval('P30D')); //one month ago
-		//$dateCreationUser = date('d-m-Y', strtotime('-30 day', strtotime(new \Datetime()) ));
+
+		$pictureFilename = '869-250x250.jpg';
+
+        $newFilename = $fileHelper->getUniqueFilename($pictureFilename); //filename transformation
+        
+		// Copy an avatar picture from the example set directory to uploaded images directory
+        $pathFrom = $this->container->getParameter('images_directory').'/usersAvatarSetExample/'.$pictureFilename;
+        $pathTo = $this->container->getParameter('uploaded_img_directory').'/'.$newFilename;
+        $filesystem->copy($pathFrom, $pathTo, true);
+
 		$firstUser->setUsername($username)
 			->setEmail('generator@snowtricks.fr')
 			->setPassword($hash)
 			->setConfirmed(1)
-			//->setCreationMoment($faker->dateTimeBetween('- 30 days', '- 27 days'));
 			->setCreationMoment($dateCreationUser)
-			->setPictureFilename('869-250x250.jpg')
+			->setPictureFilename($newFilename)
 			->setRoles(['ROLE_ADMIN']);
 		$manager->persist($firstUser);
 
@@ -125,10 +134,8 @@ class AppFixtures extends Fixture implements ContainerAwareInterface
 	    		//If the trick correspond to the current category
 	    		if($trickData[1] == $j){
 		    		$trick = new Trick();
-		        	//$daysSinceUser = (new \DateTime())->diff($firstUser->getCreationMoment())->days;
 		    		$trick->setName($trickData[0])
 		    			  ->setDescription(ucfirst($trickData[2]).'.')
-		    			  //->setCreationMoment($faker->dateTimeBetween('-'.$daysSinceUser.' days'))
 		    			  ->setCreationMoment($firstUser->getCreationMoment()) // same of first user creation
 		    			  ->setUser($firstUser)
 		    			  ->setCategory($category)
@@ -141,11 +148,8 @@ class AppFixtures extends Fixture implements ContainerAwareInterface
 		        	for($n = 0; $n < $nbrPictures; $n++){
 		        		$pictureFilename = $trickData[4][$n];
 
-				        //filename transformations (TODO: copy of saveUploadedFile method of AppController so transforme the functionnality as a service)
-				        $originalFilename = pathinfo($pictureFilename, PATHINFO_FILENAME); // filename of submitted image
-				        $safeFilename = transliterator_transliterate('Any-Latin; Latin-ASCII; [^A-Za-z0-9_] remove; Lower()', $originalFilename); // reformated filename
-				        $newFilename = $safeFilename.'-'.uniqid().'.'.pathinfo($pictureFilename, PATHINFO_EXTENSION); // unique reformated filename
-
+				        $newFilename = $fileHelper->getUniqueFilename($pictureFilename); //filename transformation
+				        
 		        		// Copy a trick picture from the inital set directory to uploaded images directory
 				        $pathFrom = $this->container->getParameter('images_directory').'/initialSet/'.$pictureFilename;
 				        $pathTo = $this->container->getParameter('uploaded_img_directory').'/'.$newFilename;
@@ -172,8 +176,7 @@ class AppFixtures extends Fixture implements ContainerAwareInterface
 
     	$manager->flush();
 
-    	// other fixtures can get this object using the UserFixtures::ADMIN_USER_REFERENCE constant
-        //$this->addReference(self::ADMIN_USER_REFERENCE, $firstUser);
+    	// share admin user object with other fixtures
         $this->addReference('admin-user', $firstUser);
     }
 }

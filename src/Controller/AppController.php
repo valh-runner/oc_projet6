@@ -11,6 +11,7 @@ use App\Form\AccountType;
 use App\Form\CommentType;
 use App\Form\TrickType;
 use App\Repository\TrickRepository;
+use App\Service\FileHelper;
 use App\Service\SlugGenerator;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
@@ -37,7 +38,6 @@ class AppController extends AbstractController
     /**
      * @Route("/details_trick/{slug}", name="show")
      */
-    //public function show(Trick $trick, Request $request, EntityManagerInterface $manager)
     public function show(string $slug, TrickRepository $repo, Request $request, EntityManagerInterface $manager)
     {
         $trick = $repo->findOneBy(['slug' => $slug]); // getting the trick by slug
@@ -151,7 +151,6 @@ class AppController extends AbstractController
     /**
      * @Route("/modification_trick/{slug}", name="update_trick")
      */
-    //public function updateTrick(Trick $trick, Request $request, EntityManagerInterface $manager)
     public function updateTrick(string $slug, TrickRepository $repo, Request $request, EntityManagerInterface $manager, SlugGenerator $slugGenerator)
     {
         $trick = $repo->findOneBy(['slug' => $slug]); // getting the trick by slug
@@ -352,12 +351,11 @@ class AppController extends AbstractController
      */
     public function saveUploadedFile($file)
     {
-        //filename transformations
-        $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME); // filename of submitted image
-        $safeFilename = transliterator_transliterate('Any-Latin; Latin-ASCII; [^A-Za-z0-9_] remove; Lower()', $originalFilename); // reformated filename
-        $newFilename = $safeFilename.'-'.uniqid().'.'.$file->guessExtension(); // unique reformated filename
+        $fileHelper = new FileHelper();
+        $newFilename = $fileHelper->getUniqueFilename($file->getClientOriginalName()); //filename transformation
         try {
-            $file->move( $this->getParameter('uploaded_img_directory') , $newFilename ); // Move the file to the uploaded images directory
+            // Move the file to the uploaded images directory
+            $file->move( $this->getParameter('uploaded_img_directory') , $newFilename );
         } catch (FileException $e) {
             throw $e; // handle exception if something happens during file upload
         }

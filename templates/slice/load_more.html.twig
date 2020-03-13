@@ -11,7 +11,7 @@
 							: asset('uploads/img/' ~ trick.pictures.first.filename) 
 						: asset('images/banner.jpg')  
 				: asset('uploads/img/' ~ trick.mainPictureFilename) }}
-				" alt="">
+				" alt="image de la figure">
 			</a>
 			<div class="trick-item-bar">
 				<a class="trick-item-title" href="{{ path('show', {'slug': trick.slug}) }}">
