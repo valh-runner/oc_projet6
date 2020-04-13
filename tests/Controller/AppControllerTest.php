@@ -28,3 +28,4 @@ class AppControllerTest extends WebTestCase {
         $this->assertEquals(404, $client->getResponse()->getStatusCode());
 	}
 }
+
