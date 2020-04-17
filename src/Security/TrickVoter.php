@@ -43,8 +43,8 @@ class TrickVoter extends Voter
             // the user must be logged in; if not, deny access
             return false;
         }
-
-        // you know $subject is a Post object, thanks to supports
+        
+        // we know $subject is a Trick object, thanks to function supports
         /** @var Trick $trick */
         $trick = $subject;
 
@@ -58,6 +58,12 @@ class TrickVoter extends Voter
         throw new \LogicException('This code should not be reached!');
     }
 
+    /**
+     * Determine if a user can edit a trick
+     * @param Trick $trick 
+     * @param User $user 
+     * @return boolean
+     */
     private function canEdit(Trick $trick, User $user)
     {
         // if they can delete, they can edit
@@ -68,6 +74,12 @@ class TrickVoter extends Voter
         return false;
     }
 
+    /**
+     * Determine if a user can delete a trick
+     * @param Trick $trick 
+     * @param User $user 
+     * @return boolean
+     */
     private function canDelete(Trick $trick, User $user)
     {
 

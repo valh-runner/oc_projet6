@@ -59,7 +59,7 @@ composer install
 
 ### Database generation
 
-Change the database connection values for correct ones in the .env file.
+Change the database connection values for correct ones in the .env file.\
 Like the following example with a snowtricks named database to create:
 ```
 DATABASE_URL=mysql://root:@127.0.0.1:3306/snowtricks?serverVersion=5.7
@@ -100,16 +100,21 @@ For more info, see https://symfony.com/doc/current/mailer.html#transport-setup
 
 ### Run the web application
 
+#### By WebServerBundle
+
 Launch the Apache/Php runtime environment by using Symfony via the following command:
 ```
 php bin/console server:run
 ```
-
 Leave this console open.\
-It is also possible to use your Apache/Php/Mysql environment in the common way by configuring a virtualhost in which to place the project.
+Then consult the URL http://localhost:8000 from your browser.
 
-Then consult the URL http://localhost:8000 from your browser.\
-If you don't use WebServerBundle, check http://localhost.
+#### By a virtualhost
+
+If you don't wan't to use WebServerBundle.
+You can use your Apache/Php/Mysql environment in a normal way.
+This by configuring a virtualhost in which to place the project.
+Then check http://localhost.
 
 ### Logiciel tests check (optional)
 
@@ -121,5 +126,5 @@ At first launch, symfony will install phpunit dependances.
 
 ### Troubleshooting
 
-If some disfunctionments appear or a file is missing, check your anti-virus quarantine.
+If some disfunctionments appear or a file is missing, check your anti-virus quarantine.\
 Prefer to set, in your anti-virus, an exclusion for the application folder.

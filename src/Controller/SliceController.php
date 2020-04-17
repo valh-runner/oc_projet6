@@ -9,9 +9,18 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * Asynchronous functionalities
+ */
 class SliceController extends AbstractController
 {
     /**
+     * Load a number of tricks as page part, starting from the offset
+     * @param int $number 
+     * @param int $offset 
+     * @param TrickRepository $repo 
+     * @return string
+     * 
      * @Route("/charger_plus/{number}/{offset}", name="load_more")
      */
     public function loadMore(int $number, int $offset, TrickRepository $repo)
@@ -25,6 +34,11 @@ class SliceController extends AbstractController
     }
 
     /**
+     * Load the comments number of a trick as JSON
+     * @param Trick $trick 
+     * @param CommentRepository $repo 
+     * @return Response $response
+     * 
      * @Route("/charger_nombre_commentaires/{trick}", name="load_comments_count")
      */
     public function loadCommentsCount(Trick $trick, CommentRepository $repo)
@@ -39,6 +53,12 @@ class SliceController extends AbstractController
     }
 
     /**
+     * Load ten comments of a trick as page part, starting from the offset
+     * @param Trick $trick 
+     * @param int $offset 
+     * @param TrickRepository $repo 
+     * @return string
+     * 
      * @Route("/charger_page_commentaires/{trick}/{offset}", name="load_comments_page")
      */
     public function loadCommentsPage(Trick $trick, int $offset, TrickRepository $repo)

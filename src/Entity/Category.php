@@ -8,11 +8,13 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
+ * This class represent categories of tricks
  * @ORM\Entity(repositoryClass="App\Repository\CategoryRepository")
  */
 class Category
 {
     /**
+     * @var int $id Identifier
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
@@ -20,6 +22,7 @@ class Category
     private $id;
 
     /**
+     * @var string $name Name of the category
      * @ORM\Column(type="string", length=255)
      * @Assert\Length(min = 2, max = 255)
      * @Assert\NotBlank
@@ -27,6 +30,7 @@ class Category
     private $name;
 
     /**
+     * @var Collection|Trick[] $tricks Related tricks
      * @ORM\OneToMany(targetEntity="App\Entity\Trick", mappedBy="category")
      */
     private $tricks;

@@ -32,10 +32,8 @@ class SlugGenerator
 
     /**
      * Returns the slug-version of the string.
-     *
-     * @param string            $string  String to slugify
-     *
-     * @return string Slugified version of the string
+     * @param string $string  	String to slugify
+     * @return string 			Slugified version of the string
      */
     public function convert($string)
     {

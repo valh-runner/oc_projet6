@@ -18,9 +18,20 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
+/**
+ * Security functionalities
+ */
 class SecurityController extends AbstractController
 {
     /**
+     * Registration page
+     * @param Request $request 
+     * @param EntityManagerInterface $manager 
+     * @param UserPasswordEncoderInterface $encoder 
+     * @param TokenGeneratorInterface $tokenGenerator 
+     * @param MailerInterface $mailer 
+     * @return string
+     * 
      * @Route("/registration", name="security_registration")
      */
     public function registration(Request $request, EntityManagerInterface $manager, UserPasswordEncoderInterface $encoder, TokenGeneratorInterface $tokenGenerator, MailerInterface $mailer)
@@ -68,9 +79,14 @@ class SecurityController extends AbstractController
     }
 
     /**
+     * Registration confirm page
+     * @param Request $request 
+     * @param EntityManagerInterface $manager 
+     * @return string
+     * 
      * @Route("/registration_confirm", name="security_registration_confirm")
      */
-    public function registrationConfirm(Request $request, /*string $token, */ EntityManagerInterface $manager)
+    public function registrationConfirm(Request $request, EntityManagerInterface $manager)
     {
         $token = $request->query->get('token');
         $success = false;
@@ -112,6 +128,10 @@ class SecurityController extends AbstractController
     }
 
     /**
+     * Login page
+     * @param AuthenticationUtils $authenticationUtils 
+     * @return string
+     * 
      * @Route("/connexion", name="security_login")
      */
     public function login(AuthenticationUtils $authenticationUtils)
@@ -128,11 +148,21 @@ class SecurityController extends AbstractController
     }
 
     /**
+     * Logout page
+     * @return string
+     * 
      * @Route("/deconnexion", name="security_logout")
      */
     public function logout() {}
 
     /**
+     * Forgot password page
+     * @param Request $request 
+     * @param EntityManagerInterface $manager 
+     * @param TokenGeneratorInterface $tokenGenerator 
+     * @param MailerInterface $mailer 
+     * @return string
+     * 
      * @Route("/oubli_mot_de_passe", name="security_forgot_password")
      */
     public function forgotPassword(Request $request, EntityManagerInterface $manager, TokenGeneratorInterface $tokenGenerator, MailerInterface $mailer) {
@@ -184,6 +214,11 @@ class SecurityController extends AbstractController
     }
 
     /**
+     * Reset password
+     * @param Request $request 
+     * @param UserPasswordEncoderInterface $encoder 
+     * @return string
+     * 
      * @Route("/nouveau_mot_de_passe", name="security_reset_password")
      */
     public function resetPassword(Request $request, UserPasswordEncoderInterface $encoder) {

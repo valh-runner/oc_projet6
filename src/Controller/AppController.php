@@ -17,12 +17,20 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * Application functionalities
+ */
 class AppController extends AbstractController
 {
     /**
+     * Homepage
+     * @param TrickRepository $repo 
+     * @return string
+     * 
      * @Route("/", name="home")
      */
     public function index(TrickRepository $repo)
@@ -36,6 +44,13 @@ class AppController extends AbstractController
     }
 
     /**
+     * Trick details page
+     * @param string $slug 
+     * @param TrickRepository $repo 
+     * @param Request $request 
+     * @param EntityManagerInterface $manager 
+     * @return string
+     * 
      * @Route("/details_trick/{slug}", name="show")
      */
     public function show(string $slug, TrickRepository $repo, Request $request, EntityManagerInterface $manager)
@@ -69,6 +84,12 @@ class AppController extends AbstractController
     }
 
     /**
+     * Add trick page
+     * @param Request $request 
+     * @param EntityManagerInterface $manager 
+     * @param SlugGenerator $slugGenerator 
+     * @return string
+     *
      * @Route("/creation_trick", name="add_trick")
      */
     public function addTrick(Request $request, EntityManagerInterface $manager, SlugGenerator $slugGenerator)
@@ -149,6 +170,14 @@ class AppController extends AbstractController
     }
 
     /**
+     * Update trick page
+     * @param string $slug 
+     * @param TrickRepository $repo 
+     * @param Request $request 
+     * @param EntityManagerInterface $manager 
+     * @param SlugGenerator $slugGenerator 
+     * @return string
+     * 
      * @Route("/modification_trick/{slug}", name="update_trick")
      */
     public function updateTrick(string $slug, TrickRepository $repo, Request $request, EntityManagerInterface $manager, SlugGenerator $slugGenerator)
@@ -273,6 +302,11 @@ class AppController extends AbstractController
     }
 
     /**
+     * Delete trick page
+     * @param Trick $trick 
+     * @param EntityManagerInterface $manager 
+     * @return string
+     * 
      * @Route("/suppression_trick/{id}", name="delete_trick")
      */
     public function deleteTrick(Trick $trick, EntityManagerInterface $manager)
@@ -310,6 +344,11 @@ class AppController extends AbstractController
     }
 
     /**
+     * Manage account page
+     * @param Request $request 
+     * @param EntityManagerInterface $manager 
+     * @return string
+     * 
      * @Route("/gestion_compte", name="manage_account")
      */
     public function manageAccount(Request $request, EntityManagerInterface $manager)
@@ -347,9 +386,11 @@ class AppController extends AbstractController
     }
 
     /**
-     * 
+     * Save as file the passed uploaded file value
+     * @param File $file 
+     * @return string $newFilename
      */
-    public function saveUploadedFile($file)
+    public function saveUploadedFile(File $file)
     {
         $fileHelper = new FileHelper();
         $newFilename = $fileHelper->getUniqueFilename($file->getClientOriginalName()); //filename transformation
@@ -364,9 +405,11 @@ class AppController extends AbstractController
     }
 
     /**
-     * 
+     * Delete the uploaded file so named
+     * @param string $filename 
+     * @return string $newFilename
      */
-    public function deleteUploadedFile($filename)
+    public function deleteUploadedFile(string $filename)
     {
         $filesystem = new Filesystem();
         $path = $this->getParameter('uploaded_img_directory').'/'.$filename;

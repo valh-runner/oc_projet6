@@ -17,6 +17,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
+/**
+ * This fixture load initial tricks of the application
+ */
 class AppFixtures extends Fixture implements ContainerAwareInterface
 {
 	private $container;

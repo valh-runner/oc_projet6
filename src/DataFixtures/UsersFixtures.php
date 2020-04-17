@@ -13,6 +13,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
+/**
+ * This fixture load an example set of generic users having commented initial tricks
+ */
 class UsersFixtures extends Fixture implements ContainerAwareInterface
 {
 	private $container;
