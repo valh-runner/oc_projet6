@@ -5,14 +5,25 @@
             {% if comment.user.pictureFilename is defined and comment.user.pictureFilename is not null %}
     			<img class="img-avatar" src="{{ asset('uploads/img/' ~ comment.user.pictureFilename) }}" alt="{{ comment.user.pictureFilename }}">
     		{% else %}
-    			<img class="img-avatar" src="{{ asset('images/' ~ 'default_avatar.jpg') }}" alt="default avatar">
+    			<img class="img-avatar" src="{{ asset('images/' ~ 'default_avatar.jpg') }}" alt="avatar par défaut">
             {% endif %}
 		</div>
-		<div class="col pl-0">
-			<div class="comment-content">
-				<div>{{comment.content | raw}}</div>
-				<div class="text-right font-italic">
-					{{comment.user.username}} (<small>{{comment.creationMoment | date('d/m/Y à H:i') }}</small>)
+		<div class="col">
+			<div class="row">
+				<div class="col-lg-4 pl-0 comment-desc">
+					<div class="row comment-desc-inner">
+						<div class="col-sm-6 col-lg-12">
+							{{comment.user.username}}
+						</div>
+						<div class="col-sm-6 col-lg-12 comment-date">
+							<small>le {{comment.creationMoment | date('d/m/Y à H:i') }}</small>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-8 pl-0 comment-content">
+					<div class="comment-content-inner">
+						{{comment.content | raw}}
+					</div>
 				</div>
 			</div>
 		</div>

@@ -9,16 +9,30 @@ use App\Entity\Trick;
 use App\Entity\User;
 use App\Entity\Video;
 use App\Service\SlugGenerator;
+use App\Service\FileHelper;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
-class AppFixtures extends Fixture
+/**
+ * This fixture load initial tricks of the application
+ */
+class AppFixtures extends Fixture implements ContainerAwareInterface
 {
+	private $container;
+
 	public function __construct(UserPasswordEncoderInterface $encoder)
 	{
 	    $this->encoder = $encoder;
 	}
+
+    public function setContainer(ContainerInterface $container = null)
+    {
+        $this->container = $container;
+    }
 
     public function load(ObjectManager $manager)
     {
@@ -77,26 +91,34 @@ class AppFixtures extends Fixture
 			]
 		];
 
-		$commentsDataset = ['Pas mal','Sympa','Cool','Qui sait faire?', 'Mortel', 'Pas évident', 'jamais sans mon casque', 'Je donne des cours particuliers sur à la plagne', 'Où puis-je apprendre?', 'ça glisse!', 'tip top', 'Attention à la réception', 'Qui veut rider en groupe sur Méribel?'];
-
 		$faker = \Faker\Factory::create('fr_FR');
 		$incrementedPictureSeed = 1;
 		$tricksList = array();
 		$slugGenerator = new SlugGenerator();
+		$fileHelper = new FileHelper();
+        $filesystem = new Filesystem();
 
     	// Create first user
 		$firstUser = new User();
 		$username = 'generator';
 		$hash = $this->encoder->encodePassword($firstUser, $username);
 		$dateCreationUser = (new \DateTime())->sub(new \DateInterval('P30D')); //one month ago
-		//$dateCreationUser = date('d-m-Y', strtotime('-30 day', strtotime(new \Datetime()) ));
+
+		$pictureFilename = '869-250x250.jpg';
+
+        $newFilename = $fileHelper->getUniqueFilename($pictureFilename); //filename transformation
+        
+		// Copy an avatar picture from the example set directory to uploaded images directory
+        $pathFrom = $this->container->getParameter('images_directory').'/usersAvatarSetExample/'.$pictureFilename;
+        $pathTo = $this->container->getParameter('uploaded_img_directory').'/'.$newFilename;
+        $filesystem->copy($pathFrom, $pathTo, true);
+
 		$firstUser->setUsername($username)
 			->setEmail('generator@snowtricks.fr')
 			->setPassword($hash)
 			->setConfirmed(1)
-			//->setCreationMoment($faker->dateTimeBetween('- 30 days', '- 27 days'));
 			->setCreationMoment($dateCreationUser)
-			->setPictureFilename('869-250x250.jpg')
+			->setPictureFilename($newFilename)
 			->setRoles(['ROLE_ADMIN']);
 		$manager->persist($firstUser);
 
@@ -115,10 +137,8 @@ class AppFixtures extends Fixture
 	    		//If the trick correspond to the current category
 	    		if($trickData[1] == $j){
 		    		$trick = new Trick();
-		        	//$daysSinceUser = (new \DateTime())->diff($firstUser->getCreationMoment())->days;
 		    		$trick->setName($trickData[0])
 		    			  ->setDescription(ucfirst($trickData[2]).'.')
-		    			  //->setCreationMoment($faker->dateTimeBetween('-'.$daysSinceUser.' days'))
 		    			  ->setCreationMoment($firstUser->getCreationMoment()) // same of first user creation
 		    			  ->setUser($firstUser)
 		    			  ->setCategory($category)
@@ -129,10 +149,17 @@ class AppFixtures extends Fixture
 			    	// Create pictures
 			    	$nbrPictures = count($trickData[4]);
 		        	for($n = 0; $n < $nbrPictures; $n++){
-		        		$pictureData = $trickData[4][$n];
+		        		$pictureFilename = $trickData[4][$n];
+
+				        $newFilename = $fileHelper->getUniqueFilename($pictureFilename); //filename transformation
+				        
+		        		// Copy a trick picture from the inital set directory to uploaded images directory
+				        $pathFrom = $this->container->getParameter('images_directory').'/initialSet/'.$pictureFilename;
+				        $pathTo = $this->container->getParameter('uploaded_img_directory').'/'.$newFilename;
+				        $filesystem->copy($pathFrom, $pathTo, true);
 
 		        		$picture = new Picture();
-		        		$picture->setFilename($pictureData)
+		        		$picture->setFilename($newFilename)
 		        				->setTrick($trick);
 		        		$manager->persist($picture);
 		        	}
@@ -150,39 +177,9 @@ class AppFixtures extends Fixture
 	    	}
     	}
 
-    	// Create 25 fake users
-    	for($i = 1; $i <= 25; $i++){
-    		$user = new User();
-    		$username = $faker->userName();
-    		$hash = $this->encoder->encodePassword($user, $username);
+    	$manager->flush();
 
-			$daysSinceFirstUser = (new \DateTime())->diff($firstUser->getCreationMoment())->days;
-			$userCreationDate = $faker->dateTimeBetween('- '.$daysSinceFirstUser.' days');
-			$pictureFilename =  mt_rand(1, 3) == 1 ? null : mt_rand(870, 894).'-250x250.jpg';
-
-    		$user->setUsername($username)
-    			 ->setEmail($username.'@'.$faker->safeEmailDomain())
-    			 ->setPassword($hash)
-    			 ->setConfirmed(1)
-    			 ->setCreationMoment($userCreationDate)
-    			 ->setPictureFilename($pictureFilename);
-    		$manager->persist($user);
-
-			foreach($tricksList as $trick){
-		    	// Create between 0 and 2 fake comment by user, so one by user in average
-	        	for($m = 1; $m <= mt_rand(0, 2); $m++){
-	        		$daysSinceUserCreation = (new \DateTime())->diff($userCreationDate)->days;
-	        		$commentContent = $commentsDataset[mt_rand(0, count($commentsDataset)-1)]; //random content
-	        		$comment = new Comment();
-	        		$comment->setContent($commentContent)
-	        				->setCreationMoment($faker->dateTimeBetween('-'.$daysSinceUserCreation.' days'))
-	        				->setUser($user)
-	        				->setTrick($trick);
-	        		$manager->persist($comment);
-	        	}
-			}
-    	}
-    	
-        $manager->flush();
+    	// share admin user object with other fixtures
+        $this->addReference('admin-user', $firstUser);
     }
 }

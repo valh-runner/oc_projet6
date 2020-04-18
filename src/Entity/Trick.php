@@ -9,6 +9,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
+ * This class represent tricks
  * @ORM\Entity(repositoryClass="App\Repository\TrickRepository")
  * @UniqueEntity(fields="name", message= "Ce nom de figure existe déja")
  * @ORM\Table(indexes={@ORM\Index(name="slug_idx",columns={"slug"}, options={"length": 255})})
@@ -16,6 +17,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 class Trick
 {
     /**
+     * @var int $id Identifier
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
@@ -23,6 +25,7 @@ class Trick
     private $id;
 
     /**
+     * @var string $name The trick name
      * @ORM\Column(type="string", length=255)
      * @Assert\Length(min = 2, max = 255)
      * @Assert\NotBlank
@@ -30,6 +33,7 @@ class Trick
     private $name;
 
     /**
+     * @var string $description Description of the trick
      * @ORM\Column(type="text")
      * @Assert\Length(min = 2, max = 255)
      * @Assert\NotBlank
@@ -37,48 +41,57 @@ class Trick
     private $description;
 
     /**
+     * @var datetime $creationMoment Creation timestamp
      * @ORM\Column(type="datetime")
      */
     private $creationMoment;
 
     /**
+     * @var datetime $revisionMoment Revision timestamp
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $revisionMoment;
 
     /**
+     * @var User $user The trick creator
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="tricks")
      * @ORM\JoinColumn(nullable=false)
      */
     private $user;
 
     /**
+     * @var Comment $comments The related comments
      * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="trick")
      * @ORM\OrderBy({"creationMoment" = "DESC"})
      */
     private $comments;
 
     /**
+     * @var int $category The related category
      * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="tricks")
      */
     private $category;
 
     /**
+     * @var Collection|Picture[] $pictures Related pictures
      * @ORM\OneToMany(targetEntity="App\Entity\Picture", mappedBy="trick", cascade={"persist"})
      */
     private $pictures;
 
     /**
+     * @var Collection|Video[] $videos Related videos
      * @ORM\OneToMany(targetEntity="App\Entity\Video", mappedBy="trick", cascade={"persist"})
      */
     private $videos;
 
     /**
+     * @var string $mainPictureFilename The filename of the main picture
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $mainPictureFilename;
 
     /**
+     * @var string $slug The slug converted string from trick's name
      * @ORM\Column(type="string", length=255)
      */
     private $slug;
@@ -168,7 +181,6 @@ class Trick
      */
     public function getCommentsSlice(int $offset, int $length): Collection
     {
-        //$commentsSlice = new ArrayCollection();
         $commentsSlice = $this->comments->slice($offset, $length); 
         return new ArrayCollection($commentsSlice);
     }

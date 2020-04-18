@@ -11,17 +11,26 @@ use App\Form\AccountType;
 use App\Form\CommentType;
 use App\Form\TrickType;
 use App\Repository\TrickRepository;
+use App\Service\FileHelper;
 use App\Service\SlugGenerator;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * Application functionalities
+ */
 class AppController extends AbstractController
 {
     /**
+     * Homepage
+     * @param TrickRepository $repo 
+     * @return string
+     * 
      * @Route("/", name="home")
      */
     public function index(TrickRepository $repo)
@@ -35,9 +44,15 @@ class AppController extends AbstractController
     }
 
     /**
+     * Trick details page
+     * @param string $slug 
+     * @param TrickRepository $repo 
+     * @param Request $request 
+     * @param EntityManagerInterface $manager 
+     * @return string
+     * 
      * @Route("/details_trick/{slug}", name="show")
      */
-    //public function show(Trick $trick, Request $request, EntityManagerInterface $manager)
     public function show(string $slug, TrickRepository $repo, Request $request, EntityManagerInterface $manager)
     {
         $trick = $repo->findOneBy(['slug' => $slug]); // getting the trick by slug
@@ -69,6 +84,12 @@ class AppController extends AbstractController
     }
 
     /**
+     * Add trick page
+     * @param Request $request 
+     * @param EntityManagerInterface $manager 
+     * @param SlugGenerator $slugGenerator 
+     * @return string
+     *
      * @Route("/creation_trick", name="add_trick")
      */
     public function addTrick(Request $request, EntityManagerInterface $manager, SlugGenerator $slugGenerator)
@@ -149,9 +170,16 @@ class AppController extends AbstractController
     }
 
     /**
+     * Update trick page
+     * @param string $slug 
+     * @param TrickRepository $repo 
+     * @param Request $request 
+     * @param EntityManagerInterface $manager 
+     * @param SlugGenerator $slugGenerator 
+     * @return string
+     * 
      * @Route("/modification_trick/{slug}", name="update_trick")
      */
-    //public function updateTrick(Trick $trick, Request $request, EntityManagerInterface $manager)
     public function updateTrick(string $slug, TrickRepository $repo, Request $request, EntityManagerInterface $manager, SlugGenerator $slugGenerator)
     {
         $trick = $repo->findOneBy(['slug' => $slug]); // getting the trick by slug
@@ -274,6 +302,11 @@ class AppController extends AbstractController
     }
 
     /**
+     * Delete trick page
+     * @param Trick $trick 
+     * @param EntityManagerInterface $manager 
+     * @return string
+     * 
      * @Route("/suppression_trick/{id}", name="delete_trick")
      */
     public function deleteTrick(Trick $trick, EntityManagerInterface $manager)
@@ -311,6 +344,11 @@ class AppController extends AbstractController
     }
 
     /**
+     * Manage account page
+     * @param Request $request 
+     * @param EntityManagerInterface $manager 
+     * @return string
+     * 
      * @Route("/gestion_compte", name="manage_account")
      */
     public function manageAccount(Request $request, EntityManagerInterface $manager)
@@ -348,16 +386,17 @@ class AppController extends AbstractController
     }
 
     /**
-     * 
+     * Save as file the passed uploaded file value
+     * @param File $file 
+     * @return string $newFilename
      */
-    public function saveUploadedFile($file)
+    public function saveUploadedFile(File $file)
     {
-        //filename transformations
-        $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME); // filename of submitted image
-        $safeFilename = transliterator_transliterate('Any-Latin; Latin-ASCII; [^A-Za-z0-9_] remove; Lower()', $originalFilename); // reformated filename
-        $newFilename = $safeFilename.'-'.uniqid().'.'.$file->guessExtension(); // unique reformated filename
+        $fileHelper = new FileHelper();
+        $newFilename = $fileHelper->getUniqueFilename($file->getClientOriginalName()); //filename transformation
         try {
-            $file->move( $this->getParameter('images_directory') , $newFilename ); // Move the file to the uploaded images directory
+            // Move the file to the uploaded images directory
+            $file->move( $this->getParameter('uploaded_img_directory') , $newFilename );
         } catch (FileException $e) {
             throw $e; // handle exception if something happens during file upload
         }
@@ -366,15 +405,14 @@ class AppController extends AbstractController
     }
 
     /**
-     * 
+     * Delete the uploaded file so named
+     * @param string $filename 
+     * @return string $newFilename
      */
-    public function deleteUploadedFile($filename)
+    public function deleteUploadedFile(string $filename)
     {
         $filesystem = new Filesystem();
-        $path = $this->getParameter('images_directory').'/'.$filename;
-        $result = $filesystem->remove($path);
-        if ($result === false) {
-            throw new \Exception(sprintf('Error deleting "%s"', $path));
-        }
+        $path = $this->getParameter('uploaded_img_directory').'/'.$filename;
+        $filesystem->remove($path);
     }
 }

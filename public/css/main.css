@@ -1,42 +1,29 @@
 
-html {
-	/*min-height: 100%;*/
-	/*width: 100%;*/
-}
 body {
 	background-color: #000;
 	position: relative; /* for fullcover height */
-	/*min-height: 100%;*/
-	/*width: 100%;*/
 }
 
 #global {
     position: relative; /* avoid background-color to be transparent cause of underlaying fullbanner */
-	/*z-index: 200; /* to delete */
 	min-height: 100vh; /* to have the footer at the bottom even if not enough content */
-
     display: flex;
     flex-direction: column;
 }
 
 #main {
 	flex: 1;
-
 	display: flex; /* to vertical center content of content-registration div */
     flex-direction: column; /* to vertical center content of content-registration div */
 }
 
 #main-container {
-	/*padding-bottom: 50px;*/
-	/*padding: 50px;*/
 	flex: 1; /* to vertical center content of content-registration div */
-
 	display: flex; /* to vertical center content of content-registration div */
     flex-direction: column; /* to vertical center content of content-registration div */
 }
 
 .navbar {
-	/*margin-bottom: 150px;*/
 	background-color: #ecf0f1;
 }
 
@@ -51,19 +38,16 @@ body {
 #trick-head {
 	position: relative;
 	height: 400px;
-	/*overflow-y: hidden;*/
 	border: 3px solid white;
 }
 
 #trick-head-banner {
 	position: absolute;
-	/*opacity:0.7;*/
 	padding-left: 0;
 	padding-right: 0;
 	object-fit: cover;
 	height: 100%;
 	width: 100%;
-	/*object-position: 50% top;*/
 }
 
 #trick-head-title {
@@ -71,13 +55,14 @@ body {
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%);
-	/*background-color: rgba(255, 255, 255, 0.5);*/
 	background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.6) 30% , rgba(255, 255, 255, 0.6) 70%, transparent 100%);
 	padding: 0 30px;
+	max-width: 100%; /* to avoid flex child overflow when larger content  */
 }
 
 #trick-head-title h1 {
 	text-align: center;
+	word-wrap: break-word; /* to break long text line */
 }
 
 #trick-head-actions {
@@ -94,29 +79,40 @@ body {
 	padding: 0;
 }
 
-#trick-head-actions i {
-	/*color: #000;
-	margin: 0 10px;*/
-}
-
-article {
-	/*padding: inherit 0;*/
-}
-
-#description {
+.trick-details #description {
 	padding: 20px 0;
 }
-#tags span {
-	background-color: #acf;
+
+#comments-content {
+	margin-top: 20px;
 }
 
-.comment {
+#comments-content .comment {
 	margin-bottom: 10px;
 }
 
-.comment-content {
-	background-color: #ccc;
-	padding: 0 15px;
+#comments-content .comment .img-avatar {
+	height: 50px;
+	width: 50px;
+}
+
+#comments-content .comment .comment-desc {
+	background-color: #c0c0c0;
+	background-clip: content-box;
+}
+
+#comments-content .comment .comment-desc-inner {
+	padding-left: 15px;
+	padding-right: 15px;
+}
+
+#comments-content .comment .comment-content {
+	background-color: #e0e0e0;
+	background-clip: content-box;
+}
+
+#comments-content .comment .comment-content-inner {
+	padding-left: 15px;
 }
 
 .img-fluid{
@@ -145,38 +141,12 @@ article {
 	top: 50%;
 	left: 50%;
 	transform: translateX(-50%);
-	/*background-color: rgba(255, 255, 255, 0.4);*/
 	padding: 10px;
 	background: linear-gradient(0deg, transparent 0%, rgba(255, 255, 255, 0.4) 30% , rgba(255, 255, 255, 0.4) 70%, transparent 100%);
 }
 
 #slogan h1 {
 	font-size: 60px;
-}
-
-.abs {
-	position: absolute;
-}
-
-.fixed {
-	position: fixed;
-}
-
-#banner-image {
-	/*height: 100vh;*/
-	height: 100%;
-	width: 100%;
-	object-fit: cover;
-	/*object-position: 50% top;*/
-}
-
-.faded {
-	opacity:0.6;
-}
-
-#thegap {
-	/*position: relative;
-	height: 100vh;*/
 }
 
 #arrow {
@@ -189,8 +159,7 @@ article {
 #arrow2 {
 	position: absolute;
 	right: 1vw;
-	/*bottom: 20vh;*/
-	bottom: 140px;
+	bottom: 190px;
 	display: none;
 }
 
@@ -201,8 +170,6 @@ article {
 }
 
 #content {
-	/*background-color: #fff;*/
-	/*padding-top:15px;*/
 	padding-top: 100px;
 	padding-bottom: 80px;
 }
@@ -233,29 +200,18 @@ article {
 	position: absolute;
 	width: 100%;
 	bottom: 0;
-	/*left:15;
-	right: 15;*/
 	background-color: rgba(236, 240, 241, 0.6);
 	display: flex;
-	/*flex-wrap: nowrap;*/
-	/*padding: 0 5px;*/
-}
-
-.trick-item .trick-item-bar > a {
-	/*flex: 1;*/
 }
 
 .trick-item-title {
 	flex: 1;
 	text-align:center;
+	min-width: 0; /* fix to avoid flex child overflow when larger content  */
 }
 
-.trick-item-edit {
-	
-}
-
-.trick-item-del {
-	
+.trick-item-title h3 {
+	word-wrap: break-word; /* to break long text line */
 }
 
 .trick-details {
@@ -275,6 +231,11 @@ article {
 	height: 100%;
 	width: 100%;
 	object-fit: cover;
+	cursor:pointer; /* to simule link aspect for onclick action */
+}
+
+.trick-details-media img:hover{
+	opacity: 0.8; /* to simule link aspect for onclick action */
 }
 
 .trick-details .trick-details-media iframe{
@@ -286,12 +247,9 @@ article {
 	background-color: #000;
 }
 
-
 #content-panel {
-	/*margin-top: 200px;*/
 	padding-top: 10px;
 	padding-bottom: 10px;
-
 	flex: 1; /* to vertical center content of content-registration div */
 }
 
@@ -316,6 +274,7 @@ article {
 ul.videos {
 	list-style-type: none;
 }
+
 ul.pictures {
 	list-style-type: none;
 }
@@ -326,11 +285,11 @@ ul.pictures {
 
 .img-preview-holder {
 	position: relative;
-	/*height: 100px;*/
     height: 0;
     padding-bottom: 56.25%;
 	background-color: #000;
 }
+
 .img-preview {
 	position: absolute;
 	height: 100%;
@@ -345,6 +304,7 @@ ul.pictures {
     padding-bottom: 56.25%;
     overflow: hidden;
 }
+
 .video-container iframe {
     position: absolute;
     width: 100%;
@@ -367,11 +327,6 @@ form[name="account"] .img-preview-holder {
     padding-bottom: 100%; /* change the common img-preview-holder rules to be square ratio */
 }
 
-.img-avatar {
-	height: 50px;
-	width: 50px;
-}
-
 #action-delete-accountPicture {
 	padding-left: 0;
 	padding-right: 0;
@@ -385,21 +340,18 @@ form[name="account"] .img-preview-holder {
 
 #link-new-trick {
 	margin-top: 50px;
+	margin-bottom: 50px;
 }
 
 #action-delete-trick {
 	color: #ecf0f1;
 }
 
-.action-paging {
-	margin: 0 10px;
+ul#comments-paging a {
+	cursor:pointer;
 }
 
 #footer {
-	/*position: absolute;
-	bottom: 0;
-	width: 100%;*/
-
 	background-color: rgb(236, 240, 241);
 	color: #333;
 }
@@ -416,26 +368,54 @@ form[name="account"] .img-preview-holder {
 .fullOn #global #main {
 	background-color: rgba(236, 240, 241, 0.65);
 }
-.fullOn #global #main-container {
-	/*padding-top: 0;
-	padding-bottom: 0;*/
+
+.h1, h1 { font-size: 2rem; 		}
+.h2, h2 { font-size: 1.75rem; 	}
+.h3, h3 { font-size: 1.5rem; 	}
+.h4, h4 { font-size: 1.25rem; 	}
+.h5, h5 { font-size: 1rem; 		}
+.h6, h6 { font-size: 0.75rem; 	}
+
+.page-item.active .page-link {
+	background-color: #138496;
+	border-color: #138496;
 }
 
-.h1, h1 {
-    font-size: 2rem;
+.page-link {
+	background-color: #e0e0e0;
+	border-color: #e0e0e0;
 }
-.h2, h2 {
-    font-size: 1.75rem;
+
+.page-link:hover {
+	border-color: #e0e0e0;
 }
-.h3, h3 {
-    font-size: 1.5rem;
+
+#picture_view_modal .modal-body {
+	max-height: 80vh;
 }
-.h4, h4 {
-    font-size: 1.25rem;
+
+#picture_view_modal .modal-body img{
+	object-fit: contain;
+	height: 100%;
+	width: 100%;
 }
-.h5, h5 {
-    font-size: 1rem;
+
+@media (max-width: 575.98px) { 							/* Extra small devices */
+
 }
-.h6, h6 {
-    font-size: 0.75rem;
+@media (min-width: 576px) and (max-width: 767.98px) { 	/* Small devices */
+	.comment-date {
+		text-align: right;
+	}
+}
+@media (min-width: 768px) and (max-width: 991.98px) { 	/* Medium devices */
+	.comment-date {
+		text-align: right;
+	}
+}
+@media (min-width: 992px) and (max-width: 1199.98px) { 	/* Large devices */
+
+}
+@media (min-width: 1200px) { 							/* Extra large devices */
+
 }

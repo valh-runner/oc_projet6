@@ -48,6 +48,15 @@ function setActiveCurrentNavItem() {
     
 }
 
+function displayPictureViewModal(pictureSrc, calledElement) {
+    //alert(pictureSrc);
+    currentImgElem = $(calledElement);
+    viewerModalElem = $('#picture_view_modal');
+    viewerModalElem.find('img').attr('src', pictureSrc);
+    viewerModalElem.find('.modal-title').text( currentImgElem.attr('alt') );
+    viewerModalElem.modal();
+}
+
 jQuery(document).ready(function() {
     $('#notices_modal').modal();
 

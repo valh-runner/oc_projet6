@@ -10,6 +10,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
+ * This class represent users
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  * @UniqueEntity(fields="username", message= "Ce nom d'utilisateur est déja utilisé!")
  * @UniqueEntity(fields="email", message= "Cette email est déja utilisé!")
@@ -17,6 +18,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 class User implements UserInterface
 {
     /**
+     * @var int $id Identifier
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
@@ -24,6 +26,7 @@ class User implements UserInterface
     private $id;
 
     /**
+     * @var string $username The pseudonym of the user
      * @ORM\Column(type="string", length=255)
      * @Assert\Length(min = 2, max = 255)
      * @Assert\NotBlank
@@ -31,6 +34,7 @@ class User implements UserInterface
     private $username;
 
     /**
+     * @var string $email Email of the user
      * @ORM\Column(type="string", length=255)
      * @Assert\Length(min = 5, max = 255)
      * @Assert\Email()
@@ -39,6 +43,7 @@ class User implements UserInterface
     private $email;
 
     /**
+     * @var string $password The password hash
      * @ORM\Column(type="string", length=255)
      * @Assert\Length(min="8", minMessage="Votre mot de passe doit avoir au moins 8 caractères", max = 255)
      * @Assert\NotBlank
@@ -46,46 +51,55 @@ class User implements UserInterface
     private $password;
 
     /**
+     * @var string $confirmPassword The unpersisted equal password check when suscribe
      * @Assert\EqualTo(propertyPath="password", message="Vous n'avez pas tapé le même mot de passe")
      */
     private $confirmPassword;
 
     /**
+     * @var Collection|Trick[] $tricks The related tricks
      * @ORM\OneToMany(targetEntity="App\Entity\Trick", mappedBy="user")
      */
     private $tricks;
 
     /**
+     * @var Collection|Comment[] $comments The related comments
      * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="user")
      */
     private $comments;
 
     /**
+     * @var boolean $confirmed The character 
      * @ORM\Column(type="boolean")
      */
     private $confirmed;
 
     /**
+     * @var string $token Confirmation token
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $token;
 
     /**
+     * @var datetime $creationMoment Creation timestamp
      * @ORM\Column(type="datetime")
      */
     private $creationMoment;
 
     /**
+     * @var datetime $forgotPasswordMoment Forgot password timestamp
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $forgotPasswordMoment;
 
     /**
+     * @var string $pictureFilename Filename of the picture
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $pictureFilename;
 
     /**
+     * @var array $roles The owned roles
      * @ORM\Column(type="json", nullable=true)
      */
     private $roles = [];

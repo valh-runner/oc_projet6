@@ -6,11 +6,13 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
+ * This class represent comments of tricks
  * @ORM\Entity(repositoryClass="App\Repository\CommentRepository")
  */
 class Comment
 {
     /**
+     * @var int $id Identifier
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
@@ -18,6 +20,7 @@ class Comment
     private $id;
 
     /**
+     * @var string $content Content of the comment
      * @ORM\Column(type="text")
      * @Assert\Length(min = 2)
      * @Assert\NotBlank
@@ -25,17 +28,20 @@ class Comment
     private $content;
 
     /**
+     * @var \Datetime $creationMoment The creation timestamp
      * @ORM\Column(type="datetime")
      */
     private $creationMoment;
 
     /**
+     * @var User $user The comment's user
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="comments")
      * @ORM\JoinColumn(nullable=false)
      */
     private $user;
 
     /**
+     * @var Trick $trick The related trick
      * @ORM\ManyToOne(targetEntity="App\Entity\Trick", inversedBy="comments")
      * @ORM\JoinColumn(nullable=false)
      */

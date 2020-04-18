@@ -6,11 +6,13 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
+ * This class represent pictures of tricks
  * @ORM\Entity(repositoryClass="App\Repository\PictureRepository")
  */
 class Picture
 {
     /**
+     * @var int $id Identifier
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
@@ -18,6 +20,7 @@ class Picture
     private $id;
 
     /**
+     * @var string $filename The picture filename
      * @ORM\Column(type="string", length=255)
      * @Assert\Length(min = 1, max = 255)
      * @Assert\NotBlank
@@ -25,11 +28,12 @@ class Picture
     private $filename;
 
     /**
-     * @var UploadedFile
+     * @var UploadedFile $file
      */
     protected $file;
 
     /**
+     * @var Trick $trick The related trick
      * @ORM\ManyToOne(targetEntity="App\Entity\Trick", inversedBy="pictures")
      * @ORM\JoinColumn(nullable=false)
      */
