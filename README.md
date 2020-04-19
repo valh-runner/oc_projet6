@@ -64,26 +64,27 @@ Like the following example with a snowtricks named database to create:
 DATABASE_URL=mysql://root:@127.0.0.1:3306/snowtricks?serverVersion=5.7
 ```
 
+In a new console placed in the root directory of the application;\
 Launch the creation of the database:
 ```
 php bin/console doctrine:database:create
 ```
 
-In a new console placed in the root directory of the application;\
-Build the database structure using the following command:
+Then, build the database structure using the following command:
 ```
 php bin/console doctrine:migrations:migrate
 ```
 
-Load the initial data into the database using the following command:
+Finally, load the initial dataset into the database with or without example users.
+To load only the initial dataset, use the following command:
 ```
 php bin/console doctrine:fixtures:load --group=AppFixtures
 ```
-
-Optional possibility, if expected, to load generic users:
+Alternatively, if you want to load the initial dataset and generic users, use this command:
 ```
-php bin/console doctrine:fixtures:load --group=UsersFixtures
+php bin/console doctrine:fixtures:load
 ```
+Please note that the password for each sample user is the username of the sample user.
 
 ### Configure the mailer connection address
 
