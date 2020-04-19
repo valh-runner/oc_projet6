@@ -75,7 +75,7 @@ Then, build the database structure using the following command:
 php bin/console doctrine:migrations:migrate
 ```
 
-Finally, load the initial dataset into the database with or without example users.
+Finally, load the initial dataset into the database with or without example users.\
 To load only the initial dataset, use the following command:
 ```
 php bin/console doctrine:fixtures:load --group=AppFixtures
@@ -111,14 +111,13 @@ Then consult the URL http://localhost:8000 from your browser.
 
 #### By a virtualhost
 
-If you don't wan't to use WebServerBundle.
-You can use your Apache/Php/Mysql environment in a normal way.
-This by configuring a virtualhost in which to place the project.
-Then check http://localhost.
+If you don't wan't to use WebServerBundle, you can use your Apache/Php/Mysql environment in a normal way.\
+This by configuring a virtualhost in which to place the project.\
+Then by checking http://localhost.
 
 ### Logiciel tests check (optional)
 
-If you want to perform unit tests and functionnal tests run the above command:
+If you want to perform unit tests and functionnal tests, run the above command:
 ```
 php bin/phpunit
 ```
