@@ -1,0 +1,35 @@
+
+{% for trick in tricks %}
+	<article class="col-sm-6 col-md-4 col-lg-3">
+		<div class="trick-item">
+			<a href="{{ path('show', {'slug': trick.slug}) }}">
+				<img class="img-fluid" src="
+				{{ trick.mainPictureFilename is null ?
+						trick.pictures|length > 0 ? 
+							trick.pictures.first.filename starts with 'http' ? 
+							trick.pictures.first.filename 
+							: asset('uploads/img/' ~ trick.pictures.first.filename) 
+						: asset('images/banner.jpg')  
+				: asset('uploads/img/' ~ trick.mainPictureFilename) }}
+				" alt="image de la figure">
+			</a>
+			<div class="trick-item-bar">
+				<a class="trick-item-title" href="{{ path('show', {'slug': trick.slug}) }}">
+					<h3>{{ trick.name }}</h3>
+				</a>
+				{% if (app.user == trick.user) or is_granted('ROLE_ADMIN') %}
+					<div class="trick-item-edit">
+						<a class="btn" href="{{ path('update_trick', {'slug': trick.slug}) }}">
+							<i class="fas fa-pencil-alt" title="Modifier le trick"></i>
+						</a>
+					</div>
+					<div class="trick-item-del">
+						<a class="btn" onclick="confirmTrickDeleteModal('{{ trick.id }}')">
+							<i class="fas fa-trash-alt" title="Supprimer le trick"></i>
+						</a>
+					</div>
+				{% endif %}
+			</div>
+		</div>
+	</article>
+{% endfor %}

@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+
+{% form_theme form 'bootstrap_4_layout.html.twig' %}
+
+{% block title %}{{ parent() }} Gestion du compte{% endblock %}
+
+{% block body %}
+	<div class="row">
+		<div class="col-sm-12 offset-md-1 col-md-10" id="content">
+			<div class="row">
+				<div class="container-fluid" id="second-container">
+					<h1 id="title-manage-account" class="text-center">Gestion du compte</h1>
+					<hr>
+					{{ form_start(form) }}
+					<div class="form-row">
+				    	<div class="form-group offset-3 col-6 offset-md-0 col-md-3">
+				    		<div class="img-preview-holder" title="aperçu de l'image">
+				            {% if user.pictureFilename is defined and user.pictureFilename is not null %}
+				    			<img class="img-preview" src="{{ asset('uploads/img/' ~ user.pictureFilename) }}" alt="{{ user.pictureFilename }}">
+				            {% endif %}
+				        	</div>
+				    	</div>
+				    	<!-- empty col to fill end whole on xs and sm devices -->
+				    	<div class="form-group col-3 d-block d-md-none"></div>
+						<div class="form-group col">
+							{{ form_label(form.accountPicture, 'Avatar du compte') }}
+				    		{{ form_widget(form.accountPicture, {
+								'attr': {
+									'placeholder': user.pictureFilename is defined and user.pictureFilename is not null ? user.pictureFilename : 'Sélectionner un fichier image',
+								},
+								'required': false,
+							}) }}
+							{{ form_errors(form.accountPicture) }}
+				    		{{ form_widget(form.pictureDeletionState, {
+								'attr': {
+									'value': 'false',
+								}
+							}) }}
+						</div>
+						<div class="form-group col-auto">
+							<a class="btn" id="action-delete-accountPicture">
+								<i class="fas fa-trash-alt" title="Supprimer l'image avatar"></i>
+							</a>
+						</div>
+					</div>
+					<div class="form-group text-right mt-5">
+						<button type="submit" class="btn btn-info"><i class="fas fa-save"></i> Enregistrer les modifications</button>
+					</div>
+					{{ form_end(form) }}
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+	<script type="text/javascript" src="{{ asset('js/manage_account.js') }}"></script>
+{% endblock %}
