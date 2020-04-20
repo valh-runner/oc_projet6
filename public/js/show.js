@@ -19,7 +19,7 @@ jQuery(document).ready(function() {
 
     $.get( "/charger_nombre_commentaires/" + trickId, function(data) {
         var totalCommentsCount = data.CommentsCount;
-        var totalPageCount = Math.ceil(totalCommentsCount / 10); // number of 10 comments pages
+        var totalPageCount = Math.ceil(totalCommentsCount / 10); // number of pages of 10 comments
 
         // buttons adding after the first pre-existent one
         for (var i = 2; i <= totalPageCount; i++) {
