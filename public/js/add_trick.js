@@ -3,7 +3,7 @@
 //-------------
 
 function disableCorrespondingFieldDependingRadio($radios) {
-        var $checked = $radios.filter(':checked');
+        var $checked = $radios.filter(":checked");
         if($checked.val() === 1) {
             $("#trick_newCategory").removeAttr("required");
             $("#trick_existantCategory").removeAttr("disabled");
@@ -154,7 +154,7 @@ jQuery(document).ready(function() {
     $("#action-delete-featuredPicture").on("click", function(e) {
 
             // file input reinitialization
-            $inputFile = $('input[id="trick_featuredPicture"]');
+            var $inputFile = $('input[id="trick_featuredPicture"]');
             $inputFile.val("");
             $inputFile.parent().find(".custom-file-label").text("Sélectionner un fichier image");
 
@@ -166,7 +166,7 @@ jQuery(document).ready(function() {
             ReplaceInitialTitleBannerImage();
     });
 
-    imgPreviewSearch = $('input[id="trick_featuredPicture"]').parent().parent().parent().find(".img-preview");
+    var imgPreviewSearch = $('input[id="trick_featuredPicture"]').parent().parent().parent().find(".img-preview");
     // if featuredPicture is preset
     if( imgPreviewSearch.length === 1 ){
         funcPreviewImageInTitleBanner(imgPreviewSearch.attr("src")); //set same picture in banner title

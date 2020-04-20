@@ -5,16 +5,26 @@
 Creation of a community site focused on the presentation of snowboard figures via the Symfony framework.
 
 ## Environment used during development
-- WampServer 3.1.7
-  - Apache 2.4.37
-  - PHP 7.2.14
-  - MySQL 5.7.24
-- Composer 1.9.3
-- Git 2.24.0
-- Symfony 4.4.1
-- PHPUnit 7.5.20
-- jQuery 3.4.1
-- Bootstrap 4.4.1
+
+-   WampServer 3.1.7
+
+    -   Apache 2.4.37
+
+    -   PHP 7.2.14
+
+    -   MySQL 5.7.24
+
+-   Composer 1.9.3
+
+-   Git 2.24.0
+
+-   Symfony 4.4.1
+
+-   PHPUnit 7.5.20
+
+-   jQuery 3.4.1
+
+-   Bootstrap 4.4.1
 
 ## Installation
 
@@ -23,10 +33,13 @@ Creation of a community site focused on the presentation of snowboard figures vi
 It is necessary to have an Apache / Php / Mysql environment.\
 Depending on your operating system, several servers can be installed:
 
-- Windows : WAMP (<http://www.wampserver.com/>)
-- MAC : MAMP (<https://www.mamp.info/en/mamp/>)
-- Linux : LAMP (<https://doc.ubuntu-fr.org/lamp>)
-- Cross system: XAMP (<https://www.apachefriends.org/fr/index.html>)
+-   Windows : WAMP (<http://www.wampserver.com/>)
+
+-   MAC : MAMP (<https://www.mamp.info/en/mamp/>)
+
+-   Linux : LAMP (<https://doc.ubuntu-fr.org/lamp>)
+
+-   Cross system: XAMP (<https://www.apachefriends.org/fr/index.html>)
 
 Symfony 4.4 requires PHP 7.1.3 or higher to run.\
 Prefer to have MySQL 5.6 or higher.\
