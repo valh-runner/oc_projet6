@@ -21,7 +21,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 class TrickType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder)
     {
         $builder
             ->add('name')
@@ -92,7 +92,7 @@ class TrickType extends AbstractType
         $resolver->setDefaults([
             'data_class' => Trick::class,
             'validation_groups' => function (FormInterface $form) {
-                $formData = $form->getData();
+
                 $catTypeValue = $form->get('categoryType')->getData();
 
                 if ($catTypeValue == 1) {
@@ -101,9 +101,8 @@ class TrickType extends AbstractType
                 elseif ($catTypeValue == 2) {
                     return ['Default', 'newCat'];
                 }
-                else{
-                    return ['Default', 'existCat'];
-                }
+                
+                return ['Default', 'existCat'];
             },
         ]);
     }

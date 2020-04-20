@@ -1,5 +1,5 @@
 jQuery(document).ready(function() {
-    $newInputFile = $('input[id="account_accountPicture"]');
+    var $newInputFile = $('input[id="account_accountPicture"]');
     //On this file input change
     $newInputFile.on('change', function(event) {
 
@@ -15,7 +15,7 @@ jQuery(document).ready(function() {
     $('#action-delete-accountPicture').on('click', function(e) {
 
         // file input reinitialization
-        $inputFile = $('input[id="account_accountPicture"]');
+        var $inputFile = $('input[id="account_accountPicture"]');
         $inputFile.val('');
         $inputFile.parent().find('.custom-file-label').text('Sélectionner un fichier image');
 
@@ -26,9 +26,9 @@ jQuery(document).ready(function() {
         $('input[id="account_pictureDeletionState"]').attr('value', 'true'); //to know to apply the main picture deletion
     });
 
-    imgPreviewSearch = $('input[id="trick_featuredPicture"]').parent().parent().parent().find('.img-preview');
+    var imgPreviewSearch = $('input[id="trick_featuredPicture"]').parent().parent().parent().find('.img-preview');
     // if featuredPicture is preset
-    if( imgPreviewSearch.length == 1 ){
+    if( imgPreviewSearch.length === 1 ){
         funcPreviewImageInTitleBanner(imgPreviewSearch.attr('src')); //set same picture in banner title
     }
 });

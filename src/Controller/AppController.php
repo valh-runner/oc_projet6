@@ -288,10 +288,11 @@ class AppController extends AbstractController
 
             return $this->redirectToRoute('home');
 
-        }else{
-            $form->get('categoryType')->setData(1); // check radio button because a trick have always an existant category
-            $form->get('existantCategory')->setData($oTrickCategory); // preselect the current category
         }
+
+        // Default form presets
+        $form->get('categoryType')->setData(1); // check radio button because a trick have always an existant category
+        $form->get('existantCategory')->setData($oTrickCategory); // preselect the current category
 
         return $this->render('app/add_trick.html.twig', [
             'formTrick' => $form->createView(),
@@ -312,7 +313,6 @@ class AppController extends AbstractController
     public function deleteTrick(Trick $trick, EntityManagerInterface $manager)
     {
         $this->denyAccessUnlessGranted('delete', $trick); //restrict deletion access to trick owner user and admin user
-        $user = $this->getUser();
 
         // remove main picture
         if($trick->getMainPictureFilename() != null){
@@ -361,8 +361,8 @@ class AppController extends AbstractController
         if($form->isSubmitted() && $form->isValid()){
 
             // submitted hidden field about account picture deletion state
-            $accountPictureDeletionState = $form->get('pictureDeletionState')->getData();
-            if($accountPictureDeletionState == 'true'){
+            $accountPictureDelete = $form->get('pictureDeletionState')->getData();
+            if($accountPictureDelete == 'true'){
                 $user->setPictureFilename(null);
             }
 

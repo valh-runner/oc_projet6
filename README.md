@@ -5,30 +5,28 @@
 Creation of a community site focused on the presentation of snowboard figures via the Symfony framework.
 
 ## Environment used during development
-* WampServer 3.1.7
-    * Apache 2.4.37
-    * PHP 7.2.14
-    * MySQL 5.7.24
-* Composer 1.9.3
-* Git 2.24.0
-* Symfony 4.4.1
-* PHPUnit 7.5.20
-* jQuery 3.4.1
-* Bootstrap 4.4.1
-
+- WampServer 3.1.7
+  - Apache 2.4.37
+  - PHP 7.2.14
+  - MySQL 5.7.24
+- Composer 1.9.3
+- Git 2.24.0
+- Symfony 4.4.1
+- PHPUnit 7.5.20
+- jQuery 3.4.1
+- Bootstrap 4.4.1
 
 ## Installation
-
 
 ### Environment setup
 
 It is necessary to have an Apache / Php / Mysql environment.\
 Depending on your operating system, several servers can be installed:
 
-- Windows : WAMP (http://www.wampserver.com/)
-- MAC : MAMP (https://www.mamp.info/en/mamp/)
-- Linux : LAMP (https://doc.ubuntu-fr.org/lamp)
-- Cross system: XAMP (https://www.apachefriends.org/fr/index.html)
+- Windows : WAMP (<http://www.wampserver.com/>)
+- MAC : MAMP (<https://www.mamp.info/en/mamp/>)
+- Linux : LAMP (<https://doc.ubuntu-fr.org/lamp>)
+- Cross system: XAMP (<https://www.apachefriends.org/fr/index.html>)
 
 Symfony 4.4 requires PHP 7.1.3 or higher to run.\
 Prefer to have MySQL 5.6 or higher.\
@@ -36,9 +34,9 @@ Make sure PHP is in the Path environment variable.\
 Note that PHP must have the extension mb_string activated for the slug converter to work.
 
 You need an installation of Composer.\
-So, install it if you don't have it. (https://getcomposer.org/)
+So, install it if you don't have it. (<https://getcomposer.org/>)
 
-If you want to use Git (optional), install it. (https://git-scm.com/downloads)
+If you want to use Git (optional), install it. (<https://git-scm.com/downloads>)
 
 ### Project files local deployement
 
@@ -95,7 +93,7 @@ Then replace it by your own connection string:
 ```
 MAILER_DSN=smtp://user:pass@smtp.example.com
 ```
-For more info, see https://symfony.com/doc/current/mailer.html#transport-setup
+For more info, see <https://symfony.com/doc/current/mailer.html#transport-setup>
 
 ### Run the web application
 

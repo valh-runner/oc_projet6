@@ -4,12 +4,12 @@
 
 function disableCorrespondingFieldDependingRadio($radios) {
         var $checked = $radios.filter(':checked');
-        if($checked.val() == 1) {
+        if($checked.val() === 1) {
             $('#trick_newCategory').removeAttr('required');
             $('#trick_existantCategory').removeAttr('disabled');
             $('#trick_newCategory').attr('disabled', 'disabled');
             $('#trick_existantCategory').attr('required', 'required');
-        } else if($checked.val() == 2) {
+        } else if($checked.val() === 2) {
             $('#trick_existantCategory').removeAttr('required');
             $('#trick_newCategory').removeAttr('disabled');
             $('#trick_existantCategory').attr('disabled', 'disabled');
@@ -34,39 +34,12 @@ function enhanceForm() {
 // Setup "add and remove" functionnality for each CollectionType
 //--------------------------------------------------------------
 
-function addAndRemoveFunctionnality(ulClassname, isFileTypeEntity){
-	var $collectionHolder;
-
-	// setup an "add a video" link
-	var $addVideoButton = $('<button type="button" class="btn btn-secondary"><i class="fas fa-plus"></i> Ajouter un champ</button>');
-	var $newLinkLi = $('<li></li>').append($addVideoButton);
-
-
-    // Get the ul that holds the collection of videos
-    $collectionHolder = $('ul.'+ ulClassname);
-
-    // add a delete link to all of the existing video form li elements
-    $collectionHolder.find('li').each(function() {
-        addItemFormDeleteLink($(this));
+function addItemFormDeleteLink($videoFormLi) {
+    var $removeFormButton = $videoFormLi.find('button');
+    $removeFormButton.on('click', function(e) {
+        // remove the li for the video form
+        $videoFormLi.remove();
     });
-
-    // add the "add a tag" anchor and li to the videos ul
-    $collectionHolder.append($newLinkLi);
-
-    // count the current form inputs we have, use that as the new
-    // index when inserting a new item
-    var index = $collectionHolder.find(':input').length;
-    $collectionHolder.data('index', index);
-
-    $addVideoButton.on('click', function(e) {
-        // add a new video form
-        addItemForm($collectionHolder, $newLinkLi, isFileTypeEntity);
-    });
-
-    //if no existant field, create default one
-    if(index == 1){
-    	addItemForm($collectionHolder, $newLinkLi, isFileTypeEntity);
-    }
 }
 
 function addItemForm($collectionHolder, $newLinkLi, isFileTypeEntity) {
@@ -95,11 +68,11 @@ function addItemForm($collectionHolder, $newLinkLi, isFileTypeEntity) {
     addItemFormDeleteLink($newForm);
 
     //If is FileType field
-    if(isFileTypeEntity == true){
+    if(isFileTypeEntity === true){
 
-    	$newInputFile = $newForm.find('.custom-file-input');
+        var $newInputFile = $newForm.find('.custom-file-input');
 
-    	//On this file input change
+        //On this file input change
         $newInputFile.on('change', function(event) {
 
             //Make fileType field, styled by bootstrap, look usable
@@ -113,12 +86,39 @@ function addItemForm($collectionHolder, $newLinkLi, isFileTypeEntity) {
     }
 }
 
-function addItemFormDeleteLink($videoFormLi) {
-    $removeFormButton = $videoFormLi.find('button');
-    $removeFormButton.on('click', function(e) {
-        // remove the li for the video form
-        $videoFormLi.remove();
+function addAndRemoveFunctionnality(ulClassname, isFileTypeEntity){
+    var $collectionHolder;
+
+    // setup an "add a video" link
+    var $addVideoButton = $('<button type="button" class="btn btn-secondary"><i class="fas fa-plus"></i> Ajouter un champ</button>');
+    var $newLinkLi = $('<li></li>').append($addVideoButton);
+
+
+    // Get the ul that holds the collection of videos
+    $collectionHolder = $('ul.'+ ulClassname);
+
+    // add a delete link to all of the existing video form li elements
+    $collectionHolder.find('li').each(function() {
+        addItemFormDeleteLink($(this));
     });
+
+    // add the "add a tag" anchor and li to the videos ul
+    $collectionHolder.append($newLinkLi);
+
+    // count the current form inputs we have, use that as the new
+    // index when inserting a new item
+    var index = $collectionHolder.find(':input').length;
+    $collectionHolder.data('index', index);
+
+    $addVideoButton.on('click', function(e) {
+        // add a new video form
+        addItemForm($collectionHolder, $newLinkLi, isFileTypeEntity);
+    });
+
+    //if no existant field, create default one
+    if(index === 1){
+        addItemForm($collectionHolder, $newLinkLi, isFileTypeEntity);
+    }
 }
 
 var initialTitleBannerSrc = null;
@@ -126,19 +126,19 @@ var initialTitleBannerSrc = null;
 var funcPreviewImageInTitleBanner = function (filename) {
     initialTitleBannerSrc = $('#trick-head-banner').attr('src');
     $('#trick-head-banner').attr('src', filename);
-}
+};
 
 function ReplaceInitialTitleBannerImage () {
-    if(initialTitleBannerSrc != null){
+    if(initialTitleBannerSrc !== null){
         $('#trick-head-banner').attr('src', initialTitleBannerSrc);
     }
 }
 
 jQuery(document).ready(function() {
-	addAndRemoveFunctionnality('videos', false);
-	addAndRemoveFunctionnality('pictures', true);
+    addAndRemoveFunctionnality('videos', false);
+    addAndRemoveFunctionnality('pictures', true);
 
-    $newInputFile = $('input[id="trick_featuredPicture"]');
+    var $newInputFile = $('input[id="trick_featuredPicture"]');
     //On this file input change
     $newInputFile.on('change', function(event) {
 
@@ -168,7 +168,7 @@ jQuery(document).ready(function() {
 
     imgPreviewSearch = $('input[id="trick_featuredPicture"]').parent().parent().parent().find('.img-preview');
     // if featuredPicture is preset
-    if( imgPreviewSearch.length == 1 ){
+    if( imgPreviewSearch.length === 1 ){
         funcPreviewImageInTitleBanner(imgPreviewSearch.attr('src')); //set same picture in banner title
     }
 

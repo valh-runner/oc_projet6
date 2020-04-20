@@ -9,7 +9,7 @@ function loadMoreTricks(numberOfTricks, offset) {
     var nbrTricks = $("div#content-index-tricks").children().length;
     /* the arrow appearance if more than 15 tricks loaded is too much,
        after 8 is better to preview with 10 initial tricks */
-    if(nbrTricks > 8 && isArrow2displayed == false){
+    if(nbrTricks > 8 && isArrow2displayed === false){
       $("#arrow2").show();
       isArrow2displayed = true;
     }

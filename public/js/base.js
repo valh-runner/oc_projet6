@@ -2,7 +2,7 @@
 function previewImageForInputFile(inputFile, callback = false) {
             
     //Display of the image preview before form submission
-    if (typeof(FileReader) == "undefined") {
+    if (typeof(FileReader) === "undefined") {
         alert("Votre navigateur n'est pas capable d'afficher l'aperÃ§u de l'image avant soumission");
     }else{
         var imgPreviewHolder = $(inputFile).parent().parent().parent().find('.img-preview-holder');
@@ -20,10 +20,10 @@ function previewImageForInputFile(inputFile, callback = false) {
                 "alt" : filename
             }).appendTo(imgPreviewHolder); 
 
-            if(callback != false){
+            if(callback !== false){
                 callback(e.target.result);
             }
-        }
+        };
         reader.readAsDataURL($(inputFile)[0].files[0]);
     }
 }
@@ -34,7 +34,7 @@ function confirmTrickDeleteModal(id){
 }
 
 function trickDelete(id){
-    document.location.href="/suppression_trick/"+id
+    document.location.href="/suppression_trick/"+id;
 }
 
 function setActiveCurrentNavItem() {
@@ -42,16 +42,15 @@ function setActiveCurrentNavItem() {
 
     $.each($('.navbar').find('li'), function() {
         $(this).toggleClass('active', 
-            window.location.pathname == $(this).find('a').attr('href')
+            window.location.pathname === $(this).find('a').attr('href')
         );
     });
     
 }
 
 function displayPictureViewModal(pictureSrc, calledElement) {
-    //alert(pictureSrc);
-    currentImgElem = $(calledElement);
-    viewerModalElem = $('#picture_view_modal');
+    var currentImgElem = $(calledElement);
+    var viewerModalElem = $('#picture_view_modal');
     viewerModalElem.find('img').attr('src', pictureSrc);
     viewerModalElem.find('.modal-title').text( currentImgElem.attr('alt') );
     viewerModalElem.modal();
