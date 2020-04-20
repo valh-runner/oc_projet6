@@ -9,7 +9,7 @@ class AppControllerTest extends WebTestCase {
     public function testHomepage()
     {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/');
+        $client->request('GET', '/');
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
 	}
 
@@ -17,14 +17,14 @@ class AppControllerTest extends WebTestCase {
     {
         $client = static::createClient();
         $value = '1080';
-        $crawler = $client->request('GET', "/details_trick/$value");
+        $client->request('GET', "/details_trick/$value");
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
 	}    
 
 	public function testFakePage()
     {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/signin');
+        $client->request('GET', '/signin');
         $this->assertEquals(404, $client->getResponse()->getStatusCode());
 	}
 }

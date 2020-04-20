@@ -51,10 +51,9 @@ class UsersFixtures extends Fixture implements ContainerAwareInterface
 			$daysSinceFirstUser = (new \DateTime())->diff($firstUser->getCreationMoment())->days;
 			$userCreationDate = $faker->dateTimeBetween('- '.$daysSinceFirstUser.' days');
 
+			$newFilename = null;
 			// Set an avatar for 2 users of 3 on average
-			if(mt_rand(1, 3) == 1){
-				$newFilename = null;
-			}else{
+			if(mt_rand(1, 3) != 1){
 				$pictureFilename =  mt_rand(870, 895).'-250x250.jpg'; // avatar file attribution
 
 				$newFilename = $fileHelper->getUniqueFilename($pictureFilename); //filename transformation
@@ -78,11 +77,11 @@ class UsersFixtures extends Fixture implements ContainerAwareInterface
 			foreach($tricks as $trick){
 		    	// Create between 0 and 2 fake comment by user, so one by user in average
 	        	for($m = 1; $m <= mt_rand(0, 2); $m++){
-	        		$daysSinceUserCreation = (new \DateTime())->diff($userCreationDate)->days;
+	        		$daysSinceUserExist = (new \DateTime())->diff($userCreationDate)->days;
 	        		$commentContent = $commentsDataset[mt_rand(0, count($commentsDataset)-1)]; //random content
 	        		$comment = new Comment();
 	        		$comment->setContent($commentContent)
-	        				->setCreationMoment($faker->dateTimeBetween('-'.$daysSinceUserCreation.' days'))
+	        				->setCreationMoment($faker->dateTimeBetween('-'.$daysSinceUserExist.' days'))
 	        				->setUser($user)
 	        				->setTrick($trick);
 	        		$manager->persist($comment);

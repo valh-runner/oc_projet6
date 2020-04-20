@@ -91,8 +91,6 @@ class AppFixtures extends Fixture implements ContainerAwareInterface
 			]
 		];
 
-		$faker = \Faker\Factory::create('fr_FR');
-		$incrementedPictureSeed = 1;
 		$tricksList = array();
 		$slugGenerator = new SlugGenerator();
 		$fileHelper = new FileHelper();

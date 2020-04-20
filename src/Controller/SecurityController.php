@@ -254,9 +254,9 @@ class SecurityController extends AbstractController
                     if($user->getToken() != $token){
                         $this->addFlash('danger', 'token non valide');
                     }else{
-                        $hoursSinceForgotPasswordAsk = (new \DateTime())->diff($user->getForgotPasswordMoment())->h;
-                        //if 48 hours time limit not expired
-                        if($hoursSinceForgotPasswordAsk > 48){
+                        $hrsSinceForgotPsswd = (new \DateTime())->diff($user->getForgotPasswordMoment())->h;
+                        //if 48 hours time limit not expired since forgot password ask
+                        if($hrsSinceForgotPsswd > 48){
                             $this->addFlash('danger', 'limite de temps du token expirée');
                         }else{
                             $hash = $encoder->encodePassword($user, $formData['password']);
