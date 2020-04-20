@@ -18,17 +18,17 @@ function loadMoreTricks(numberOfTricks, offset) {
 
 jQuery(document).ready(function() {
 
-  $('#action-load-more').on('click', function(e) {
+  $("#action-load-more").on("click", function(e) {
       loadMoreTricks(numberOfTricks, offset);
       offset += numberOfTricks;
   });
 
 
   // Add scrollspy to <body>
-  $('body').scrollspy({target: ".navbar", offset: 50});
+  $("body").scrollspy({target: ".navbar", offset: 50});
 
   // Add smooth scrolling on links
-  $("#navbarSupportedContent #slideToTricksLink, #arrow a, #arrow2 a").on('click', function(event) {
+  $("#navbarSupportedContent #slideToTricksLink, #arrow a, #arrow2 a").on("click", function(event) {
 
     // Make sure this.hash has a value before overriding default behavior
     if (this.hash !== "") {
@@ -36,7 +36,7 @@ jQuery(document).ready(function() {
       var hash = this.hash; // Store hash
 
       // smooth page autoscroll taking specified milliseconds to scroll to the specified area
-      $('html, body').animate({
+      $("html, body").animate({
         scrollTop: $(hash).offset().top
       }, 800, function(){
         window.location.hash = hash; // Add hash (#) to URL when done scrolling (default click behavior)
@@ -47,9 +47,9 @@ jQuery(document).ready(function() {
 
   // Slogan fade manage
   $(window).scroll(function () {
-      var sloganElem = $('#slogan');
+      var sloganElem = $("#slogan");
       var sloganScrollTop = sloganElem.position().top; /* offset from top of the parent being on top of the page */
-      var mainElem = $('#main');
+      var mainElem = $("#main");
       var mainScrollTop = mainElem.offset().top; /* offset from top of the page */
 
       var initialDiff = mainScrollTop - (sloganScrollTop + sloganElem.outerHeight() );
@@ -57,9 +57,9 @@ jQuery(document).ready(function() {
 
       if ( diff > 0 ) {
         var diffValueOn1 = ( diff * 1 ) / initialDiff;
-        sloganElem.css('opacity', diffValueOn1);
+        sloganElem.css("opacity", diffValueOn1);
       } else {
-        sloganElem.css('opacity', 0);
+        sloganElem.css("opacity", 0);
       }
   });
 
