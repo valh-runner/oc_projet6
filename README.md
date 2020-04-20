@@ -117,14 +117,14 @@ Launch the Apache/Php runtime environment by using Symfony via the following com
 php bin/console server:run
 ```
 Leave this console open.\
-Then consult the URL http://localhost:8000 from your browser.
+Then consult the URL <http://localhost:8000> from your browser.
 
 #### By a virtualhost
 
 If you don't wan't to use WebServerBundle.
 You can use your Apache/Php/Mysql environment in a normal way.
 This by configuring a virtualhost in which to place the project.
-Then check http://localhost.
+Then check <http://localhost>.
 
 ### Logiciel tests check (optional)
 
