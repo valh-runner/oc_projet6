@@ -391,7 +391,7 @@ ul#comments-paging a {
 }
 
 #picture_view_modal .modal-body {
-	max-height: 80vh;
+	height: 80vh;
 }
 
 #picture_view_modal .modal-body img{

@@ -11,7 +11,7 @@ use Symfony\Component\Validator\Constraints\Image;
 
 class PictureType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder)
+    public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->add('file', FileType::class, [
