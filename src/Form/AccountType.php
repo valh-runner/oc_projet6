@@ -11,7 +11,7 @@ use Symfony\Component\Validator\Constraints\Image;
 
 class AccountType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder)
+    public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->add('accountPicture', FileType::class, [
