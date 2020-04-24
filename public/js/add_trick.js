@@ -4,12 +4,12 @@
 
 function disableCorrespondingFieldDependingRadio($radios) {
         var $checked = $radios.filter(":checked");
-        if($checked.val() === '1') {
+        if($checked.val() === "1") {
             $("#trick_newCategory").removeAttr("required");
             $("#trick_existantCategory").removeAttr("disabled");
             $("#trick_newCategory").attr("disabled", "disabled");
             $("#trick_existantCategory").attr("required", "required");
-        } else if($checked.val() === '2') {
+        } else if($checked.val() === "2") {
             $("#trick_existantCategory").removeAttr("required");
             $("#trick_newCategory").removeAttr("disabled");
             $("#trick_existantCategory").attr("disabled", "disabled");
