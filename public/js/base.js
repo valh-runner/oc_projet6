@@ -45,7 +45,6 @@ function setActiveCurrentNavItem() {
             window.location.pathname === $(this).find("a").attr("href")
         );
     });
-    
 }
 
 function displayPictureViewModal(pictureSrc, calledElement) {
