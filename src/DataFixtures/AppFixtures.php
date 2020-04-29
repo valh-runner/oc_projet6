@@ -46,7 +46,7 @@ class AppFixtures extends Fixture implements ContainerAwareInterface
 			],
 			[
 				'180',0,'rotation horizontale d\'un demi tour',
-				['ATMiAVTLsuc','JMS2PGAFMcE	GnYAlEt-s00'],
+				['ATMiAVTLsuc','JMS2PGAFMcE','GnYAlEt-s00'],
 				['180-1.jpg','180-2.jpg','180-3.jpg']
 			],
 			[
