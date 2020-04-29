@@ -133,6 +133,14 @@ function ReplaceInitialTitleBannerImage () {
     }
 }
 
+function undisablePreExistantTrickPicturesBeforeSubmit () {
+    $('form').submit(function(e) {
+        $(':disabled').each(function(e) {
+            $(this).removeAttr('disabled');
+        })
+    });
+}
+
 jQuery(document).ready(function() {
     addAndRemoveFunctionnality("videos", false);
     addAndRemoveFunctionnality("pictures", true);
@@ -172,4 +180,6 @@ jQuery(document).ready(function() {
     }
 
     enhanceForm();
+
+    undisablePreExistantTrickPicturesBeforeSubmit();
 });
