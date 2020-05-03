@@ -30,7 +30,7 @@ function previewImageForInputFile(inputFile, callback = false) {
 
 function confirmTrickDeleteModal(id){
     $("#delete_warn_modal").modal();
-    $("#deleteButton").attr("onclick", 'trickDelete("+id+")');
+    $("#deleteButton").attr("onclick", "trickDelete("+id+")");
 }
 
 function trickDelete(id){
