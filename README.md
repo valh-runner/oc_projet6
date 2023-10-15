@@ -1,6 +1,6 @@
 # Projet6 - SnowTricks
 
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/93c9b6cb48e54f46859d632d11c6b802)](https://www.codacy.com/manual/valh-runner/oc_projet6?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=valh-runner/oc_projet6&amp;utm_campaign=Badge_Grade)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/93c9b6cb48e54f46859d632d11c6b802)](https://app.codacy.com/gh/valh-runner/oc_projet6/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 
 Creation of a community site focused on the presentation of snowboard figures via the Symfony framework.
 
