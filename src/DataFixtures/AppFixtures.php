@@ -34,7 +34,7 @@ class AppFixtures extends Fixture implements ContainerAwareInterface
         $this->container = $container;
     }
 
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
     	$categoriesDataset = ['Rotations','Flips','Grabs','Slides'];
 
