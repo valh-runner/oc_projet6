@@ -4,11 +4,14 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <title>{% block title %}SnowTricks -{% endblock %}</title>
+        {# Run `composer require symfony/webpack-encore-bundle`
+           and uncomment the following Encore helpers to start using Symfony UX #}
         {% block stylesheets %}
           <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
           <link rel="stylesheet" href="{{ asset('css/main.css') }}" />
           <link rel="shortcut icon" type="image/png" href="{{ asset('images/favicon48.png') }}">
           <link rel="apple-touch-icon" href="{{ asset('images/favicon96.png') }}">
+          {#{{ encore_entry_link_tags('app') }}#}
         {% endblock %}
     </head>
     <body class="{% block fullscreenState %}{% endblock %}">
@@ -138,6 +141,7 @@
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
         <script src="https://kit.fontawesome.com/6476d46678.js" crossorigin="anonymous"></script>
         <script type="text/javascript" src="{{ asset('js/base.js') }}"></script>
+        {#{{ encore_entry_script_tags('app') }}#}
       {% endblock %}
     </body>
 </html>
