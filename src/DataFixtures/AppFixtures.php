@@ -11,7 +11,7 @@ use App\Entity\Video;
 use App\Service\SlugGenerator;
 use App\Service\FileHelper;
 use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Filesystem\Filesystem;
@@ -34,7 +34,7 @@ class AppFixtures extends Fixture implements ContainerAwareInterface
         $this->container = $container;
     }
 
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
     	$categoriesDataset = ['Rotations','Flips','Grabs','Slides'];
 
