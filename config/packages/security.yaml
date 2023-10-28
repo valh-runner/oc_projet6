@@ -18,9 +18,9 @@ security:
         main:
             anonymous: true
             lazy: true
-            provider: users_in_memory
 
             provider: in_database
+            #provider: users_in_memory
 
             form_login:
                 login_path: security_login
