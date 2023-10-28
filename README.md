@@ -6,16 +6,16 @@ Creation of a community site focused on the presentation of snowboard figures vi
 
 ## Environment used during development
 
--   WampServer 3.1.7
-    -   Apache 2.4.37
-    -   PHP 8.2.12
-    -   MySQL 5.7.24
--   Composer 2.6.5
--   Git 2.24.0
--   Symfony 5.4.29
--   PHPUnit 9.5.28
--   jQuery 3.4.1
--   Bootstrap 4.4.1
+- WampServer 3.1.7
+    - Apache 2.4.37
+    - PHP 8.2.12
+    - MySQL 5.7.24
+- Composer 2.6.5
+- Git 2.24.0
+- Symfony 5.4.29
+- PHPUnit 9.5.28
+- jQuery 3.4.1
+- Bootstrap 4.4.1
 
 ## Installation
 
@@ -24,21 +24,21 @@ Creation of a community site focused on the presentation of snowboard figures vi
 It is necessary to have an Apache / Php / Mysql environment.\
 Depending on your operating system, several servers can be installed:
 
--   Windows : WAMP (<http://www.wampserver.com/>)
--   MAC : MAMP (<https://www.mamp.info/en/mamp/>)
--   Linux : LAMP (<https://doc.ubuntu-fr.org/lamp>)
--   Cross system: XAMP (<https://www.apachefriends.org/fr/index.html>)
+- Windows : WAMP (<http://www.wampserver.com/>)
+- MAC : MAMP (<https://www.mamp.info/en/mamp/>)
+- Linux : LAMP (<https://doc.ubuntu-fr.org/lamp>)
+- Cross system: XAMP (<https://www.apachefriends.org/fr/index.html>)
 
 The project requires PHP 8.2.0 or higher to run.\
 Prefer to have MySQL 5.6 or higher.\
 Make sure PHP is in the Path environment variable.\
 Note that PHP must have the following extensions activated:
--   fileinfo
--   intl
--   curl
--   openssl
--   pdo_mysql
--   mb_string (for slug generation)
+- fileinfo
+- intl
+- curl
+- openssl
+- pdo_mysql
+- mb_string (for slug generation)
 
 You need an installation of Composer.\
 So, install it if you don't have it. (<https://getcomposer.org/>)
