@@ -40,10 +40,16 @@ Depending on your operating system, several servers can be installed:
 
 -   Cross system: XAMP (<https://www.apachefriends.org/fr/index.html>)
 
-Symfony 4.4 requires PHP 7.1.3 or higher to run.\
+The project requires PHP 8.2.0 or higher to run.\
 Prefer to have MySQL 5.6 or higher.\
 Make sure PHP is in the Path environment variable.\
-Note that PHP must have the extension mb_string activated for the slug converter to work.
+Note that PHP must have the following extensions activated:
+-fileinfo
+-intl
+-curl
+-openssl
+-pdo_mysql
+-mb_string (for slug generation)
 
 You need an installation of Composer.\
 So, install it if you don't have it. (<https://getcomposer.org/>)
