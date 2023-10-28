@@ -44,12 +44,17 @@ The project requires PHP 8.2.0 or higher to run.\
 Prefer to have MySQL 5.6 or higher.\
 Make sure PHP is in the Path environment variable.\
 Note that PHP must have the following extensions activated:
--fileinfo
--intl
--curl
--openssl
--pdo_mysql
--mb_string (for slug generation)
+-   fileinfo
+
+-   intl
+
+-   curl
+
+-   openssl
+
+-   pdo_mysql
+
+-   mb_string (for slug generation)
 
 You need an installation of Composer.\
 So, install it if you don't have it. (<https://getcomposer.org/>)
