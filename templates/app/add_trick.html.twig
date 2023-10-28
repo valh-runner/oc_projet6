@@ -142,8 +142,10 @@
 						        {% for picture in formTrick.pictures %}
 						        	{{ formMacros.printPicturePrototype(picture, picture.vars.value.filename, false, true) }}
 						        {% endfor %}
-								{# prevents the display of this field at the end of the form when no child inside #}
-								{{ form_widget(formTrick.pictures) }}
+								{% if formTrick.pictures is empty %}
+									{# prevents the display of this field at the end of the form when no child inside #}
+									{{ form_widget(formTrick.pictures) }}
+								{% endif %}
 							</ul>
 							{{ form_label(formTrick.videos, 'Vidéos') }}
 							{{ form_errors(formTrick.videos) }}
@@ -152,8 +154,10 @@
 						        {% for video in formTrick.videos %}
 						            {{ formMacros.printVideoPrototype(video, true) }}
 						        {% endfor %}
-								{# prevents the display of this field at the end of the form when no child inside #}
-								{{ form_widget(formTrick.videos) }}
+								{% if formTrick.videos is empty %}
+									{# prevents the display of this field at the end of the form when no child inside #}
+									{{ form_widget(formTrick.videos) }}
+								{% endif %}
 							</ul>
 						</div>
 						<div id="action-medias" class="d-block d-sm-none text-center">

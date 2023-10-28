@@ -29,7 +29,8 @@ security:
             form_login:
                 login_path: security_login
                 check_path: security_login
-                csrf_token_generator: security.csrf.token_manager
+                #csrf_token_generator: security.csrf.token_manager
+                enable_csrf: true
 
             logout:
                 path: security_logout
