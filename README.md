@@ -10,15 +10,14 @@ Creation of a community site focused on the presentation of snowboard figures vi
 
     -   Apache 2.4.37
 
-    -   PHP 7.2.14
+    -   PHP 7.4.33
 
     -   MySQL 5.7.24
 
--   Composer 1.9.3
-
+-   Composer 2.6.5
 -   Git 2.24.0
 
--   Symfony 4.4.1
+-   Symfony 5.4.29
 
 -   PHPUnit 7.5.20
 
