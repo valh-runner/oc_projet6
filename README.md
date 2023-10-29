@@ -129,14 +129,6 @@ Please note the password for each generated generic user is the username of the 
 Get a view in your database to know who's in, you can register yourself too.
 Same thing for the password of the admin account, who's named "generator".
 
-### Logiciel tests check (optional)
-
-If you want to perform some unit and functionnal tests, run the above command:
-```
-php bin/phpunit
-```
-At first launch, symfony will install phpunit dependances.
-
 ### Troubleshooting
 
 If some disfunctionments appear or a file is missing, check your anti-virus quarantine.\
