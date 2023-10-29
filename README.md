@@ -4,16 +4,9 @@
 
 Creation of a community site focused on the presentation of snowboard figures via the Symfony framework.
 
-## Environment used during development
+## Components used by the project
 
--   WampServer 3.1.7
-    -   Apache 2.4.37
-    -   PHP 8.2.12
-    -   MySQL 5.7.24
--   Composer 2.6.5
--   Git 2.24.0
 -   Symfony 5.4.29
--   PHPUnit 9.5.28
 -   jQuery 3.4.1
 -   Bootstrap 4.4.1
 
@@ -31,7 +24,7 @@ Depending on your operating system, several environments can be installed, inclu
 -   Cross system: XAMP (<https://www.apachefriends.org/fr/index.html>)
 
 The project requires PHP 8.2.0 or higher to run.\
-Prefer to have MySQL 5.6 or higher.\
+Prefer to have MySQL 5.7 or higher.\
 Make sure PHP is in the Path environment variable.\
 Note that PHP must have the following extensions activated:
 -   fileinfo
@@ -41,7 +34,7 @@ Note that PHP must have the following extensions activated:
 -   pdo_mysql
 -   mb_string (for slug generation)
 
-You need an installation of Composer (<https://getcomposer.org/>)\
+You need an installation of Composer 2 (<https://getcomposer.org/>)\
 You have to install Symfony CLI as well (<https://symfony.com/download>)\
 If you want to use Git (optional), install it. (<https://git-scm.com/downloads>)
 
