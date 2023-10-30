@@ -92,7 +92,7 @@ class Trick
 
     /**
      * @var string $slug The slug converted string from trick's name
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, unique=true)
      */
     private $slug;
 
