@@ -86,13 +86,14 @@ class AppController extends AbstractController
     /**
      * Add trick page
      * @param Request $request 
+     * @param TrickRepository $repo
      * @param EntityManagerInterface $manager 
      * @param SlugGenerator $slugGenerator 
      * @return string
      *
      * @Route("/creation_trick", name="add_trick")
      */
-    public function addTrick(Request $request, EntityManagerInterface $manager, SlugGenerator $slugGenerator)
+    public function addTrick(Request $request, TrickRepository $repo, EntityManagerInterface $manager, SlugGenerator $slugGenerator)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY'); //restrict access to connected users
         $user = $this->getUser();
@@ -105,15 +106,20 @@ class AppController extends AbstractController
         if($form->isSubmitted() && $form->isValid()){
 
             $catTypeValue = $form->get('categoryType')->getData();
+            $slug = $slugGenerator->convert( $trick->getName() );
 
             // if category definition mode choose is unknown 
             if($catTypeValue != 1 && $catTypeValue != 2){
                 $this->addFlash('danger', 'choix inconnu du mode de définition de la catégorie');
             }
+            // if generated slug already exists
+            elseif( $repo->findOneBy(['slug' => $slug]) !== null){
+                $this->addFlash('danger', 'le slug correspondant à ce titre existe déjà');
+            }
             else{
                 $trick->setCreationMoment(new \DateTime())
                       ->setUser($user)
-                      ->setSlug($slugGenerator->convert( $trick->getName() )); // slug converted trick's name
+                      ->setSlug($slug); // slug converted trick's name
 
                 // category assignment depending on whether the category is existing or new
                 switch ($catTypeValue) {
@@ -205,14 +211,19 @@ class AppController extends AbstractController
         if($form->isSubmitted() && $form->isValid()){
 
             $catTypeValue = $form->get('categoryType')->getData();
+            $newSlug = $slugGenerator->convert( $form->get('name')->getData() );
 
             // if category definition mode choose is unknown 
             if($catTypeValue != 1 && $catTypeValue != 2){
                 $this->addFlash('danger', 'choix inconnu du mode de définition de la catégorie');
             }
+            // if slug updated and the new one already exists
+            elseif($newSlug !== $slug && $repo->findOneBy(['slug' => $newSlug]) !== null  ){
+                $this->addFlash('danger', 'le slug correspondant à ce titre existe déjà');
+            }
             else {
                 $trick->setRevisionMoment(new \DateTime())
-                      ->setSlug($slugGenerator->convert( $trick->getName() )); // slug converted trick's name
+                      ->setSlug($slug); // slug converted trick's name
 
                 // category assignment depending on whether the category is existing or new
                 switch ($catTypeValue) {
